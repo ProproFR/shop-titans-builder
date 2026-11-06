@@ -14,8 +14,8 @@ Interface en français et en anglais.
 | [STC Hub – Best In Slot](https://stcentral-hub.github.io/tools/bis-heroes/) (Nerilea, Reiga & Yuki) | Builds recommandés, affichés tels quels avec crédit | CC BY-NC-ND 4.0 |
 | [Shop Titans Central](https://st-central.net) | Formules de combat ([Combat Compendium](https://st-central.net/combat-compendium/)), guides | CC BY-NC-ND 4.0 |
 
-Les builds STC sont reproduits **sans modification**, avec attribution et lien, dans une appli **non commerciale**.
-Demande d'accord à l'équipe STC : à faire sur leur [Discord](https://discord.gg/stcentral).
+Les builds STC sont reproduits **sans modification**, avec attribution et lien, dans une appli **non commerciale**
+à usage personnel et pour une guilde (lien partagé en privé, site non référencé).
 
 ## Structure
 
