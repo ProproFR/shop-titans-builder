@@ -1,19 +1,24 @@
 // Point d'entrée : routeur par hash (#/vue?param=valeur) + chrome de l'application.
-import { loadData, D } from './data.js';
+import { loadData, D, uiIcon } from './data.js';
+import './i18n-extra.js';
 import { t, getLang, setLang, onLangChange } from './i18n.js';
-import { h, clear, fmt } from './dom.js';
+import { h, clear, icon, creditImages } from './dom.js';
 import * as builds from './views/builds.js';
 import * as optimizer from './views/optimizer.js';
 import * as team from './views/team.js';
 import * as skills from './views/skills.js';
+import * as roster from './views/roster.js';
+import * as tower from './views/tower.js';
 import * as about from './views/about.js';
 
 const ROUTES = {
-  builds: { mod: builds, label: 'nav.builds' },
-  optimizer: { mod: optimizer, label: 'nav.optimizer' },
-  team: { mod: team, label: 'nav.team' },
-  skills: { mod: skills, label: 'nav.skills' },
-  about: { mod: about, label: 'nav.about' },
+  builds: { mod: builds, label: 'nav.builds', ico: 'heroes' },
+  roster: { mod: roster, label: 'nav.roster', ico: 'champion' },
+  optimizer: { mod: optimizer, label: 'nav.optimizer', ico: 'craft' },
+  team: { mod: team, label: 'nav.team', ico: 'quest' },
+  tower: { mod: tower, label: 'nav.tower', ico: 'gem' },
+  skills: { mod: skills, label: 'nav.skills', ico: 'skilltree' },
+  about: { mod: about, label: 'nav.about', ico: 'help' },
 };
 const root = document.getElementById('main');
 let current = 'builds';
@@ -41,7 +46,7 @@ function renderNav() {
   const nav = document.getElementById('nav');
   clear(nav);
   nav.append(h('ul', {}, Object.entries(ROUTES).map(([k, r]) =>
-    h('li', {}, h('a', { href: `#/${k}`, 'aria-current': k === current ? 'page' : null }, t(r.label))))));
+    h('li', {}, h('a', { href: `#/${k}`, 'aria-current': k === current ? 'page' : null }, icon(uiIcon(r.ico), { size: 28 }), h('span', {}, t(r.label)))))));
 }
 
 function renderFooter() {
@@ -51,6 +56,7 @@ function renderFooter() {
   el.append(
     h('p', {}, t('footer.versions', { game: m.clientVersion, sheet: m.sheetVersion, date: new Date(m.generatedAt).toLocaleDateString(getLang() === 'fr' ? 'fr-FR' : 'en-GB') })),
     h('p', { class: 'muted' }, t('footer.disclaimer')),
+    h('p', { class: 'muted' }, creditImages()),
   );
 }
 

@@ -30,6 +30,8 @@ jobs:
         run: python scripts/build_data.py
       - name: Récupérer les builds STC Hub
         run: python scripts/scrape_stc_bis.py
+      - name: Récupérer les données de la Tour des Titans (STC Hub)
+        run: python scripts/scrape_stc_tower.py
       - name: Commit si les données ont changé
         run: |
           git config user.name "github-actions[bot]"

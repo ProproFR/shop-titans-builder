@@ -1,20 +1,22 @@
 // Vue 3 : composeur d'équipe pour une quête.
-import { D } from '../data.js';
+import { D, classIcon, champIcon, questIcon, uiIcon } from '../data.js';
 import { t } from '../i18n.js';
-import { h, clear, combo, select, numberField, table, elBadge, fmt, pct } from '../dom.js';
+import { h, clear, combo, select, numberField, table, elBadge, fmt, pct, icon, statLabel, withIcon } from '../dom.js';
 import { parseEffect, addMods, newMods, targetProbabilities } from '../calc.js';
 import { computeFromQuery } from './optimizer.js';
+import * as store from '../store.js';
+import { heroClass, memberParam } from '../hero.js';
 
 const HEALERS = new Set(['Cleric', 'Bishop', 'Druid', 'Arch Druid']);
 
-/** Membres sérialisés : "h~Classe~atk~def~hp" ou "c~Champion~palier". */
+/** Membres sérialisés : "h~Classe~atk~def~hp[~idHéros]" ou "c~Champion~palier". */
 function parseMember(s) {
-  const [kind, name, a, b, c] = String(s).split('~');
-  if (kind === 'h' && D.classByName.has(name)) return { kind: 'h', name, atk: Number(a) || 0, def: Number(b) || 0, hp: Number(c) || 0 };
+  const [kind, name, a, b, c, hid] = String(s).split('~');
+  if (kind === 'h' && D.classByName.has(name)) return { kind: 'h', name, atk: Number(a) || 0, def: Number(b) || 0, hp: Number(c) || 0, hid: /^[A-Za-z0-9_-]{1,40}$/.test(hid || '') ? hid : '' };
   if (kind === 'c' && D.championByName.has(name)) return { kind: 'c', name, tier: Math.min(4, Math.max(1, Number(a) || 1)) };
   return null;
 }
-const serialize = (m) => m.kind === 'h' ? `h~${m.name}~${m.atk}~${m.def}~${m.hp}` : `c~${m.name}~${m.tier}`;
+const serialize = (m) => m.kind === 'h' ? `h~${m.name}~${m.atk}~${m.def}~${m.hp}${m.hid ? '~' + m.hid : ''}` : `c~${m.name}~${m.tier}`;
 
 export function leaderSkill(champName, tier) {
   return D.skills.find((s) => s.type === 'Leader' && s.classes.includes(champName) && s.tier === tier) || null;
@@ -38,7 +40,7 @@ export function render(root, ctx) {
   const drawQuest = () => {
     clear(questInfo);
     const l = S.quest.levels[S.lv];
-    questInfo.append(h('h2', {}, `${S.quest.name} – ${l.difficulty}`), table([t('team.partySize'), t('team.type'), t('team.minPower'), t('team.monsterHp'), t('team.monsterDmg'), t('team.aoe'), t('team.barrier'), t('team.barrierHp')], [[
+    questInfo.append(h('h2', { class: 'with-ico-h' }, icon(questIcon(S.quest.name) || uiIcon('quest'), { size: 56 }), `${S.quest.name} – ${l.difficulty}`), table([t('team.partySize'), t('team.type'), t('team.minPower'), t('team.monsterHp'), t('team.monsterDmg'), t('team.aoe'), t('team.barrier'), t('team.barrierHp')], [[
       S.quest.partySize, l.type || t('team.normal'), fmt(l.minPower), fmt(l.monsterHp), fmt(l.monsterDmg), fmt(l.monsterAoe),
       l.barrier ? l.barrier.split(',').map((e) => elBadge(e.trim())) : '–', l.barrier ? fmt(l.barrierHp) : '–']]));
   };
@@ -48,9 +50,11 @@ export function render(root, ctx) {
     S.members.forEach((m, i) => {
       const row = h('div', { class: 'member card' });
       if (m.kind === 'h') {
-        row.append(h('h3', {}, `${t('team.hero')} ${i + 1}`),
+        const hIco = icon(classIcon(m.name), { size: 40 });
+        const saved = m.hid ? store.getHero(m.hid) : null;
+        row.append(h('h3', { class: 'with-ico-h' }, hIco, `${t('team.hero')} ${i + 1}`, saved ? h('span', { class: 'tag' }, `${t('team.saved')} : ${saved.name}`) : null),
           h('div', { class: 'row' },
-            combo({ label: t('opt.class'), options: D.classes.map((c) => ({ value: c.name, label: c.group })), value: m.name, onPick: (n) => { if (n) { m.name = n; persist(); update(); } } }),
+            combo({ label: t('opt.class'), options: D.classes.map((c) => ({ value: c.name, label: c.group })), value: m.name, onPick: (n) => { if (n) { m.name = n; m.hid = ''; if (hIco && classIcon(n)) hIco.src = classIcon(n); persist(); update(); } } }),
             numberField({ label: 'ATK', value: m.atk, min: 0, step: 1, onChange: (v) => { m.atk = v ?? 0; persist(); update(); } }),
             numberField({ label: 'DEF', value: m.def, min: 0, step: 1, onChange: (v) => { m.def = v ?? 0; persist(); update(); } }),
             numberField({ label: 'HP', value: m.hp, min: 0, step: 1, onChange: (v) => { m.hp = v ?? 0; persist(); update(); } })));
@@ -65,9 +69,10 @@ export function render(root, ctx) {
           } });
         row.append(h('div', { class: 'field' }, h('label', { for: `imp-${i}` }, t('team.import')), imp));
       } else {
-        row.append(h('h3', {}, t('team.champion')),
+        const cIco = icon(champIcon(m.name) || uiIcon('champion'), { size: 48, cls: 'portrait' });
+        row.append(h('h3', { class: 'with-ico-h' }, cIco, t('team.champion')),
           h('div', { class: 'row' },
-            combo({ label: t('team.champion'), options: D.champions.map((c) => ({ value: c.name, label: c.element })), value: m.name, onPick: (n) => { if (n) { m.name = n; persist(); update(); } } }),
+            combo({ label: t('team.champion'), options: D.champions.map((c) => ({ value: c.name, label: c.element })), value: m.name, onPick: (n) => { if (n) { m.name = n; cIco.src = champIcon(n) || uiIcon('champion'); persist(); update(); } } }),
             select({ label: t('team.leaderTier'), value: m.tier, options: [1, 2, 3, 4].map((x) => ({ value: x, label: `T${x}` })), onChange: (v) => { m.tier = Number(v); persist(); update(); } })));
       }
       row.append(h('button', { type: 'button', class: 'btn-small', onclick: () => { S.members.splice(i, 1); persist(); drawMembers(); update(); } }, `${t('remove')} (${m.name})`));
@@ -79,6 +84,17 @@ export function render(root, ctx) {
       h('button', { type: 'button', class: 'button', disabled: full, onclick: () => { S.members.push({ kind: 'h', name: 'Soldier', atk: 0, def: 0, hp: 0 }); persist(); drawMembers(); update(); } }, t('team.addHero')), ' ',
       h('button', { type: 'button', class: 'button secondary', disabled: full || hasChamp, onclick: () => { S.members.push({ kind: 'c', name: D.champions[0].name, tier: 4 }); persist(); drawMembers(); update(); } }, t('team.addChampion')),
       h('span', { class: 'muted' }, ` ${S.members.length}/${S.quest.partySize}`)));
+    const heroes = store.listHeroes();
+    if (heroes.length) {
+      const pick = select({ label: t('team.addSaved'), value: '', options: [{ value: '', label: '—' }, ...heroes.map((x) => ({ value: x.id, label: `${x.name} (${heroClass(x).name})` }))],
+        onChange: (v) => {
+          const hero = store.getHero(v); if (!hero || S.members.length >= S.quest.partySize) return;
+          const [, name, atk, def, hp] = memberParam(hero).split('~');
+          S.members.push({ kind: 'h', name, atk: Number(atk), def: Number(def), hp: Number(hp), hid: hero.id });
+          persist(); drawMembers(); update();
+        } });
+      membersBox.append(pick);
+    } else membersBox.append(h('p', { class: 'muted small' }, t('team.noSaved'), ' ', h('a', { href: '#/roster' }, t('nav.roster'))));
   };
 
   const update = () => {
@@ -117,8 +133,8 @@ export function render(root, ctx) {
     // Cibles + stats ajustées
     const probs = targetProbabilities(info.map((x) => x.threat));
     out.append(h('section', { class: 'card' }, h('h2', {}, t('team.members')),
-      table([t('team.member'), t('stat.group'), t('stat.element'), t('stat.threat'), t('team.targetProb'), 'ATK', 'DEF', 'HP'],
-        info.map((x, i) => [x.label, x.group, elBadge(x.element), fmt(x.threat), pct(probs[i], 1),
+      table([t('team.member'), t('stat.group'), t('stat.element'), t('stat.threat'), t('team.targetProb'), statLabel('attack', 'ATK'), statLabel('defense', 'DEF'), statLabel('health', 'HP')],
+        info.map((x, i) => [withIcon(x.m.kind === 'h' ? classIcon(x.m.name) : (champIcon(x.m.name) || uiIcon('champion')), x.label, 32), x.group, elBadge(x.element), fmt(x.threat), pct(probs[i], 1),
           fmt(x.base.atk * (1 + party.atk / 100)), fmt(x.base.def * (1 + party.def / 100)), fmt(x.base.hp * (1 + party.hp / 100))])),
       h('p', { class: 'muted small' }, t('team.statsNote'))));
 
@@ -139,6 +155,19 @@ export function render(root, ctx) {
     if (S.members.some((m) => m.kind === 'h' && (!m.atk || !m.hp))) warnings.push(t('team.warnStats'));
     out.append(h('section', { class: 'card' }, h('h2', {}, t('team.warnings')),
       warnings.length ? h('ul', { class: 'warn-list' }, warnings.map((w) => h('li', {}, w))) : h('p', {}, t('team.noWarning'))));
+    // Enregistrer l'équipe (héros sauvegardés + champions uniquement)
+    const saveMsg = h('p', { class: 'small', role: 'status', 'aria-live': 'polite' });
+    const nameInp = h('input', { type: 'text', id: 'team-save-name', maxlength: 60, placeholder: t('team.saveNamePh') });
+    const savable = S.members.filter((m) => (m.kind === 'h' && m.hid && store.getHero(m.hid)) || m.kind === 'c');
+    out.append(h('section', { class: 'card' }, h('h2', {}, t('team.saveTitle')),
+      h('div', { class: 'field' }, h('label', { for: 'team-save-name' }, t('ro.teamName')), nameInp),
+      h('div', { class: 'actions' }, h('button', { type: 'button', class: 'button', disabled: !savable.length, onclick: () => {
+        const members = savable.map((m) => (m.kind === 'c' ? { champion: m.name, leaderTier: m.tier } : { heroId: m.hid }));
+        const tm = store.saveTeam({ id: store.newId('t'), name: nameInp.value.trim() || `${S.quest.name} – ${l.difficulty}`, context: { kind: 'quest', quest: S.quest.name, difficulty: S.lv }, members, notes: '' });
+        saveMsg.className = 'small'; saveMsg.textContent = tm ? t('team.saved1', { name: tm.name }) : t('ro.saveFail');
+        if (tm && !store.storageOk()) { saveMsg.className = 'small error'; saveMsg.textContent = t('ro.noStorage'); }
+      } }, t('team.saveBtn')), ' ', h('a', { class: 'button secondary', href: '#/roster' }, t('ro.teams'))),
+      S.members.length > savable.length ? h('p', { class: 'muted small' }, t('team.saveSkipped', { n: S.members.length - savable.length })) : null, saveMsg));
     out.append(h('p', { class: 'actions' }, h('button', { type: 'button', class: 'button secondary', onclick: async (e) => {
       try { await navigator.clipboard.writeText(location.href); e.target.textContent = t('copied'); } catch { window.prompt(t('copyManual'), location.href); }
     } }, t('copyLink'))));

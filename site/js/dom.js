@@ -1,4 +1,6 @@
 // Petits utilitaires DOM (pas de framework).
+import { itemIcon, elemIcon, statIcon, uiIcon } from './data.js';
+
 let uid = 0;
 export const nextId = (p = 'id') => `${p}-${++uid}`;
 
@@ -48,7 +50,7 @@ export function combo({ label, options, value = '', placeholder = '', onPick, id
     else input.setAttribute('aria-invalid', 'true');
   };
   input.addEventListener('change', fire);
-  input.addEventListener('input', () => { if (byLower.has(input.value.trim().toLowerCase())) fire(); });
+  input.addEventListener('input', () => { if (byLower.has(input.value.trim().toLowerCase())) setTimeout(fire, 0); });
   const wrap = h('div', { class: 'field' }, label ? h('label', { for: iid }, label) : null, input, dl);
   wrap.input = input;
   return wrap;
@@ -72,7 +74,38 @@ export function numberField({ label, value, min, max, step, onChange, id }) {
   return wrap;
 }
 
-export const elBadge = (el) => el ? h('span', { class: `elem elem-${String(el).toLowerCase()}` }, el) : null;
+/** Image décorative ou nommée. size = côté en px (width/height). */
+export function icon(src, { size = 24, alt = '', cls = '' } = {}) {
+  if (!src) return null;
+  return h('img', { class: `ico${cls ? ' ' + cls : ''}`, src, alt, width: size, height: size, loading: 'lazy', decoding: 'async' });
+}
+
+/** Pastille d'élément : icône + texte. */
+export const elBadge = (el) => el ? h('span', { class: `elem elem-${String(el).toLowerCase()}` }, icon(elemIcon(el), { size: 16 }), el) : null;
+
+/** Étiquette de statistique : icône (clé d'icons.stats) + texte. */
+export const statLabel = (key, text) => h('span', { class: 'stat-label' }, icon(statIcon(key), { size: 18 }), text);
+
+/** Icône + texte alignés (classe, compétence, quête…). */
+export const withIcon = (src, text, size = 28) => h('span', { class: 'with-ico' }, icon(src, { size }), h('span', {}, text));
+
+/** Case d'équipement façon jeu : image, cadre de qualité, pastille de tier en coin. */
+export function gearTile(item, { tier, quality, size = 64 } = {}) {
+  const src = itemIcon(item);
+  const q = quality ? ({ normal: 'common', superior: 'uncommon' }[String(quality).toLowerCase()] || String(quality).toLowerCase()) : '';
+  const tile = h('div', { class: `gear-tile${q ? ' q-' + q : ''}`, style: `--tile:${size}px` },
+    src ? icon(src, { size, alt: item.name || '' }) : h('span', { class: 'gear-empty', 'aria-hidden': 'true' }, '?'),
+    tier ? h('span', { class: 'tier-badge' }, icon(uiIcon('tier'), { size: 14 }), `T${tier}`) : null);
+  return tile;
+}
+
+/** Mention des images (Fan Kit officiel). */
+export function creditImages() {
+  const fr = document.documentElement.lang !== 'en';
+  return [fr ? 'Images : Fan Kit officiel Shop Titans © Kabam Games, Inc., utilisé pour un projet de fan non commercial'
+    : 'Images: official Shop Titans Fan Kit © Kabam Games, Inc., used for a non-commercial fan project',
+  ' (', h('a', { href: 'https://playshoptitans.com', target: '_blank', rel: 'noopener noreferrer' }, 'playshoptitans.com'), ')'];
+}
 
 export function table(headers, rows, cls = '') {
   return h('div', { class: 'table-wrap' }, h('table', { class: cls },

@@ -1,0 +1,2451 @@
+{
+ "source": "https://stcentral-hub.github.io/posts/event-quests/",
+ "authors": "STC Hub",
+ "license": "CC BY-NC-ND 4.0",
+ "licenseUrl": "https://creativecommons.org/licenses/by-nc-nd/4.0/",
+ "fetchedAt": "2026-11-06T12:24:55+00:00",
+ "towers": [
+  {
+   "name": "Alpha Tower",
+   "difficulty": "Alpha",
+   "partySize": 3,
+   "floors": [
+    {
+     "floor": 1,
+     "boss": false,
+     "minPower": 250,
+     "hp": 300,
+     "atk": 9,
+     "aoe": 7,
+     "defCaps": {
+      "50": 100,
+      "70": 200,
+      "75": 600
+     }
+    },
+    {
+     "floor": 2,
+     "boss": false,
+     "minPower": 250,
+     "hp": 350,
+     "atk": 9,
+     "aoe": 7,
+     "defCaps": {
+      "50": 170,
+      "70": 340,
+      "75": 1020
+     }
+    },
+    {
+     "floor": 3,
+     "boss": true,
+     "bossName": "Boss",
+     "minPower": 250,
+     "hp": 400,
+     "atk": 11,
+     "aoe": 7,
+     "defCaps": {
+      "50": 200,
+      "70": 400,
+      "75": 1200
+     }
+    },
+    {
+     "floor": 4,
+     "boss": false,
+     "minPower": 250,
+     "hp": 500,
+     "atk": 10,
+     "aoe": 7,
+     "defCaps": {
+      "50": 200,
+      "70": 400,
+      "75": 1200
+     }
+    },
+    {
+     "floor": 5,
+     "boss": false,
+     "minPower": 250,
+     "hp": 600,
+     "atk": 10,
+     "aoe": 7,
+     "defCaps": {
+      "50": 200,
+      "70": 400,
+      "75": 1200
+     }
+    },
+    {
+     "floor": 6,
+     "boss": true,
+     "bossName": "Boss",
+     "minPower": 250,
+     "hp": 750,
+     "atk": 12,
+     "aoe": 7,
+     "defCaps": {
+      "50": 260,
+      "70": 520,
+      "75": 1560
+     }
+    },
+    {
+     "floor": 7,
+     "boss": false,
+     "minPower": 250,
+     "hp": 850,
+     "atk": 10,
+     "aoe": 7,
+     "defCaps": {
+      "50": 260,
+      "70": 520,
+      "75": 1560
+     }
+    },
+    {
+     "floor": 8,
+     "boss": false,
+     "minPower": 250,
+     "hp": 950,
+     "atk": 10,
+     "aoe": 7,
+     "defCaps": {
+      "50": 260,
+      "70": 520,
+      "75": 1560
+     }
+    },
+    {
+     "floor": 9,
+     "boss": true,
+     "bossName": "Boss",
+     "minPower": 250,
+     "hp": 1000,
+     "atk": 13,
+     "aoe": 7,
+     "defCaps": {
+      "50": 260,
+      "70": 520,
+      "75": 1560
+     }
+    },
+    {
+     "floor": 10,
+     "boss": false,
+     "minPower": 250,
+     "hp": 1250,
+     "atk": 12,
+     "aoe": 7,
+     "defCaps": {
+      "50": 400,
+      "70": 800,
+      "75": 2400
+     }
+    },
+    {
+     "floor": 11,
+     "boss": false,
+     "minPower": 350,
+     "hp": 1250,
+     "atk": 12,
+     "aoe": 10,
+     "defCaps": {
+      "50": 500,
+      "70": 1000,
+      "75": 3000
+     }
+    },
+    {
+     "floor": 12,
+     "boss": true,
+     "bossName": "Boss",
+     "minPower": 350,
+     "hp": 1500,
+     "atk": 15,
+     "aoe": 10,
+     "defCaps": {
+      "50": 600,
+      "70": 1200,
+      "75": 3600
+     }
+    },
+    {
+     "floor": 13,
+     "boss": false,
+     "minPower": 500,
+     "hp": 2000,
+     "atk": 16,
+     "aoe": 10,
+     "defCaps": {
+      "50": 600,
+      "70": 1200,
+      "75": 3600
+     }
+    },
+    {
+     "floor": 14,
+     "boss": false,
+     "minPower": 500,
+     "hp": 3000,
+     "atk": 16,
+     "aoe": 10,
+     "defCaps": {
+      "50": 700,
+      "70": 1400,
+      "75": 4200
+     }
+    },
+    {
+     "floor": 15,
+     "boss": true,
+     "bossName": "Boss",
+     "minPower": 600,
+     "hp": 4000,
+     "atk": 20,
+     "aoe": 10,
+     "defCaps": {
+      "50": 800,
+      "70": 1600,
+      "75": 4800
+     }
+    },
+    {
+     "floor": 16,
+     "boss": false,
+     "minPower": 750,
+     "hp": 4500,
+     "atk": 18,
+     "aoe": 12,
+     "defCaps": {
+      "50": 800,
+      "70": 1600,
+      "75": 4800
+     }
+    },
+    {
+     "floor": 17,
+     "boss": false,
+     "minPower": 750,
+     "hp": 5500,
+     "atk": 18,
+     "aoe": 12,
+     "defCaps": {
+      "50": 800,
+      "70": 1600,
+      "75": 4800
+     }
+    },
+    {
+     "floor": 18,
+     "boss": true,
+     "bossName": "Boss",
+     "minPower": 800,
+     "hp": 6500,
+     "atk": 20,
+     "aoe": 12,
+     "defCaps": {
+      "50": 800,
+      "70": 1600,
+      "75": 4800
+     }
+    },
+    {
+     "floor": 19,
+     "boss": false,
+     "minPower": 850,
+     "hp": 9000,
+     "atk": 20,
+     "aoe": 12,
+     "defCaps": {
+      "50": 800,
+      "70": 1600,
+      "75": 4800
+     }
+    },
+    {
+     "floor": 20,
+     "boss": false,
+     "minPower": 900,
+     "hp": 10500,
+     "atk": 20,
+     "aoe": 12,
+     "defCaps": {
+      "50": 800,
+      "70": 1600,
+      "75": 4800
+     }
+    },
+    {
+     "floor": 21,
+     "boss": true,
+     "bossName": "Boss",
+     "minPower": 1000,
+     "hp": 12000,
+     "atk": 22,
+     "aoe": 15,
+     "defCaps": {
+      "50": 800,
+      "70": 1600,
+      "75": 4800
+     }
+    },
+    {
+     "floor": 22,
+     "boss": false,
+     "minPower": 1000,
+     "hp": 14000,
+     "atk": 23,
+     "aoe": 15,
+     "defCaps": {
+      "50": 800,
+      "70": 1600,
+      "75": 4800
+     }
+    },
+    {
+     "floor": 23,
+     "boss": false,
+     "minPower": 1000,
+     "hp": 16000,
+     "atk": 23,
+     "aoe": 15,
+     "defCaps": {
+      "50": 800,
+      "70": 1600,
+      "75": 4800
+     }
+    },
+    {
+     "floor": 24,
+     "boss": true,
+     "bossName": "Boss",
+     "minPower": 1050,
+     "hp": 18500,
+     "atk": 25,
+     "aoe": 20,
+     "defCaps": {
+      "50": 900,
+      "70": 1800,
+      "75": 5400
+     }
+    },
+    {
+     "floor": 25,
+     "boss": false,
+     "minPower": 1100,
+     "hp": 20000,
+     "atk": 25,
+     "aoe": 20,
+     "defCaps": {
+      "50": 900,
+      "70": 1800,
+      "75": 5400
+     }
+    },
+    {
+     "floor": 26,
+     "boss": false,
+     "minPower": 1150,
+     "hp": 22000,
+     "atk": 25,
+     "aoe": 20,
+     "defCaps": {
+      "50": 900,
+      "70": 1800,
+      "75": 5400
+     }
+    },
+    {
+     "floor": 27,
+     "boss": true,
+     "bossName": "Boss",
+     "minPower": 1200,
+     "hp": 25000,
+     "atk": 27,
+     "aoe": 20,
+     "defCaps": {
+      "50": 1000,
+      "70": 2000,
+      "75": 6000
+     }
+    },
+    {
+     "floor": 28,
+     "boss": false,
+     "minPower": 1250,
+     "hp": 27000,
+     "atk": 27,
+     "aoe": 20,
+     "defCaps": {
+      "50": 1200,
+      "70": 2400,
+      "75": 7200
+     }
+    },
+    {
+     "floor": 29,
+     "boss": false,
+     "minPower": 1300,
+     "hp": 29000,
+     "atk": 27,
+     "aoe": 20,
+     "defCaps": {
+      "50": 1200,
+      "70": 2400,
+      "75": 7200
+     }
+    },
+    {
+     "floor": 30,
+     "boss": true,
+     "bossName": "Alpha Titan",
+     "minPower": 1600,
+     "hp": 30000,
+     "atk": 30,
+     "aoe": 25,
+     "defCaps": {
+      "50": 1400,
+      "70": 2800,
+      "75": 8400
+     }
+    }
+   ]
+  },
+  {
+   "name": "Beta Tower",
+   "difficulty": "Beta",
+   "partySize": 3,
+   "floors": [
+    {
+     "floor": 1,
+     "boss": false,
+     "minPower": 500,
+     "hp": 4000,
+     "atk": 15,
+     "aoe": 10,
+     "defCaps": {
+      "50": 600,
+      "70": 1200,
+      "75": 3600
+     }
+    },
+    {
+     "floor": 2,
+     "boss": false,
+     "minPower": 500,
+     "hp": 5000,
+     "atk": 15,
+     "aoe": 10,
+     "defCaps": {
+      "50": 600,
+      "70": 1200,
+      "75": 3600
+     }
+    },
+    {
+     "floor": 3,
+     "boss": true,
+     "bossName": "Boss",
+     "minPower": 650,
+     "hp": 6000,
+     "atk": 18,
+     "aoe": 12,
+     "defCaps": {
+      "50": 800,
+      "70": 1600,
+      "75": 4800
+     }
+    },
+    {
+     "floor": 4,
+     "boss": false,
+     "minPower": 750,
+     "hp": 7000,
+     "atk": 18,
+     "aoe": 12,
+     "defCaps": {
+      "50": 800,
+      "70": 1600,
+      "75": 4800
+     }
+    },
+    {
+     "floor": 5,
+     "boss": false,
+     "minPower": 750,
+     "hp": 8000,
+     "atk": 18,
+     "aoe": 12,
+     "defCaps": {
+      "50": 800,
+      "70": 1600,
+      "75": 4800
+     }
+    },
+    {
+     "floor": 6,
+     "boss": true,
+     "bossName": "Boss",
+     "minPower": 900,
+     "hp": 13000,
+     "atk": 25,
+     "aoe": 16,
+     "defCaps": {
+      "50": 1200,
+      "70": 2400,
+      "75": 7200
+     }
+    },
+    {
+     "floor": 7,
+     "boss": false,
+     "minPower": 900,
+     "hp": 14000,
+     "atk": 25,
+     "aoe": 16,
+     "defCaps": {
+      "50": 1200,
+      "70": 2400,
+      "75": 7200
+     }
+    },
+    {
+     "floor": 8,
+     "boss": false,
+     "minPower": 900,
+     "hp": 15000,
+     "atk": 25,
+     "aoe": 16,
+     "defCaps": {
+      "50": 1400,
+      "70": 2800,
+      "75": 8400
+     }
+    },
+    {
+     "floor": 9,
+     "boss": true,
+     "bossName": "Boss",
+     "minPower": 1000,
+     "hp": 16000,
+     "atk": 25,
+     "aoe": 18,
+     "defCaps": {
+      "50": 1400,
+      "70": 2800,
+      "75": 8400
+     }
+    },
+    {
+     "floor": 10,
+     "boss": false,
+     "minPower": 1130,
+     "hp": 17000,
+     "atk": 25,
+     "aoe": 18,
+     "defCaps": {
+      "50": 1400,
+      "70": 2800,
+      "75": 8400
+     }
+    },
+    {
+     "floor": 11,
+     "boss": false,
+     "minPower": 1130,
+     "hp": 18000,
+     "atk": 25,
+     "aoe": 18,
+     "defCaps": {
+      "50": 1400,
+      "70": 2800,
+      "75": 8400
+     }
+    },
+    {
+     "floor": 12,
+     "boss": true,
+     "bossName": "Boss",
+     "minPower": 1500,
+     "hp": 20000,
+     "atk": 30,
+     "aoe": 18,
+     "defCaps": {
+      "50": 1600,
+      "70": 3200,
+      "75": 9600
+     }
+    },
+    {
+     "floor": 13,
+     "boss": false,
+     "minPower": 1500,
+     "hp": 25000,
+     "atk": 30,
+     "aoe": 18,
+     "defCaps": {
+      "50": 1600,
+      "70": 3200,
+      "75": 9600
+     }
+    },
+    {
+     "floor": 14,
+     "boss": false,
+     "minPower": 1500,
+     "hp": 27000,
+     "atk": 30,
+     "aoe": 18,
+     "defCaps": {
+      "50": 1600,
+      "70": 3200,
+      "75": 9600
+     }
+    },
+    {
+     "floor": 15,
+     "boss": true,
+     "bossName": "Boss",
+     "minPower": 1500,
+     "hp": 28000,
+     "atk": 30,
+     "aoe": 18,
+     "defCaps": {
+      "50": 1800,
+      "70": 3600,
+      "75": 10800
+     }
+    },
+    {
+     "floor": 16,
+     "boss": false,
+     "minPower": 1500,
+     "hp": 30000,
+     "atk": 35,
+     "aoe": 28,
+     "defCaps": {
+      "50": 1800,
+      "70": 3600,
+      "75": 10800
+     }
+    },
+    {
+     "floor": 17,
+     "boss": false,
+     "minPower": 1500,
+     "hp": 32000,
+     "atk": 35,
+     "aoe": 28,
+     "defCaps": {
+      "50": 1800,
+      "70": 3600,
+      "75": 10800
+     }
+    },
+    {
+     "floor": 18,
+     "boss": true,
+     "bossName": "Boss",
+     "minPower": 1500,
+     "hp": 35000,
+     "atk": 35,
+     "aoe": 28,
+     "defCaps": {
+      "50": 2000,
+      "70": 4000,
+      "75": 12000
+     }
+    },
+    {
+     "floor": 19,
+     "boss": false,
+     "minPower": 2000,
+     "hp": 38000,
+     "atk": 35,
+     "aoe": 23,
+     "defCaps": {
+      "50": 2000,
+      "70": 4000,
+      "75": 12000
+     }
+    },
+    {
+     "floor": 20,
+     "boss": false,
+     "minPower": 2000,
+     "hp": 40000,
+     "atk": 35,
+     "aoe": 23,
+     "defCaps": {
+      "50": 2000,
+      "70": 4000,
+      "75": 12000
+     }
+    },
+    {
+     "floor": 21,
+     "boss": true,
+     "bossName": "Boss",
+     "minPower": 2000,
+     "hp": 42500,
+     "atk": 35,
+     "aoe": 23,
+     "defCaps": {
+      "50": 2200,
+      "70": 4400,
+      "75": 13200
+     }
+    },
+    {
+     "floor": 22,
+     "boss": false,
+     "minPower": 2250,
+     "hp": 45000,
+     "atk": 40,
+     "aoe": 23,
+     "defCaps": {
+      "50": 2200,
+      "70": 4400,
+      "75": 13200
+     }
+    },
+    {
+     "floor": 23,
+     "boss": false,
+     "minPower": 2250,
+     "hp": 47000,
+     "atk": 40,
+     "aoe": 25,
+     "defCaps": {
+      "50": 2200,
+      "70": 4400,
+      "75": 13200
+     }
+    },
+    {
+     "floor": 24,
+     "boss": true,
+     "bossName": "Boss",
+     "minPower": 2250,
+     "hp": 50000,
+     "atk": 45,
+     "aoe": 34,
+     "defCaps": {
+      "50": 2400,
+      "70": 4800,
+      "75": 14400
+     }
+    },
+    {
+     "floor": 25,
+     "boss": false,
+     "minPower": 2500,
+     "hp": 60000,
+     "atk": 50,
+     "aoe": 34,
+     "defCaps": {
+      "50": 2400,
+      "70": 4800,
+      "75": 14400
+     }
+    },
+    {
+     "floor": 26,
+     "boss": false,
+     "minPower": 2500,
+     "hp": 70000,
+     "atk": 50,
+     "aoe": 34,
+     "defCaps": {
+      "50": 2400,
+      "70": 4800,
+      "75": 14400
+     }
+    },
+    {
+     "floor": 27,
+     "boss": true,
+     "bossName": "Boss",
+     "minPower": 2750,
+     "hp": 80000,
+     "atk": 55,
+     "aoe": 34,
+     "defCaps": {
+      "50": 2600,
+      "70": 5200,
+      "75": 15600
+     }
+    },
+    {
+     "floor": 28,
+     "boss": false,
+     "minPower": 2750,
+     "hp": 80000,
+     "atk": 65,
+     "aoe": 34,
+     "defCaps": {
+      "50": 2600,
+      "70": 5200,
+      "75": 15600
+     }
+    },
+    {
+     "floor": 29,
+     "boss": false,
+     "minPower": 2750,
+     "hp": 90000,
+     "atk": 65,
+     "aoe": 34,
+     "defCaps": {
+      "50": 2600,
+      "70": 5200,
+      "75": 15600
+     }
+    },
+    {
+     "floor": 30,
+     "boss": true,
+     "bossName": "Beta Titan",
+     "minPower": 3000,
+     "hp": 125000,
+     "atk": 70,
+     "aoe": 40,
+     "defCaps": {
+      "50": 3000,
+      "70": 6000,
+      "75": 18000
+     }
+    }
+   ]
+  },
+  {
+   "name": "Gamma Tower",
+   "difficulty": "Gamma",
+   "partySize": 4,
+   "floors": [
+    {
+     "floor": 1,
+     "boss": false,
+     "minPower": 1500,
+     "hp": 25000,
+     "atk": 40,
+     "aoe": 20,
+     "defCaps": {
+      "50": 2000,
+      "70": 4000,
+      "75": 12000
+     }
+    },
+    {
+     "floor": 2,
+     "boss": false,
+     "minPower": 1500,
+     "hp": 27500,
+     "atk": 40,
+     "aoe": 20,
+     "defCaps": {
+      "50": 2000,
+      "70": 4000,
+      "75": 12000
+     }
+    },
+    {
+     "floor": 3,
+     "boss": true,
+     "bossName": "Boss",
+     "minPower": 1200,
+     "hp": 30000,
+     "atk": 40,
+     "aoe": 20,
+     "defCaps": {
+      "50": 2000,
+      "70": 4000,
+      "75": 12000
+     }
+    },
+    {
+     "floor": 4,
+     "boss": false,
+     "minPower": 1200,
+     "hp": 32500,
+     "atk": 40,
+     "aoe": 20,
+     "defCaps": {
+      "50": 2400,
+      "70": 4800,
+      "75": 14400
+     }
+    },
+    {
+     "floor": 5,
+     "boss": false,
+     "minPower": 1200,
+     "hp": 35000,
+     "atk": 40,
+     "aoe": 20,
+     "defCaps": {
+      "50": 2400,
+      "70": 4800,
+      "75": 14400
+     }
+    },
+    {
+     "floor": 6,
+     "boss": true,
+     "bossName": "Boss",
+     "minPower": 1200,
+     "hp": 40000,
+     "atk": 50,
+     "aoe": 20,
+     "defCaps": {
+      "50": 2400,
+      "70": 4800,
+      "75": 14400
+     }
+    },
+    {
+     "floor": 7,
+     "boss": false,
+     "minPower": 1200,
+     "hp": 43000,
+     "atk": 50,
+     "aoe": 20,
+     "defCaps": {
+      "50": 2600,
+      "70": 5200,
+      "75": 15600
+     }
+    },
+    {
+     "floor": 8,
+     "boss": false,
+     "minPower": 1200,
+     "hp": 45000,
+     "atk": 50,
+     "aoe": 20,
+     "defCaps": {
+      "50": 2600,
+      "70": 5200,
+      "75": 15600
+     }
+    },
+    {
+     "floor": 9,
+     "boss": true,
+     "bossName": "Boss",
+     "minPower": 1200,
+     "hp": 50000,
+     "atk": 50,
+     "aoe": 20,
+     "defCaps": {
+      "50": 2800,
+      "70": 5600,
+      "75": 16800
+     }
+    },
+    {
+     "floor": 10,
+     "boss": false,
+     "minPower": 1200,
+     "hp": 55000,
+     "atk": 60,
+     "aoe": 20,
+     "defCaps": {
+      "50": 2800,
+      "70": 5600,
+      "75": 16800
+     }
+    },
+    {
+     "floor": 11,
+     "boss": false,
+     "minPower": 1750,
+     "hp": 60000,
+     "atk": 60,
+     "aoe": 20,
+     "defCaps": {
+      "50": 2800,
+      "70": 5600,
+      "75": 16800
+     }
+    },
+    {
+     "floor": 12,
+     "boss": true,
+     "bossName": "Boss",
+     "minPower": 1500,
+     "hp": 65000,
+     "atk": 60,
+     "aoe": 20,
+     "defCaps": {
+      "50": 3000,
+      "70": 6000,
+      "75": 18000
+     }
+    },
+    {
+     "floor": 13,
+     "boss": false,
+     "minPower": 1750,
+     "hp": 73000,
+     "atk": 60,
+     "aoe": 20,
+     "defCaps": {
+      "50": 3000,
+      "70": 6000,
+      "75": 18000
+     }
+    },
+    {
+     "floor": 14,
+     "boss": false,
+     "minPower": 1750,
+     "hp": 75000,
+     "atk": 60,
+     "aoe": 20,
+     "defCaps": {
+      "50": 3000,
+      "70": 6000,
+      "75": 18000
+     }
+    },
+    {
+     "floor": 15,
+     "boss": true,
+     "bossName": "Boss",
+     "minPower": 2000,
+     "hp": 80000,
+     "atk": 70,
+     "aoe": 40,
+     "defCaps": {
+      "50": 3200,
+      "70": 6400,
+      "75": 19200
+     }
+    },
+    {
+     "floor": 16,
+     "boss": false,
+     "minPower": 2500,
+     "hp": 90000,
+     "atk": 70,
+     "aoe": 40,
+     "defCaps": {
+      "50": 3200,
+      "70": 6400,
+      "75": 19200
+     }
+    },
+    {
+     "floor": 17,
+     "boss": false,
+     "minPower": 2500,
+     "hp": 95000,
+     "atk": 70,
+     "aoe": 40,
+     "defCaps": {
+      "50": 3200,
+      "70": 6400,
+      "75": 19200
+     }
+    },
+    {
+     "floor": 18,
+     "boss": true,
+     "bossName": "Boss",
+     "minPower": 2500,
+     "hp": 100000,
+     "atk": 80,
+     "aoe": 40,
+     "defCaps": {
+      "50": 3400,
+      "70": 6800,
+      "75": 20400
+     }
+    },
+    {
+     "floor": 19,
+     "boss": false,
+     "minPower": 3000,
+     "hp": 110000,
+     "atk": 80,
+     "aoe": 40,
+     "defCaps": {
+      "50": 3400,
+      "70": 6800,
+      "75": 20400
+     }
+    },
+    {
+     "floor": 20,
+     "boss": false,
+     "minPower": 3000,
+     "hp": 120000,
+     "atk": 85,
+     "aoe": 40,
+     "defCaps": {
+      "50": 3400,
+      "70": 6800,
+      "75": 20400
+     }
+    },
+    {
+     "floor": 21,
+     "boss": true,
+     "bossName": "Boss",
+     "minPower": 3750,
+     "hp": 120000,
+     "atk": 80,
+     "aoe": 40,
+     "defCaps": {
+      "50": 4000,
+      "70": 8000,
+      "75": 24000
+     }
+    },
+    {
+     "floor": 22,
+     "boss": false,
+     "minPower": 3750,
+     "hp": 123000,
+     "atk": 80,
+     "aoe": 40,
+     "defCaps": {
+      "50": 4000,
+      "70": 8000,
+      "75": 24000
+     }
+    },
+    {
+     "floor": 23,
+     "boss": false,
+     "minPower": 3750,
+     "hp": 125000,
+     "atk": 80,
+     "aoe": 40,
+     "defCaps": {
+      "50": 4000,
+      "70": 8000,
+      "75": 24000
+     }
+    },
+    {
+     "floor": 24,
+     "boss": true,
+     "bossName": "Boss",
+     "minPower": 4000,
+     "hp": 130000,
+     "atk": 100,
+     "aoe": 70,
+     "defCaps": {
+      "50": 4800,
+      "70": 9600,
+      "75": 28800
+     }
+    },
+    {
+     "floor": 25,
+     "boss": false,
+     "minPower": 4500,
+     "hp": 150000,
+     "atk": 100,
+     "aoe": 70,
+     "defCaps": {
+      "50": 4800,
+      "70": 9600,
+      "75": 28800
+     }
+    },
+    {
+     "floor": 26,
+     "boss": false,
+     "minPower": 4500,
+     "hp": 160000,
+     "atk": 100,
+     "aoe": 70,
+     "defCaps": {
+      "50": 4800,
+      "70": 9600,
+      "75": 28800
+     }
+    },
+    {
+     "floor": 27,
+     "boss": true,
+     "bossName": "Boss",
+     "minPower": 5000,
+     "hp": 200000,
+     "atk": 125,
+     "aoe": 70,
+     "defCaps": {
+      "50": 5200,
+      "70": 10400,
+      "75": 31200
+     }
+    },
+    {
+     "floor": 28,
+     "boss": false,
+     "minPower": 6500,
+     "hp": 220000,
+     "atk": 125,
+     "aoe": 70,
+     "defCaps": {
+      "50": 5200,
+      "70": 10400,
+      "75": 31200
+     }
+    },
+    {
+     "floor": 29,
+     "boss": false,
+     "minPower": 6500,
+     "hp": 250000,
+     "atk": 125,
+     "aoe": 70,
+     "defCaps": {
+      "50": 5200,
+      "70": 10400,
+      "75": 31200
+     }
+    },
+    {
+     "floor": 30,
+     "boss": true,
+     "bossName": "Gamma Titan",
+     "minPower": 6750,
+     "hp": 500000,
+     "atk": 140,
+     "aoe": 75,
+     "defCaps": {
+      "50": 6000,
+      "70": 12000,
+      "75": 36000
+     }
+    }
+   ]
+  },
+  {
+   "name": "Delta Tower",
+   "difficulty": "Delta",
+   "partySize": 4,
+   "floors": [
+    {
+     "floor": 1,
+     "boss": false,
+     "minPower": 3750,
+     "hp": 100000,
+     "atk": 80,
+     "aoe": 40,
+     "defCaps": {
+      "50": 4500,
+      "70": 9000,
+      "75": 27000
+     }
+    },
+    {
+     "floor": 2,
+     "boss": false,
+     "minPower": 3750,
+     "hp": 110000,
+     "atk": 80,
+     "aoe": 40,
+     "defCaps": {
+      "50": 4500,
+      "70": 9000,
+      "75": 27000
+     }
+    },
+    {
+     "floor": 3,
+     "boss": true,
+     "bossName": "Boss",
+     "minPower": 3750,
+     "hp": 120000,
+     "atk": 80,
+     "aoe": 40,
+     "defCaps": {
+      "50": 4500,
+      "70": 9000,
+      "75": 27000
+     }
+    },
+    {
+     "floor": 4,
+     "boss": false,
+     "minPower": 3750,
+     "hp": 130000,
+     "atk": 80,
+     "aoe": 40,
+     "defCaps": {
+      "50": 4500,
+      "70": 9000,
+      "75": 27000
+     }
+    },
+    {
+     "floor": 5,
+     "boss": false,
+     "minPower": 3750,
+     "hp": 140000,
+     "atk": 80,
+     "aoe": 40,
+     "defCaps": {
+      "50": 4500,
+      "70": 9000,
+      "75": 27000
+     }
+    },
+    {
+     "floor": 6,
+     "boss": true,
+     "bossName": "Boss",
+     "minPower": 5000,
+     "hp": 150000,
+     "atk": 90,
+     "aoe": 45,
+     "defCaps": {
+      "50": 5200,
+      "70": 10400,
+      "75": 31200
+     }
+    },
+    {
+     "floor": 7,
+     "boss": false,
+     "minPower": 5000,
+     "hp": 160000,
+     "atk": 90,
+     "aoe": 45,
+     "defCaps": {
+      "50": 5200,
+      "70": 10400,
+      "75": 31200
+     }
+    },
+    {
+     "floor": 8,
+     "boss": false,
+     "minPower": 5000,
+     "hp": 170000,
+     "atk": 90,
+     "aoe": 45,
+     "defCaps": {
+      "50": 5200,
+      "70": 10400,
+      "75": 31200
+     }
+    },
+    {
+     "floor": 9,
+     "boss": true,
+     "bossName": "Boss",
+     "minPower": 5000,
+     "hp": 180000,
+     "atk": 90,
+     "aoe": 45,
+     "defCaps": {
+      "50": 5200,
+      "70": 10400,
+      "75": 31200
+     }
+    },
+    {
+     "floor": 10,
+     "boss": false,
+     "minPower": 6250,
+     "hp": 200000,
+     "atk": 100,
+     "aoe": 50,
+     "defCaps": {
+      "50": 5200,
+      "70": 10400,
+      "75": 31200
+     }
+    },
+    {
+     "floor": 11,
+     "boss": false,
+     "minPower": 6250,
+     "hp": 210000,
+     "atk": 100,
+     "aoe": 50,
+     "defCaps": {
+      "50": 5200,
+      "70": 10400,
+      "75": 31200
+     }
+    },
+    {
+     "floor": 12,
+     "boss": true,
+     "bossName": "Boss",
+     "minPower": 6250,
+     "hp": 220000,
+     "atk": 100,
+     "aoe": 50,
+     "defCaps": {
+      "50": 5200,
+      "70": 10400,
+      "75": 31200
+     }
+    },
+    {
+     "floor": 13,
+     "boss": false,
+     "minPower": 6250,
+     "hp": 230000,
+     "atk": 100,
+     "aoe": 50,
+     "defCaps": {
+      "50": 5400,
+      "70": 10800,
+      "75": 32400
+     }
+    },
+    {
+     "floor": 14,
+     "boss": false,
+     "minPower": 6250,
+     "hp": 240000,
+     "atk": 100,
+     "aoe": 50,
+     "defCaps": {
+      "50": 5400,
+      "70": 10800,
+      "75": 32400
+     }
+    },
+    {
+     "floor": 15,
+     "boss": true,
+     "bossName": "Boss",
+     "minPower": 6250,
+     "hp": 250000,
+     "atk": 100,
+     "aoe": 50,
+     "defCaps": {
+      "50": 5400,
+      "70": 10800,
+      "75": 32400
+     }
+    },
+    {
+     "floor": 16,
+     "boss": false,
+     "minPower": 6250,
+     "hp": 260000,
+     "atk": 100,
+     "aoe": 50,
+     "defCaps": {
+      "50": 5400,
+      "70": 10800,
+      "75": 32400
+     }
+    },
+    {
+     "floor": 17,
+     "boss": false,
+     "minPower": 6250,
+     "hp": 270000,
+     "atk": 100,
+     "aoe": 50,
+     "defCaps": {
+      "50": 5600,
+      "70": 11200,
+      "75": 33600
+     }
+    },
+    {
+     "floor": 18,
+     "boss": true,
+     "bossName": "Boss",
+     "minPower": 6250,
+     "hp": 280000,
+     "atk": 100,
+     "aoe": 50,
+     "defCaps": {
+      "50": 5600,
+      "70": 11200,
+      "75": 33600
+     }
+    },
+    {
+     "floor": 19,
+     "boss": false,
+     "minPower": 8000,
+     "hp": 300000,
+     "atk": 125,
+     "aoe": 60,
+     "defCaps": {
+      "50": 5800,
+      "70": 11600,
+      "75": 34800
+     }
+    },
+    {
+     "floor": 20,
+     "boss": false,
+     "minPower": 8000,
+     "hp": 325000,
+     "atk": 125,
+     "aoe": 60,
+     "defCaps": {
+      "50": 5800,
+      "70": 11600,
+      "75": 34800
+     }
+    },
+    {
+     "floor": 21,
+     "boss": true,
+     "bossName": "Boss",
+     "minPower": 8000,
+     "hp": 350000,
+     "atk": 125,
+     "aoe": 60,
+     "defCaps": {
+      "50": 5800,
+      "70": 11600,
+      "75": 34800
+     }
+    },
+    {
+     "floor": 22,
+     "boss": false,
+     "minPower": 8000,
+     "hp": 400000,
+     "atk": 125,
+     "aoe": 60,
+     "defCaps": {
+      "50": 5800,
+      "70": 11600,
+      "75": 34800
+     }
+    },
+    {
+     "floor": 23,
+     "boss": false,
+     "minPower": 8000,
+     "hp": 450000,
+     "atk": 125,
+     "aoe": 60,
+     "defCaps": {
+      "50": 5800,
+      "70": 11600,
+      "75": 34800
+     }
+    },
+    {
+     "floor": 24,
+     "boss": true,
+     "bossName": "Boss",
+     "minPower": 10000,
+     "hp": 500000,
+     "atk": 140,
+     "aoe": 70,
+     "defCaps": {
+      "50": 6000,
+      "70": 12000,
+      "75": 36000
+     }
+    },
+    {
+     "floor": 25,
+     "boss": false,
+     "minPower": 10000,
+     "hp": 550000,
+     "atk": 140,
+     "aoe": 70,
+     "defCaps": {
+      "50": 6000,
+      "70": 12000,
+      "75": 36000
+     }
+    },
+    {
+     "floor": 26,
+     "boss": false,
+     "minPower": 10000,
+     "hp": 600000,
+     "atk": 140,
+     "aoe": 70,
+     "defCaps": {
+      "50": 6000,
+      "70": 12000,
+      "75": 36000
+     }
+    },
+    {
+     "floor": 27,
+     "boss": true,
+     "bossName": "Boss",
+     "minPower": 10000,
+     "hp": 650000,
+     "atk": 145,
+     "aoe": 70,
+     "defCaps": {
+      "50": 6400,
+      "70": 12800,
+      "75": 38400
+     }
+    },
+    {
+     "floor": 28,
+     "boss": false,
+     "minPower": 10000,
+     "hp": 700000,
+     "atk": 150,
+     "aoe": 70,
+     "defCaps": {
+      "50": 6400,
+      "70": 12800,
+      "75": 38400
+     }
+    },
+    {
+     "floor": 29,
+     "boss": false,
+     "minPower": 10000,
+     "hp": 800000,
+     "atk": 150,
+     "aoe": 70,
+     "defCaps": {
+      "50": 6600,
+      "70": 13200,
+      "75": 39600
+     }
+    },
+    {
+     "floor": 30,
+     "boss": true,
+     "bossName": "Delta Titan",
+     "minPower": 10000,
+     "hp": 1300000,
+     "atk": 175,
+     "aoe": 100,
+     "defCaps": {
+      "50": 7400,
+      "70": 14800,
+      "75": 44400
+     }
+    }
+   ]
+  },
+  {
+   "name": "Epsilon Tower",
+   "difficulty": "Epsilon",
+   "partySize": 4,
+   "floors": [
+    {
+     "floor": 1,
+     "boss": false,
+     "minPower": 8000,
+     "hp": 350000,
+     "atk": 125,
+     "aoe": 70,
+     "defCaps": {
+      "50": 5800,
+      "70": 11600,
+      "75": 34800
+     }
+    },
+    {
+     "floor": 2,
+     "boss": false,
+     "minPower": 8500,
+     "hp": 400000,
+     "atk": 135,
+     "aoe": 70,
+     "defCaps": {
+      "50": 5800,
+      "70": 11600,
+      "75": 34800
+     }
+    },
+    {
+     "floor": 3,
+     "boss": true,
+     "bossName": "Boss",
+     "minPower": 9000,
+     "hp": 450000,
+     "atk": 145,
+     "aoe": 70,
+     "defCaps": {
+      "50": 6500,
+      "70": 13000,
+      "75": 39000
+     }
+    },
+    {
+     "floor": 4,
+     "boss": false,
+     "minPower": 9250,
+     "hp": 480000,
+     "atk": 145,
+     "aoe": 70,
+     "defCaps": {
+      "50": 6600,
+      "70": 13200,
+      "75": 39600
+     }
+    },
+    {
+     "floor": 5,
+     "boss": false,
+     "minPower": 9500,
+     "hp": 500000,
+     "atk": 150,
+     "aoe": 70,
+     "defCaps": {
+      "50": 6600,
+      "70": 13200,
+      "75": 39600
+     }
+    },
+    {
+     "floor": 6,
+     "boss": true,
+     "bossName": "Boss",
+     "minPower": 9750,
+     "hp": 530000,
+     "atk": 155,
+     "aoe": 80,
+     "defCaps": {
+      "50": 6800,
+      "70": 13600,
+      "75": 40800
+     }
+    },
+    {
+     "floor": 7,
+     "boss": false,
+     "minPower": 10000,
+     "hp": 550000,
+     "atk": 155,
+     "aoe": 80,
+     "defCaps": {
+      "50": 6800,
+      "70": 13600,
+      "75": 40800
+     }
+    },
+    {
+     "floor": 8,
+     "boss": false,
+     "minPower": 10250,
+     "hp": 580000,
+     "atk": 160,
+     "aoe": 80,
+     "defCaps": {
+      "50": 7000,
+      "70": 14000,
+      "75": 42000
+     }
+    },
+    {
+     "floor": 9,
+     "boss": true,
+     "bossName": "Boss",
+     "minPower": 10500,
+     "hp": 600000,
+     "atk": 160,
+     "aoe": 80,
+     "defCaps": {
+      "50": 7200,
+      "70": 14400,
+      "75": 43200
+     }
+    },
+    {
+     "floor": 10,
+     "boss": false,
+     "minPower": 10750,
+     "hp": 650000,
+     "atk": 165,
+     "aoe": 90,
+     "defCaps": {
+      "50": 7400,
+      "70": 14800,
+      "75": 44400
+     }
+    },
+    {
+     "floor": 11,
+     "boss": false,
+     "minPower": 11000,
+     "hp": 700000,
+     "atk": 165,
+     "aoe": 90,
+     "defCaps": {
+      "50": 7600,
+      "70": 15200,
+      "75": 45600
+     }
+    },
+    {
+     "floor": 12,
+     "boss": true,
+     "bossName": "Boss",
+     "minPower": 11250,
+     "hp": 750000,
+     "atk": 170,
+     "aoe": 90,
+     "defCaps": {
+      "50": 8000,
+      "70": 16000,
+      "75": 48000
+     }
+    },
+    {
+     "floor": 13,
+     "boss": false,
+     "minPower": 11500,
+     "hp": 800000,
+     "atk": 170,
+     "aoe": 90,
+     "defCaps": {
+      "50": 8000,
+      "70": 16000,
+      "75": 48000
+     }
+    },
+    {
+     "floor": 14,
+     "boss": false,
+     "minPower": 11750,
+     "hp": 900000,
+     "atk": 175,
+     "aoe": 90,
+     "defCaps": {
+      "50": 8200,
+      "70": 16400,
+      "75": 49200
+     }
+    },
+    {
+     "floor": 15,
+     "boss": true,
+     "bossName": "Boss",
+     "minPower": 12000,
+     "hp": 1000000,
+     "atk": 175,
+     "aoe": 90,
+     "defCaps": {
+      "50": 8200,
+      "70": 16400,
+      "75": 49200
+     }
+    },
+    {
+     "floor": 16,
+     "boss": false,
+     "minPower": 12250,
+     "hp": 1100000,
+     "atk": 180,
+     "aoe": 90,
+     "defCaps": {
+      "50": 8400,
+      "70": 16800,
+      "75": 50400
+     }
+    },
+    {
+     "floor": 17,
+     "boss": false,
+     "minPower": 12500,
+     "hp": 1200000,
+     "atk": 180,
+     "aoe": 90,
+     "defCaps": {
+      "50": 8400,
+      "70": 16800,
+      "75": 50400
+     }
+    },
+    {
+     "floor": 18,
+     "boss": true,
+     "bossName": "Boss",
+     "minPower": 12750,
+     "hp": 1250000,
+     "atk": 185,
+     "aoe": 90,
+     "defCaps": {
+      "50": 8600,
+      "70": 17200,
+      "75": 51600
+     }
+    },
+    {
+     "floor": 19,
+     "boss": false,
+     "minPower": 13000,
+     "hp": 1300000,
+     "atk": 185,
+     "aoe": 90,
+     "defCaps": {
+      "50": 8600,
+      "70": 17200,
+      "75": 51600
+     }
+    },
+    {
+     "floor": 20,
+     "boss": false,
+     "minPower": 13250,
+     "hp": 1350000,
+     "atk": 190,
+     "aoe": 90,
+     "defCaps": {
+      "50": 8700,
+      "70": 17400,
+      "75": 52200
+     }
+    },
+    {
+     "floor": 21,
+     "boss": true,
+     "bossName": "Boss",
+     "minPower": 13500,
+     "hp": 1400000,
+     "atk": 190,
+     "aoe": 90,
+     "defCaps": {
+      "50": 8700,
+      "70": 17400,
+      "75": 52200
+     }
+    },
+    {
+     "floor": 22,
+     "boss": false,
+     "minPower": 13750,
+     "hp": 1500000,
+     "atk": 195,
+     "aoe": 90,
+     "defCaps": {
+      "50": 8800,
+      "70": 17600,
+      "75": 52800
+     }
+    },
+    {
+     "floor": 23,
+     "boss": false,
+     "minPower": 14000,
+     "hp": 1550000,
+     "atk": 195,
+     "aoe": 90,
+     "defCaps": {
+      "50": 8800,
+      "70": 17600,
+      "75": 52800
+     }
+    },
+    {
+     "floor": 24,
+     "boss": true,
+     "bossName": "Boss",
+     "minPower": 14250,
+     "hp": 1600000,
+     "atk": 200,
+     "aoe": 100,
+     "defCaps": {
+      "50": 8900,
+      "70": 17800,
+      "75": 53400
+     }
+    },
+    {
+     "floor": 25,
+     "boss": false,
+     "minPower": 14500,
+     "hp": 1700000,
+     "atk": 205,
+     "aoe": 100,
+     "defCaps": {
+      "50": 8900,
+      "70": 17800,
+      "75": 53400
+     }
+    },
+    {
+     "floor": 26,
+     "boss": false,
+     "minPower": 14750,
+     "hp": 1800000,
+     "atk": 205,
+     "aoe": 100,
+     "defCaps": {
+      "50": 9000,
+      "70": 18000,
+      "75": 54000
+     }
+    },
+    {
+     "floor": 27,
+     "boss": true,
+     "bossName": "Boss",
+     "minPower": 15000,
+     "hp": 1850000,
+     "atk": 210,
+     "aoe": 100,
+     "defCaps": {
+      "50": 9000,
+      "70": 18000,
+      "75": 54000
+     }
+    },
+    {
+     "floor": 28,
+     "boss": false,
+     "minPower": 15250,
+     "hp": 1900000,
+     "atk": 210,
+     "aoe": 100,
+     "defCaps": {
+      "50": 9100,
+      "70": 18200,
+      "75": 54600
+     }
+    },
+    {
+     "floor": 29,
+     "boss": false,
+     "minPower": 15500,
+     "hp": 2000000,
+     "atk": 210,
+     "aoe": 105,
+     "defCaps": {
+      "50": 9100,
+      "70": 18200,
+      "75": 54600
+     }
+    },
+    {
+     "floor": 30,
+     "boss": true,
+     "bossName": "Epsilon Titan",
+     "minPower": 16000,
+     "hp": 2500000,
+     "atk": 240,
+     "aoe": 120,
+     "defCaps": {
+      "50": 9600,
+      "70": 19200,
+      "75": 57600
+     }
+    }
+   ]
+  },
+  {
+   "name": "Terror Tower",
+   "difficulty": "Terror",
+   "partySize": 4,
+   "floors": [
+    {
+     "floor": 1,
+     "boss": false,
+     "minPower": 15250,
+     "hp": 180000,
+     "atk": 195,
+     "aoe": 98,
+     "defCaps": {
+      "50": 9600,
+      "70": 19200,
+      "75": 57600
+     }
+    },
+    {
+     "floor": 2,
+     "boss": false,
+     "minPower": 13250,
+     "hp": 185000,
+     "atk": 195,
+     "aoe": 98,
+     "defCaps": {
+      "50": 9760,
+      "70": 19520,
+      "75": 58560
+     }
+    },
+    {
+     "floor": 3,
+     "boss": true,
+     "bossName": "Boss",
+     "minPower": 13500,
+     "hp": 190000,
+     "atk": 200,
+     "aoe": 100,
+     "defCaps": {
+      "50": 10080,
+      "70": 20160,
+      "75": 60480
+     }
+    },
+    {
+     "floor": 4,
+     "boss": false,
+     "minPower": 13750,
+     "hp": 195000,
+     "atk": 200,
+     "aoe": 100,
+     "defCaps": {
+      "50": 10400,
+      "70": 20800,
+      "75": 62400
+     }
+    },
+    {
+     "floor": 5,
+     "boss": false,
+     "minPower": 14000,
+     "hp": 200000,
+     "atk": 205,
+     "aoe": 103,
+     "defCaps": {
+      "50": 10560,
+      "70": 21120,
+      "75": 63360
+     }
+    },
+    {
+     "floor": 6,
+     "boss": true,
+     "bossName": "Boss",
+     "minPower": 14250,
+     "hp": 205000,
+     "atk": 210,
+     "aoe": 105,
+     "defCaps": {
+      "50": 10800,
+      "70": 21600,
+      "75": 64800
+     }
+    },
+    {
+     "floor": 7,
+     "boss": false,
+     "minPower": 14500,
+     "hp": 210000,
+     "atk": 210,
+     "aoe": 105,
+     "defCaps": {
+      "50": 11200,
+      "70": 22400,
+      "75": 67200
+     }
+    },
+    {
+     "floor": 8,
+     "boss": false,
+     "minPower": 14750,
+     "hp": 205000,
+     "atk": 215,
+     "aoe": 108,
+     "defCaps": {
+      "50": 11600,
+      "70": 23200,
+      "75": 69600
+     }
+    },
+    {
+     "floor": 9,
+     "boss": true,
+     "bossName": "Boss",
+     "minPower": 15000,
+     "hp": 210000,
+     "atk": 215,
+     "aoe": 108,
+     "defCaps": {
+      "50": 12000,
+      "70": 24000,
+      "75": 72000
+     }
+    },
+    {
+     "floor": 10,
+     "boss": false,
+     "minPower": 15250,
+     "hp": 215000,
+     "atk": 220,
+     "aoe": 110,
+     "defCaps": {
+      "50": 12400,
+      "70": 24800,
+      "75": 74400
+     }
+    },
+    {
+     "floor": 11,
+     "boss": false,
+     "minPower": 15500,
+     "hp": 220000,
+     "atk": 225,
+     "aoe": 113,
+     "defCaps": {
+      "50": 12800,
+      "70": 25600,
+      "75": 76800
+     }
+    },
+    {
+     "floor": 12,
+     "boss": true,
+     "bossName": "Boss",
+     "minPower": 16500,
+     "hp": 225000,
+     "atk": 225,
+     "aoe": 113,
+     "defCaps": {
+      "50": 14800,
+      "70": 29600,
+      "75": 88800
+     }
+    },
+    {
+     "floor": 13,
+     "boss": false,
+     "minPower": 17000,
+     "hp": 230000,
+     "atk": 230,
+     "aoe": 115,
+     "defCaps": {
+      "50": 15040,
+      "70": 30080,
+      "75": 90240
+     }
+    },
+    {
+     "floor": 14,
+     "boss": false,
+     "minPower": 17500,
+     "hp": 235000,
+     "atk": 230,
+     "aoe": 115,
+     "defCaps": {
+      "50": 15360,
+      "70": 30720,
+      "75": 92160
+     }
+    },
+    {
+     "floor": 15,
+     "boss": true,
+     "bossName": "Boss",
+     "minPower": 18000,
+     "hp": 240000,
+     "atk": 235,
+     "aoe": 118,
+     "defCaps": {
+      "50": 15680,
+      "70": 31360,
+      "75": 94080
+     }
+    },
+    {
+     "floor": 16,
+     "boss": false,
+     "minPower": 18500,
+     "hp": 245000,
+     "atk": 235,
+     "aoe": 118,
+     "defCaps": {
+      "50": 16000,
+      "70": 32000,
+      "75": 96000
+     }
+    },
+    {
+     "floor": 17,
+     "boss": false,
+     "minPower": 19000,
+     "hp": 250000,
+     "atk": 240,
+     "aoe": 120,
+     "defCaps": {
+      "50": 16320,
+      "70": 32640,
+      "75": 97920
+     }
+    },
+    {
+     "floor": 18,
+     "boss": true,
+     "bossName": "Boss",
+     "minPower": 20000,
+     "hp": 255000,
+     "atk": 240,
+     "aoe": 120,
+     "defCaps": {
+      "50": 16640,
+      "70": 33280,
+      "75": 99840
+     }
+    },
+    {
+     "floor": 19,
+     "boss": false,
+     "minPower": 21250,
+     "hp": 260000,
+     "atk": 245,
+     "aoe": 123,
+     "defCaps": {
+      "50": 17600,
+      "70": 35200,
+      "75": 105600
+     }
+    },
+    {
+     "floor": 20,
+     "boss": false,
+     "minPower": 22500,
+     "hp": 270000,
+     "atk": 250,
+     "aoe": 125,
+     "defCaps": {
+      "50": 18400,
+      "70": 36800,
+      "75": 110400
+     }
+    },
+    {
+     "floor": 21,
+     "boss": true,
+     "bossName": "Boss",
+     "minPower": 21500,
+     "hp": 275000,
+     "atk": 250,
+     "aoe": 125,
+     "defCaps": {
+      "50": 19200,
+      "70": 38400,
+      "75": 115200
+     }
+    },
+    {
+     "floor": 22,
+     "boss": false,
+     "minPower": 23750,
+     "hp": 280000,
+     "atk": 255,
+     "aoe": 128,
+     "defCaps": {
+      "50": 20000,
+      "70": 40000,
+      "75": 120000
+     }
+    },
+    {
+     "floor": 23,
+     "boss": false,
+     "minPower": 24500,
+     "hp": 285000,
+     "atk": 255,
+     "aoe": 128,
+     "defCaps": {
+      "50": 20800,
+      "70": 41600,
+      "75": 124800
+     }
+    },
+    {
+     "floor": 24,
+     "boss": true,
+     "bossName": "Boss",
+     "minPower": 25000,
+     "hp": 290000,
+     "atk": 260,
+     "aoe": 130,
+     "defCaps": {
+      "50": 21600,
+      "70": 43200,
+      "75": 129600
+     }
+    },
+    {
+     "floor": 25,
+     "boss": false,
+     "minPower": 26000,
+     "hp": 295000,
+     "atk": 260,
+     "aoe": 130,
+     "defCaps": {
+      "50": 22400,
+      "70": 44800,
+      "75": 134400
+     }
+    },
+    {
+     "floor": 26,
+     "boss": false,
+     "minPower": 27000,
+     "hp": 300000,
+     "atk": 265,
+     "aoe": 133,
+     "defCaps": {
+      "50": 22720,
+      "70": 45440,
+      "75": 136320
+     }
+    },
+    {
+     "floor": 27,
+     "boss": true,
+     "bossName": "Boss",
+     "minPower": 28000,
+     "hp": 310000,
+     "atk": 270,
+     "aoe": 135,
+     "defCaps": {
+      "50": 23040,
+      "70": 46080,
+      "75": 138240
+     }
+    },
+    {
+     "floor": 28,
+     "boss": false,
+     "minPower": 29000,
+     "hp": 320000,
+     "atk": 270,
+     "aoe": 135,
+     "defCaps": {
+      "50": 23360,
+      "70": 46720,
+      "75": 140160
+     }
+    },
+    {
+     "floor": 29,
+     "boss": false,
+     "minPower": 30000,
+     "hp": 330000,
+     "atk": 280,
+     "aoe": 140,
+     "defCaps": {
+      "50": 23680,
+      "70": 47360,
+      "75": 142080
+     }
+    },
+    {
+     "floor": 30,
+     "boss": true,
+     "bossName": "Titan of Terror",
+     "minPower": 32500,
+     "hp": 400000,
+     "atk": 300,
+     "aoe": 150,
+     "defCaps": {
+      "50": 25600,
+      "70": 51200,
+      "75": 153600
+     }
+    }
+   ]
+  }
+ ]
+}

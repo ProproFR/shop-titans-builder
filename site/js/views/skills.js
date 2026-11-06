@@ -1,7 +1,7 @@
 // Vue 4 : évaluateur de compétences (heuristique).
-import { D } from '../data.js';
+import { D, skillIcon, classIcon } from '../data.js';
 import { t } from '../i18n.js';
-import { h, clear, combo, select, table, fmt } from '../dom.js';
+import { h, clear, combo, select, table, fmt, icon, withIcon } from '../dom.js';
 import { classMatches, scoreSkill, defaultRole, SKILL_ROLES, RARITY_RANK, parseEffect } from '../calc.js';
 import { skillFamiliesFor } from './optimizer.js';
 
@@ -21,7 +21,8 @@ export function render(root, ctx) {
   if (!SKILL_ROLES[S.role]) S.role = S.cls ? defaultRole(S.cls) : 'dps';
   const persist = () => ctx.setParams({ cls: S.cls ? S.cls.name : '', role: S.cls && S.role !== defaultRole(S.cls) ? S.role : '', sk: S.sk });
   const out = h('div', { 'aria-live': 'polite' });
-  const rarityLabel = (r) => r || '–';
+  const rarityLabel = (r) => r ? h('span', { class: `rar rar-${r.toLowerCase()}` }, r) : '–';
+  const skName = (sk, fam) => withIcon(skillIcon(sk.name) || skillIcon(fam), fam, 36);
 
   const draw = () => {
     clear(root);
@@ -46,7 +47,7 @@ export function render(root, ctx) {
         S.sk.forEach((v, i) => {
           const p = parseSk(v);
           const tiers = [...p.fam.tiers.keys()].sort((a, b) => a - b);
-          rows.append(h('div', { class: 'skill-row' }, h('div', { class: 'grow' }, h('strong', {}, p.fam.family)),
+          rows.append(h('div', { class: 'skill-row' }, icon(skillIcon(p.skill.name) || skillIcon(p.fam.family), { size: 44, cls: 'skill-ico' }), h('div', { class: 'grow' }, h('strong', {}, p.fam.family)),
             select({ label: t('skills.tier'), value: p.tier, options: tiers.map((x) => ({ value: x, label: `T${x}` })),
               onChange: (nv) => { S.sk[i] = `${p.fam.key}~${nv}`; persist(); redraw(); update(); } }),
             h('button', { type: 'button', class: 'btn-small', 'aria-label': `${t('remove')} ${p.fam.family}`, onclick: () => { S.sk.splice(i, 1); persist(); redraw(); update(); } }, t('remove'))));
@@ -75,9 +76,9 @@ export function render(root, ctx) {
     if (owned.length) {
       const total = owned.reduce((a, b) => a + b.score, 0);
       const weak = owned.reduce((a, b) => (b.score < a.score ? b : a), owned[0]);
-      out.append(h('section', { class: 'card' }, h('h2', {}, t('sk.owned')),
+      out.append(h('section', { class: 'card' }, h('h2', { class: 'with-ico-h' }, icon(classIcon(S.cls.name), { size: 40 }), t('sk.owned')),
         table([t('skills.name'), t('skills.tier'), t('skills.rarity'), t('skills.effect'), t('sk.score')],
-          owned.map((o) => [o.fam.family, `T${o.tier}`, rarityLabel(o.skill.rarity), o.skill.effect, fmt(o.score, 1)])),
+          owned.map((o) => [skName(o.skill, o.fam.family), `T${o.tier}`, rarityLabel(o.skill.rarity), o.skill.effect, fmt(o.score, 1)])),
         h('p', {}, h('strong', {}, t('sk.total')), ` ${fmt(total, 1)}`),
         owned.length > 1 ? h('p', { class: 'warn' }, t('sk.reroll', { name: weak.fam.family, score: fmt(weak.score, 1) })) : null,
         owned.some((o) => parseEffect(o.skill.effect).unknown.length) ? h('p', { class: 'muted small' }, t('sk.unparsed')) : null));
@@ -91,7 +92,7 @@ export function render(root, ctx) {
     }).filter((c) => c.score > 0).sort((a, b) => (RARITY_RANK[b.skill.rarity] || 0) - (RARITY_RANK[a.skill.rarity] || 0) || b.score - a.score).slice(0, 12);
     out.append(h('section', { class: 'card' }, h('h2', {}, t('sk.best')),
       cands.length ? table([t('skills.name'), t('skills.rarity'), t('skills.tier'), t('skills.effect'), t('sk.score')],
-        cands.map((c) => [c.fam.family, rarityLabel(c.skill.rarity), `T${c.tier}`, c.skill.effect, fmt(c.score, 1)])) : h('p', { class: 'muted' }, '–'),
+        cands.map((c) => [skName(c.skill, c.fam.family), rarityLabel(c.skill.rarity), `T${c.tier}`, c.skill.effect, fmt(c.score, 1)])) : h('p', { class: 'muted' }, '–'),
       h('p', { class: 'muted small' }, t('sk.bestNote'))));
   };
 

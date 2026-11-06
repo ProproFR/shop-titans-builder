@@ -140,6 +140,8 @@ export function setLang(l) {
   listeners.forEach((f) => f());
 }
 export const onLangChange = (f) => listeners.push(f);
+/** Ajoute (ou surcharge) des messages : utilisé par i18n-extra.js. */
+export function addMessages(l, obj) { Object.assign(DICT[l], obj); }
 
 export function t(key, vars) {
   let s = DICT[lang][key] ?? DICT.fr[key] ?? key;

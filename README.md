@@ -13,6 +13,8 @@ Interface en français et en anglais.
 | [Shop Titans Data Spreadsheet](https://docs.google.com/spreadsheets/d/1WLa7X8h3O0-aGKxeAlCL7bnN8-FhGd3t7pz2RCzSg8c) (officiel, Kabam) | Objets, classes, compétences, champions, quêtes | © Kabam Games, Inc. |
 | [STC Hub – Best In Slot](https://stcentral-hub.github.io/tools/bis-heroes/) (Nerilea, Reiga & Yuki) | Builds recommandés, affichés tels quels avec crédit | CC BY-NC-ND 4.0 |
 | [Shop Titans Central](https://st-central.net) | Formules de combat ([Combat Compendium](https://st-central.net/combat-compendium/)), guides | CC BY-NC-ND 4.0 |
+| Fan Kit officiel (lien en bas de [playshoptitans.com](https://playshoptitans.com)) | Images : objets, compétences, classes, stats, éléments | © Kabam : projets de fans autorisés, pas de redistribution du kit ni de monétisation |
+| [Blueprint Browser officiel](https://playshoptitans.com/blueprints/featured/new) | Correspondance nom d'objet ↔ nom du fichier image (`site/data/name2uid.json`) | © Kabam |
 
 Les builds STC sont reproduits **sans modification**, avec attribution et lien, dans une appli **non commerciale**
 à usage personnel et pour une guilde (lien partagé en privé, site non référencé).
@@ -36,6 +38,18 @@ python scripts/scrape_stc_bis.py      # récupère les derniers builds STC
 ```
 
 Avec un fichier téléchargé : `python scripts/build_data.py --local "Shop Titans Data Spreadsheet ….xlsx"`.
+
+### Images (à relancer à la main quand de nouveaux objets sortent)
+
+Le Fan Kit n'est pas dans le dépôt (seules les images utilisées, en WebP, sont dans `site/img/`).
+Télécharger le zip depuis le lien « Game Assets Fan Kit » en bas de playshoptitans.com, puis :
+
+```bash
+pip install openpyxl pillow
+python scripts/build_icons.py --fankit "chemin/vers/Fan Kit Assets (Shop Titans).zip"
+```
+
+Les objets absents du kit (collaborations sous licence : Avatar, Jumanji…) affichent l'icône de leur type.
 
 ## Lancer en local
 

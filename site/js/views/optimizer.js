@@ -1,11 +1,11 @@
 // Vue 2 : optimiseur d'équipement (calcul indicatif).
-import { D } from '../data.js';
+import { D, classIcon, skillIcon, qualityIcon } from '../data.js';
 import { t } from '../i18n.js';
-import { h, clear, combo, select, numberField, table, elBadge, fmt, pct } from '../dom.js';
+import { h, clear, combo, select, numberField, table, elBadge, fmt, pct, icon, statLabel, gearTile } from '../dom.js';
 import {
   QUALITY, PROFILES, classMatches, parseEffect, skillsToMods, rankSlot, computeStats, newMods, modsIsEmpty,
 } from '../calc.js';
-import { itemStatsText } from './builds.js';
+import { itemStatsNode } from './builds.js';
 
 const ELEMENTS = ['Fire', 'Water', 'Air', 'Earth', 'Light', 'Dark'];
 const MAX_SKILLS = 4;
@@ -89,8 +89,10 @@ export function render(root, ctx) {
     const hint = () => t('opt.tierHint', { tier: maxTierOf(S) });
     tierHint.textContent = hint();
     form.append(tierHint);
-    form.append(select({ label: t('opt.quality'), value: S.q, options: Object.keys(QUALITY).map((k) => ({ value: k, label: `${k} (×${QUALITY[k]})` })),
-      onChange: (v) => { S.q = v; persist(); update(); } }));
+    const qBtns = Object.keys(QUALITY).map((k) => h('button', { type: 'button', class: 'q-btn', 'data-q': k.toLowerCase(), 'aria-pressed': String(S.q === k),
+      onclick: () => { S.q = k; qBtns.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.q === k.toLowerCase()))); persist(); update(); } },
+      icon(qualityIcon(k), { size: 28 }), h('span', {}, `${k} (×${QUALITY[k]})`)));
+    form.append(h('fieldset', { class: 'quality-set' }, h('legend', {}, t('opt.quality')), h('div', { class: 'q-group' }, qBtns)));
 
     const wBox = h('fieldset', { class: 'weights', hidden: S.prof !== 'custom' },
       h('legend', {}, t('opt.weights')),
@@ -114,6 +116,7 @@ export function render(root, ctx) {
           const p = parseSkillParam(v);
           const tiers = [...p.fam.tiers.keys()].sort((a, b) => a - b);
           rows.append(h('div', { class: 'skill-row' },
+            icon(skillIcon(p.skill.name) || skillIcon(p.fam.family), { size: 44, cls: 'skill-ico' }),
             h('div', { class: 'grow' }, h('strong', {}, p.fam.family), h('span', { class: 'muted' }, ` (${p.fam.type})`), h('div', { class: 'small' }, p.skill.effect)),
             select({ label: t('skills.tier'), value: p.tier, options: tiers.map((x) => ({ value: x, label: `T${x}` })),
               onChange: (nv) => { S.sk[i] = `${p.fam.key}~${nv}`; persist(); redrawRows(); update(); } }),
@@ -151,13 +154,14 @@ export function render(root, ctx) {
     const R = compute(S);
     if (!R) { out.append(h('p', { class: 'muted' }, t('opt.pickClassFirst'))); return; }
     const cls = S.cls;
-    out.append(h('h2', {}, t('opt.result', { cls: cls.name, tier: R.maxTier })));
+    out.append(h('h2', { class: 'with-ico-h' }, icon(classIcon(cls.name), { size: 48 }), t('opt.result', { cls: cls.name, tier: R.maxTier })));
 
     // Stats totales
     const st = R.stats;
     out.append(h('section', { class: 'card' }, h('h3', {}, t('opt.totals')),
       h('dl', { class: 'stats' },
-        [['HP', fmt(st.hp)], ['ATK', fmt(st.atk)], ['DEF', fmt(st.def)], ['EVA', pct(st.eva, 1)], ['CRIT', pct(st.crit, 1)], [t('stat.critDmg'), `×${fmt(st.critDmg, 2)}`]]
+        [[statLabel('health', 'HP'), fmt(st.hp)], [statLabel('attack', 'ATK'), fmt(st.atk)], [statLabel('defense', 'DEF'), fmt(st.def)],
+          [statLabel('evasion', 'EVA'), pct(st.eva, 1)], [statLabel('critchance', 'CRIT'), pct(st.crit, 1)], [t('stat.critDmg'), `×${fmt(st.critDmg, 2)}`]]
           .map(([k, v]) => h('div', {}, h('dt', {}, k), h('dd', {}, v)))),
       h('p', { class: 'muted small' }, t('opt.totalsNote', { q: S.q })),
       R.unknown.length ? h('details', {}, h('summary', {}, t('opt.unparsed')), h('ul', {}, R.unknown.map((u) => h('li', {}, u)))) : null,
@@ -169,11 +173,13 @@ export function render(root, ctx) {
         h('h3', {}, `${t('builds.slot')} ${i + 1} — ${cls.slots[i].join(' / ')}`));
       if (!slot.list.length) { card.append(h('p', { class: 'muted' }, t('opt.noItem'))); out.append(card); return; }
       if (slot.relaxed) card.append(h('p', { class: 'warn small' }, t('opt.affinityRelaxed')));
-      const itemLine = (e, big) => h('div', { class: big ? 'best' : 'alt' },
-        h('strong', {}, e.item.name), ` · T${e.item.tier} · ${e.item.type} `,
-        e.item.elemAff.map((a) => (a === 'All' ? h('span', { class: 'tag' }, 'All') : elBadge(a))),
-        h('div', { class: 'small' }, itemStatsText(e.item), e.item.source ? h('span', { class: 'muted' }, ` · ${e.item.source}`) : null,
-          h('span', { class: 'muted' }, ` · ${t('opt.score')} ${fmt(e.score, 1)}`)));
+      const itemLine = (e, big) => h('div', { class: big ? 'best item-line' : 'alt item-line' },
+        gearTile(e.item, { tier: e.item.tier, quality: S.q, size: big ? 72 : 44 }),
+        h('div', { class: 'item-info' },
+          h('strong', {}, e.item.name), ` · T${e.item.tier} · ${e.item.type} `,
+          e.item.elemAff.map((a) => (a === 'All' ? h('span', { class: 'tag' }, 'All') : elBadge(a))),
+          h('div', { class: 'small' }, itemStatsNode(e.item), e.item.source ? h('span', { class: 'muted' }, ` · ${e.item.source}`) : null,
+            h('span', { class: 'muted' }, ` · ${t('opt.score')} ${fmt(e.score, 1)}`))));
       card.append(h('div', { class: 'label-best' }, t('opt.best')), itemLine(slot.list[0], true));
       const alts = slot.list.slice(1, 4);
       if (alts.length) card.append(h('div', { class: 'label-alt' }, t('opt.alts')), h('ol', { class: 'alts' }, alts.map((e) => h('li', {}, itemLine(e, false)))));

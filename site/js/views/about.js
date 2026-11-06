@@ -1,5 +1,5 @@
 import { t } from '../i18n.js';
-import { h } from '../dom.js';
+import { h, creditImages } from '../dom.js';
 import { D } from '../data.js';
 
 const ext = (href, text) => h('a', { href, target: '_blank', rel: 'noopener noreferrer' }, text);
@@ -18,6 +18,7 @@ export function render(root) {
     h('h2', {}, t('about.license')),
     h('p', {}, t('about.licenseBis', { license: D.bis.license }), ' ', ext(D.bis.licenseUrl, D.bis.licenseUrl)),
     h('p', {}, t('about.noModify')),
+    h('p', { class: 'credit', role: 'note' }, creditImages()),
     h('h2', {}, t('about.limits')),
     h('ul', {}, ['about.l1', 'about.l2', 'about.l3'].map((k) => h('li', {}, t(k)))),
     h('h2', {}, t('about.data')),
