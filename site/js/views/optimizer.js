@@ -1,7 +1,8 @@
 // Vue 2 : optimiseur d'équipement (calcul indicatif).
 import { D, classIcon, skillIcon, qualityIcon } from '../data.js';
 import { t } from '../i18n.js';
-import { h, clear, combo, select, numberField, table, elBadge, fmt, pct, icon, statLabel, gearTile } from '../dom.js';
+import { h, clear, combo, select, numberField, table, elBadge, fmt, pct, icon, statLabel, gearTile, originBadge } from '../dom.js';
+import { accessSelector, getAccess } from '../provenance.js';
 import {
   QUALITY, PROFILES, classMatches, parseEffect, skillsToMods, rankSlot, computeStats, newMods, modsIsEmpty,
 } from '../calc.js';
@@ -35,7 +36,6 @@ function readState(params) {
     prof: ['dps', 'tank', 'balanced', 'custom'].includes(params.get('prof')) ? params.get('prof') : 'dps',
     w: (params.get('w') || '1,0.2,0.2,2,3').split(',').map(Number).concat([0, 0, 0, 0, 0]).slice(0, 5).map((x) => (Number.isFinite(x) ? x : 0)),
     sk: params.getAll('sk').filter((v) => parseSkillParam(v)).slice(0, MAX_SKILLS),
-    ip: params.get('ip') === '1',
     el: ELEMENTS.includes(params.get('el')) ? params.get('el') : '',
   };
 }
@@ -49,7 +49,7 @@ export function compute(S) {
   if (!S.cls) return null;
   const skills = S.sk.map(parseSkillParam).filter(Boolean);
   const mods = skillsToMods(skills.map((s) => s.skill));
-  const opts = { maxTier: maxTierOf(S), quality: S.q, weights: weightsOf(S), mods, excludePacks: !S.ip, element: S.el };
+  const opts = { maxTier: maxTierOf(S), quality: S.q, weights: weightsOf(S), mods, access: getAccess(), element: S.el };
   const slots = S.cls.slots.map((types) => rankSlot(D.items, types, opts));
   const best = slots.map((s) => (s.list[0] ? s.list[0].item : null));
   const stats = computeStats({ cls: S.cls, items: best, quality: S.q, mods });
@@ -68,7 +68,7 @@ export function render(root, ctx) {
   const S = readState(ctx.params);
   const persist = () => ctx.setParams({
     cls: S.cls ? S.cls.name : '', lvl: S.lvl === D.maxLevel ? '' : S.lvl, tier: S.tier ?? '', q: S.q === 'Normal' ? '' : S.q,
-    prof: S.prof, w: S.prof === 'custom' ? S.w.join(',') : '', sk: S.sk, ip: S.ip, el: S.el,
+    prof: S.prof, w: S.prof === 'custom' ? S.w.join(',') : '', sk: S.sk, el: S.el,
   });
   const out = h('div', { 'aria-live': 'polite' });
 
@@ -140,7 +140,7 @@ export function render(root, ctx) {
 
     // Filtres
     const filters = h('fieldset', { class: 'filters' }, h('legend', {}, t('opt.filters')),
-      h('label', { class: 'check' }, h('input', { type: 'checkbox', checked: !S.ip, onchange: (e) => { S.ip = !e.target.checked; persist(); update(); } }), ' ', t('opt.excludePacks')),
+      accessSelector(() => update()),
       select({ label: t('opt.element'), value: S.el, options: [{ value: '', label: t('opt.anyElement') }, ...ELEMENTS.map((e) => ({ value: e, label: e }))],
         onChange: (v) => { S.el = v; persist(); update(); } }));
     form.append(filters);
@@ -178,7 +178,7 @@ export function render(root, ctx) {
         h('div', { class: 'item-info' },
           h('strong', {}, e.item.name), ` · T${e.item.tier} · ${e.item.type} `,
           e.item.elemAff.map((a) => (a === 'All' ? h('span', { class: 'tag' }, 'All') : elBadge(a))),
-          h('div', { class: 'small' }, itemStatsNode(e.item), e.item.source ? h('span', { class: 'muted' }, ` · ${e.item.source}`) : null,
+          h('div', { class: 'small' }, itemStatsNode(e.item), ' ', originBadge(e.item), e.item.source ? h('span', { class: 'muted' }, ` · ${e.item.source}`) : null,
             h('span', { class: 'muted' }, ` · ${t('opt.score')} ${fmt(e.score, 1)}`))));
       card.append(h('div', { class: 'label-best' }, t('opt.best')), itemLine(slot.list[0], true));
       const alts = slot.list.slice(1, 4);

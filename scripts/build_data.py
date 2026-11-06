@@ -74,6 +74,23 @@ def split_list(v):
 
 
 # ---------------------------------------------------------------- items
+def origin(source, antique_tokens):
+    """Provenance d'un plan :
+    - "base"    : craft standard (débloqué par niveau ou parchemins de recherche), accessible à tous ;
+    - "chest"   : obtenu en jeu dans un coffre de quête (clés) ou via le livre de collection ;
+    - "antique" : sans pack, acheté à l'antiquaire avec des jetons gagnés en jeu (événements) ;
+    - "paid"    : pack, offre ou Content Pass payant (peut revenir plus tard à l'antiquaire).
+    """
+    s = (source or "").lower()
+    if re.search(r"pack|parck|pact|offer|content pass|bundle", s):
+        return "paid"
+    if re.search(r"chest|collection book", s):
+        return "chest"
+    if antique_tokens:
+        return "antique"
+    return "base"
+
+
 def parse_items(ws):
     rows = grid(ws)
     h = [clean(x) for x in rows[0]]
@@ -84,8 +101,9 @@ def parse_items(ws):
     c = {k: col(k) for k in ["Name", "Type", "Unlock Prerequisite", "Tier", "Value",
                               "ATK", "DEF", "HP", "EVA", "CRIT", "Mana Shield",
                               "Elemental Affinity", "Spirit Affinity",
-                              "Built-In Element", "Built-In Spirit"]}
-    antique = len(h) - 1 if h[-1] and "Antique" in str(h[-1]) else None
+                              "Built-In Element", "Built-In Spirit",
+                              "Research Scrolls", "Antique Tokens", "Airship Power"]}
+    antique = next((i for i, x in enumerate(h) if x and "Is Antique" in str(x)), None)
     items = []
     for r in rows[1:]:
         name, typ = clean(r[c["Name"]]), clean(r[c["Type"]])
@@ -107,7 +125,11 @@ def parse_items(ws):
             "builtInElement": clean(r[c["Built-In Element"]]),
             "builtInSpirit": clean(r[c["Built-In Spirit"]]),
             "source": clean(r[c["Unlock Prerequisite"]]),
+            "scrolls": int(num(r[c["Research Scrolls"]])),
+            "antiqueTokens": int(num(r[c["Antique Tokens"]])),
+            "airship": num(r[c["Airship Power"]]),
         }
+        it["origin"] = origin(it["source"], it["antiqueTokens"])
         if antique is not None and clean(r[antique]):
             it["antique"] = str(clean(r[antique]))[:10]
         items.append(it)

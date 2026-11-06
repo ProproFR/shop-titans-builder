@@ -1,5 +1,6 @@
 // Petits utilitaires DOM (pas de framework).
 import { itemIcon, elemIcon, statIcon, uiIcon } from './data.js';
+import { t } from './i18n.js';
 
 let uid = 0;
 export const nextId = (p = 'id') => `${p}-${++uid}`;
@@ -95,8 +96,26 @@ export function gearTile(item, { tier, quality, size = 64 } = {}) {
   const q = quality ? ({ normal: 'common', superior: 'uncommon' }[String(quality).toLowerCase()] || String(quality).toLowerCase()) : '';
   const tile = h('div', { class: `gear-tile${q ? ' q-' + q : ''}`, style: `--tile:${size}px` },
     src ? icon(src, { size, alt: item.name || '' }) : h('span', { class: 'gear-empty', 'aria-hidden': 'true' }, '?'),
-    tier ? h('span', { class: 'tier-badge' }, icon(uiIcon('tier'), { size: 14 }), `T${tier}`) : null);
+    tier ? h('span', { class: 'tier-badge' }, icon(uiIcon('tier'), { size: 14 }), `T${tier}`) : null,
+    item.origin ? h('span', { class: `origin-dot origin-${item.origin}`, title: originLabel(item), role: 'img', 'aria-label': originLabel(item) }, icon(uiIcon(ORIGIN_ICON[item.origin]), { size: 12 })) : null);
   return tile;
+}
+
+const ORIGIN_ICON = { base: 'craft', chest: 'quest', antique: 'antique', paid: 'gem' };
+
+/** Texte de provenance d'un objet (sans mise en forme). */
+export function originLabel(item) {
+  if (!item || !item.origin) return '';
+  return t('org.' + item.origin) + (item.origin === 'paid' && item.antiqueTokens > 0 ? ' · ' + t('org.alsoAntique') : '');
+}
+
+/** Badge(s) de provenance : « Craft de base » / « Coffre (en jeu) » / « Antiquaire (en jeu) » / « Pack payant » (+ « aussi à l'antiquaire »). */
+export function originBadge(item) {
+  if (!item || !item.origin) return null;
+  const tokens = item.origin === 'paid' && item.antiqueTokens > 0;
+  return h('span', { class: 'origin-wrap' },
+    h('span', { class: `origin origin-${item.origin}` }, icon(uiIcon(ORIGIN_ICON[item.origin]), { size: 16 }), t('org.' + item.origin)),
+    tokens ? h('span', { class: 'origin origin-antique', title: `${item.antiqueTokens} ${t('org.tokens')}` }, icon(uiIcon('antique'), { size: 16 }), `${t('org.alsoAntique')} (${item.antiqueTokens})`) : null);
 }
 
 /** Mention des images (Fan Kit officiel). */

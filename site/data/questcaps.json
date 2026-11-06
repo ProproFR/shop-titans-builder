@@ -1,0 +1,1565 @@
+{
+ "source": "https://stcentral-hub.github.io/posts/main-quests/",
+ "authors": "STC Hub",
+ "license": "CC BY-NC-ND 4.0",
+ "licenseUrl": "https://creativecommons.org/licenses/by-nc-nd/4.0/",
+ "fetchedAt": "2026-11-06T12:56:23+00:00",
+ "areas": [
+  {
+   "name": "Howling Woods",
+   "levels": [
+    {
+     "minPower": 0,
+     "hp": 250,
+     "atk": 8,
+     "aoe": 5,
+     "defCaps": {
+      "50": 100,
+      "70": 200,
+      "75": 600
+     },
+     "difficulty": "Easy"
+    },
+    {
+     "minPower": 250,
+     "hp": 1000,
+     "atk": 10,
+     "aoe": 6,
+     "defCaps": {
+      "50": 300,
+      "70": 600,
+      "75": 1800
+     },
+     "difficulty": "Medium"
+    },
+    {
+     "minPower": 450,
+     "hp": 3500,
+     "atk": 14,
+     "aoe": 9,
+     "defCaps": {
+      "50": 480,
+      "70": 960,
+      "75": 2880
+     },
+     "difficulty": "Hard"
+    },
+    {
+     "minPower": 2000,
+     "hp": 30000,
+     "atk": 40,
+     "aoe": 20,
+     "defCaps": {
+      "50": 2000,
+      "70": 4000,
+      "75": 12000
+     },
+     "difficulty": "Extreme"
+    }
+   ]
+  },
+  {
+   "name": "Troublin Lair",
+   "levels": [
+    {
+     "minPower": 250,
+     "hp": 2000,
+     "atk": 12,
+     "aoe": 7,
+     "defCaps": {
+      "50": 400,
+      "70": 800,
+      "75": 2400
+     },
+     "difficulty": "Easy"
+    },
+    {
+     "minPower": 500,
+     "hp": 4000,
+     "atk": 15,
+     "aoe": 9,
+     "defCaps": {
+      "50": 600,
+      "70": 1200,
+      "75": 3600
+     },
+     "difficulty": "Medium"
+    },
+    {
+     "minPower": 750,
+     "hp": 10000,
+     "atk": 20,
+     "aoe": 13,
+     "defCaps": {
+      "50": 1000,
+      "70": 2000,
+      "75": 6000
+     },
+     "difficulty": "Hard"
+    },
+    {
+     "minPower": 3000,
+     "hp": 80000,
+     "atk": 60,
+     "aoe": 30,
+     "defCaps": {
+      "50": 3000,
+      "70": 6000,
+      "75": 18000
+     },
+     "barrier": "Air",
+     "barrierHp": 30,
+     "difficulty": "Extreme"
+    }
+   ],
+   "bossOf": "Howling Woods"
+  },
+  {
+   "name": "Aurora Caves",
+   "levels": [
+    {
+     "minPower": 250,
+     "hp": 900,
+     "atk": 9,
+     "aoe": 7,
+     "defCaps": {
+      "50": 260,
+      "70": 520,
+      "75": 1560
+     },
+     "difficulty": "Easy"
+    },
+    {
+     "minPower": 450,
+     "hp": 4000,
+     "atk": 12,
+     "aoe": 8,
+     "defCaps": {
+      "50": 520,
+      "70": 1040,
+      "75": 3120
+     },
+     "difficulty": "Medium"
+    },
+    {
+     "minPower": 750,
+     "hp": 8000,
+     "atk": 14,
+     "aoe": 10,
+     "defCaps": {
+      "50": 900,
+      "70": 1800,
+      "75": 5400
+     },
+     "difficulty": "Hard"
+    },
+    {
+     "minPower": 3500,
+     "hp": 60000,
+     "atk": 55,
+     "aoe": null,
+     "defCaps": {
+      "50": 4000,
+      "70": 8000,
+      "75": 24000
+     },
+     "difficulty": "Extreme"
+    }
+   ]
+  },
+  {
+   "name": "Yeti King Throne",
+   "levels": [
+    {
+     "minPower": 600,
+     "hp": 7000,
+     "atk": 12,
+     "aoe": 9,
+     "defCaps": {
+      "50": 700,
+      "70": 1400,
+      "75": 4200
+     },
+     "difficulty": "Easy"
+    },
+    {
+     "minPower": 800,
+     "hp": 10000,
+     "atk": 17,
+     "aoe": 12,
+     "defCaps": {
+      "50": 900,
+      "70": 1800,
+      "75": 5400
+     },
+     "difficulty": "Medium"
+    },
+    {
+     "minPower": 1500,
+     "hp": 22000,
+     "atk": 27,
+     "aoe": 18,
+     "defCaps": {
+      "50": 1300,
+      "70": 2600,
+      "75": 7800
+     },
+     "difficulty": "Hard"
+    },
+    {
+     "minPower": 5000,
+     "hp": 170000,
+     "atk": 80,
+     "aoe": 40,
+     "defCaps": {
+      "50": 4200,
+      "70": 8400,
+      "75": 25200
+     },
+     "barrier": "Fire",
+     "barrierHp": 40,
+     "difficulty": "Extreme"
+    }
+   ],
+   "bossOf": "Aurora Caves"
+  },
+  {
+   "name": "Whispering Bog",
+   "levels": [
+    {
+     "minPower": 500,
+     "hp": 4000,
+     "atk": 15,
+     "aoe": 10,
+     "defCaps": {
+      "50": 600,
+      "70": 1200,
+      "75": 3600
+     },
+     "difficulty": "Easy"
+    },
+    {
+     "minPower": 650,
+     "hp": 6000,
+     "atk": 18,
+     "aoe": 12,
+     "defCaps": {
+      "50": 800,
+      "70": 1600,
+      "75": 4800
+     },
+     "difficulty": "Medium"
+    },
+    {
+     "minPower": 900,
+     "hp": 13000,
+     "atk": 25,
+     "aoe": 16,
+     "defCaps": {
+      "50": 1200,
+      "70": 2400,
+      "75": 7200
+     },
+     "difficulty": "Hard"
+    },
+    {
+     "minPower": 4500,
+     "hp": 140000,
+     "atk": 70,
+     "aoe": 35,
+     "defCaps": {
+      "50": 4600,
+      "70": 9200,
+      "75": 27600
+     },
+     "difficulty": "Extreme"
+    }
+   ]
+  },
+  {
+   "name": "Cursed Witch Hut",
+   "levels": [
+    {
+     "minPower": 750,
+     "hp": 9000,
+     "atk": 20,
+     "aoe": 10,
+     "defCaps": {
+      "50": 1000,
+      "70": 2000,
+      "75": 6000
+     },
+     "difficulty": "Easy"
+    },
+    {
+     "minPower": 1130,
+     "hp": 16000,
+     "atk": 25,
+     "aoe": 18,
+     "defCaps": {
+      "50": 1400,
+      "70": 2800,
+      "75": 8400
+     },
+     "difficulty": "Medium"
+    },
+    {
+     "minPower": 2000,
+     "hp": 30000,
+     "atk": 35,
+     "aoe": 28,
+     "defCaps": {
+      "50": 1800,
+      "70": 3600,
+      "75": 10800
+     },
+     "difficulty": "Hard"
+    },
+    {
+     "minPower": 7500,
+     "hp": 330000,
+     "atk": 100,
+     "aoe": 50,
+     "defCaps": {
+      "50": 4800,
+      "70": 9600,
+      "75": 28800
+     },
+     "barrier": "Earth",
+     "barrierHp": 55,
+     "difficulty": "Extreme"
+    }
+   ],
+   "bossOf": "Whispering Bog"
+  },
+  {
+   "name": "Barren Wastes",
+   "levels": [
+    {
+     "minPower": 700,
+     "hp": 9000,
+     "atk": 18,
+     "aoe": 12,
+     "defCaps": {
+      "50": 800,
+      "70": 1600,
+      "75": 4800
+     },
+     "difficulty": "Easy"
+    },
+    {
+     "minPower": 1000,
+     "hp": 13000,
+     "atk": 23,
+     "aoe": 17,
+     "defCaps": {
+      "50": 1200,
+      "70": 2400,
+      "75": 7200
+     },
+     "difficulty": "Medium"
+    },
+    {
+     "minPower": 1500,
+     "hp": 26000,
+     "atk": 30,
+     "aoe": 18,
+     "defCaps": {
+      "50": 1600,
+      "70": 3200,
+      "75": 9600
+     },
+     "difficulty": "Hard"
+    },
+    {
+     "minPower": 6500,
+     "hp": 280000,
+     "atk": 100,
+     "aoe": 50,
+     "defCaps": {
+      "50": 5000,
+      "70": 10000,
+      "75": 30000
+     },
+     "difficulty": "Extreme"
+    }
+   ]
+  },
+  {
+   "name": "Mushgoon Arena",
+   "levels": [
+    {
+     "minPower": 1500,
+     "hp": 20000,
+     "atk": 25,
+     "aoe": 19,
+     "defCaps": {
+      "50": 1400,
+      "70": 2800,
+      "75": 8400
+     },
+     "difficulty": "Easy"
+    },
+    {
+     "minPower": 2000,
+     "hp": 45000,
+     "atk": 35,
+     "aoe": 23,
+     "defCaps": {
+      "50": 1600,
+      "70": 3200,
+      "75": 9600
+     },
+     "difficulty": "Medium"
+    },
+    {
+     "minPower": 2750,
+     "hp": 80000,
+     "atk": 50,
+     "aoe": 34,
+     "defCaps": {
+      "50": 2000,
+      "70": 4000,
+      "75": 12000
+     },
+     "difficulty": "Hard"
+    },
+    {
+     "minPower": 8000,
+     "hp": 500000,
+     "atk": 125,
+     "aoe": 60,
+     "defCaps": {
+      "50": 5800,
+      "70": 11600,
+      "75": 34800
+     },
+     "barrier": "Water",
+     "barrierHp": 75,
+     "difficulty": "Extreme"
+    }
+   ],
+   "bossOf": "Barren Wastes"
+  },
+  {
+   "name": "Sun God's Tomb",
+   "levels": [
+    {
+     "minPower": 1200,
+     "hp": 25000,
+     "atk": 40,
+     "aoe": 20,
+     "defCaps": {
+      "50": 2000,
+      "70": 4000,
+      "75": 12000
+     },
+     "difficulty": "Easy"
+    },
+    {
+     "minPower": 1500,
+     "hp": 40000,
+     "atk": 50,
+     "aoe": 25,
+     "defCaps": {
+      "50": 2400,
+      "70": 4800,
+      "75": 14400
+     },
+     "difficulty": "Medium"
+    },
+    {
+     "minPower": 2500,
+     "hp": 80000,
+     "atk": 60,
+     "aoe": 30,
+     "defCaps": {
+      "50": 2700,
+      "70": 5400,
+      "75": 16200
+     },
+     "difficulty": "Hard"
+    },
+    {
+     "minPower": 7500,
+     "hp": 430000,
+     "atk": 130,
+     "aoe": 65,
+     "defCaps": {
+      "50": 6800,
+      "70": 13600,
+      "75": 40800
+     },
+     "difficulty": "Extreme"
+    }
+   ]
+  },
+  {
+   "name": "Sun God's Guardian",
+   "levels": [
+    {
+     "minPower": 1800,
+     "hp": 60000,
+     "atk": 60,
+     "aoe": 30,
+     "defCaps": {
+      "50": 2800,
+      "70": 5600,
+      "75": 16800
+     },
+     "difficulty": "Easy"
+    },
+    {
+     "minPower": 2500,
+     "hp": 90000,
+     "atk": 70,
+     "aoe": 35,
+     "defCaps": {
+      "50": 3400,
+      "70": 6800,
+      "75": 20400
+     },
+     "difficulty": "Medium"
+    },
+    {
+     "minPower": 4000,
+     "hp": 130000,
+     "atk": 80,
+     "aoe": 40,
+     "defCaps": {
+      "50": 3800,
+      "70": 7600,
+      "75": 22800
+     },
+     "difficulty": "Hard"
+    },
+    {
+     "minPower": 10000,
+     "hp": 750000,
+     "atk": 175,
+     "aoe": 80,
+     "defCaps": {
+      "50": 7600,
+      "70": 15200,
+      "75": 45600
+     },
+     "barrier": "Light",
+     "barrierHp": 95,
+     "difficulty": "Extreme"
+    }
+   ],
+   "bossOf": "Sun God's Tomb"
+  },
+  {
+   "name": "Chronos Ruins",
+   "levels": [
+    {
+     "minPower": 2500,
+     "hp": 60000,
+     "atk": 60,
+     "aoe": 30,
+     "defCaps": {
+      "50": 3500,
+      "70": 7000,
+      "75": 21000
+     },
+     "difficulty": "Easy"
+    },
+    {
+     "minPower": 3500,
+     "hp": 90000,
+     "atk": 70,
+     "aoe": 35,
+     "defCaps": {
+      "50": 4000,
+      "70": 8000,
+      "75": 24000
+     },
+     "difficulty": "Medium"
+    },
+    {
+     "minPower": 4000,
+     "hp": 120000,
+     "atk": 80,
+     "aoe": 40,
+     "defCaps": {
+      "50": 4500,
+      "70": 9000,
+      "75": 27000
+     },
+     "difficulty": "Hard"
+    },
+    {
+     "minPower": 9500,
+     "hp": 600000,
+     "atk": 150,
+     "aoe": 75,
+     "defCaps": {
+      "50": 7400,
+      "70": 14800,
+      "75": 44400
+     },
+     "difficulty": "Extreme"
+    }
+   ]
+  },
+  {
+   "name": "Hall of Kings",
+   "levels": [
+    {
+     "minPower": 4000,
+     "hp": 130000,
+     "atk": 80,
+     "aoe": 40,
+     "defCaps": {
+      "50": 4500,
+      "70": 9000,
+      "75": 27000
+     },
+     "difficulty": "Easy"
+    },
+    {
+     "minPower": 5000,
+     "hp": 170000,
+     "atk": 100,
+     "aoe": 60,
+     "defCaps": {
+      "50": 5000,
+      "70": 10000,
+      "75": 30000
+     },
+     "difficulty": "Medium"
+    },
+    {
+     "minPower": 6500,
+     "hp": 300000,
+     "atk": 125,
+     "aoe": 70,
+     "defCaps": {
+      "50": 5500,
+      "70": 11000,
+      "75": 33000
+     },
+     "difficulty": "Hard"
+    },
+    {
+     "minPower": 12500,
+     "hp": 1100000,
+     "atk": 200,
+     "aoe": 100,
+     "defCaps": {
+      "50": 8000,
+      "70": 16000,
+      "75": 48000
+     },
+     "barrier": "Air",
+     "barrierHp": 110,
+     "difficulty": "Extreme"
+    }
+   ],
+   "bossOf": "Chronos Ruins"
+  },
+  {
+   "name": "Haunted Castle",
+   "levels": [
+    {
+     "minPower": 3750,
+     "hp": 100000,
+     "atk": 80,
+     "aoe": 40,
+     "defCaps": {
+      "50": 4500,
+      "70": 9000,
+      "75": 27000
+     },
+     "difficulty": "Easy"
+    },
+    {
+     "minPower": 5000,
+     "hp": 150000,
+     "atk": 90,
+     "aoe": 45,
+     "defCaps": {
+      "50": 5200,
+      "70": 10400,
+      "75": 31200
+     },
+     "difficulty": "Medium"
+    },
+    {
+     "minPower": 6250,
+     "hp": 250000,
+     "atk": 100,
+     "aoe": 50,
+     "defCaps": {
+      "50": 5600,
+      "70": 11200,
+      "75": 33600
+     },
+     "difficulty": "Hard"
+    },
+    {
+     "minPower": 10000,
+     "hp": 1000000,
+     "atk": 170,
+     "aoe": 85,
+     "defCaps": {
+      "50": 8000,
+      "70": 16000,
+      "75": 48000
+     },
+     "difficulty": "Extreme"
+    }
+   ]
+  },
+  {
+   "name": "Forsaken Throne",
+   "levels": [
+    {
+     "minPower": 6250,
+     "hp": 200000,
+     "atk": 100,
+     "aoe": 50,
+     "defCaps": {
+      "50": 5000,
+      "70": 10000,
+      "75": 30000
+     },
+     "difficulty": "Easy"
+    },
+    {
+     "minPower": 8000,
+     "hp": 300000,
+     "atk": 125,
+     "aoe": 60,
+     "defCaps": {
+      "50": 5500,
+      "70": 11000,
+      "75": 33000
+     },
+     "difficulty": "Medium"
+    },
+    {
+     "minPower": 10000,
+     "hp": 500000,
+     "atk": 140,
+     "aoe": 70,
+     "defCaps": {
+      "50": 6000,
+      "70": 12000,
+      "75": 36000
+     },
+     "difficulty": "Hard"
+    },
+    {
+     "minPower": 13500,
+     "hp": 1800000,
+     "atk": 200,
+     "aoe": 100,
+     "defCaps": {
+      "50": 9000,
+      "70": 18000,
+      "75": 54000
+     },
+     "barrier": "Light",
+     "barrierHp": 130,
+     "difficulty": "Extreme"
+    }
+   ],
+   "bossOf": "Haunted Castle"
+  },
+  {
+   "name": "Sunken Temple",
+   "levels": [
+    {
+     "minPower": 6250,
+     "hp": 250000,
+     "atk": 100,
+     "aoe": 50,
+     "defCaps": {
+      "50": 5600,
+      "70": 11200,
+      "75": 33600
+     },
+     "difficulty": "Easy"
+    },
+    {
+     "minPower": 7500,
+     "hp": 350000,
+     "atk": 120,
+     "aoe": 55,
+     "defCaps": {
+      "50": 6000,
+      "70": 12000,
+      "75": 36000
+     },
+     "difficulty": "Medium"
+    },
+    {
+     "minPower": 9000,
+     "hp": 450000,
+     "atk": 145,
+     "aoe": 60,
+     "defCaps": {
+      "50": 6500,
+      "70": 13000,
+      "75": 39000
+     },
+     "difficulty": "Hard"
+    },
+    {
+     "minPower": 11000,
+     "hp": 1500000,
+     "atk": 210,
+     "aoe": 105,
+     "defCaps": {
+      "50": 8800,
+      "70": 17600,
+      "75": 52800
+     },
+     "difficulty": "Extreme"
+    }
+   ]
+  },
+  {
+   "name": "Deep Nursery",
+   "levels": [
+    {
+     "minPower": 9000,
+     "hp": 300000,
+     "atk": 145,
+     "aoe": 60,
+     "defCaps": {
+      "50": 6000,
+      "70": 12000,
+      "75": 36000
+     },
+     "difficulty": "Easy"
+    },
+    {
+     "minPower": 10000,
+     "hp": 450000,
+     "atk": 160,
+     "aoe": 70,
+     "defCaps": {
+      "50": 6600,
+      "70": 13200,
+      "75": 39600
+     },
+     "difficulty": "Medium"
+    },
+    {
+     "minPower": 11750,
+     "hp": 900000,
+     "atk": 175,
+     "aoe": 80,
+     "defCaps": {
+      "50": 7200,
+      "70": 14400,
+      "75": 43200
+     },
+     "difficulty": "Hard"
+    },
+    {
+     "minPower": 12500,
+     "hp": 2000000,
+     "atk": 230,
+     "aoe": 110,
+     "defCaps": {
+      "50": 10000,
+      "70": 20000,
+      "75": 60000
+     },
+     "barrier": "Fire",
+     "barrierHp": 155,
+     "difficulty": "Extreme"
+    }
+   ],
+   "bossOf": "Sunken Temple"
+  },
+  {
+   "name": "Bleakspire Peak",
+   "levels": [
+    {
+     "minPower": 6500,
+     "hp": 400000,
+     "atk": 130,
+     "aoe": 60,
+     "defCaps": {
+      "50": 7000,
+      "70": 14000,
+      "75": 42000
+     },
+     "difficulty": "Easy"
+    },
+    {
+     "minPower": 9000,
+     "hp": 500000,
+     "atk": 150,
+     "aoe": 65,
+     "defCaps": {
+      "50": 7500,
+      "70": 15000,
+      "75": 45000
+     },
+     "difficulty": "Medium"
+    },
+    {
+     "minPower": 10000,
+     "hp": 650000,
+     "atk": 170,
+     "aoe": 70,
+     "defCaps": {
+      "50": 8000,
+      "70": 16000,
+      "75": 48000
+     },
+     "difficulty": "Hard"
+    },
+    {
+     "minPower": 13000,
+     "hp": 1800000,
+     "atk": 220,
+     "aoe": 110,
+     "defCaps": {
+      "50": 9800,
+      "70": 19600,
+      "75": 58800
+     },
+     "difficulty": "Extreme"
+    }
+   ]
+  },
+  {
+   "name": "Bleakspire Nest",
+   "levels": [
+    {
+     "minPower": 10000,
+     "hp": 600000,
+     "atk": 170,
+     "aoe": 70,
+     "defCaps": {
+      "50": 7500,
+      "70": 15000,
+      "75": 45000
+     },
+     "difficulty": "Easy"
+    },
+    {
+     "minPower": 12000,
+     "hp": 900000,
+     "atk": 190,
+     "aoe": 80,
+     "defCaps": {
+      "50": 8500,
+      "70": 17000,
+      "75": 51000
+     },
+     "difficulty": "Medium"
+    },
+    {
+     "minPower": 13000,
+     "hp": 1200000,
+     "atk": 215,
+     "aoe": 100,
+     "defCaps": {
+      "50": 10000,
+      "70": 20000,
+      "75": 60000
+     },
+     "difficulty": "Hard"
+    },
+    {
+     "minPower": 16000,
+     "hp": 3000000,
+     "atk": 250,
+     "aoe": 125,
+     "defCaps": {
+      "50": 12000,
+      "70": 24000,
+      "75": 72000
+     },
+     "barrier": "Earth",
+     "barrierHp": 165,
+     "difficulty": "Extreme"
+    }
+   ],
+   "bossOf": "Bleakspire Peak"
+  },
+  {
+   "name": "Cinderlake Volcano",
+   "levels": [
+    {
+     "minPower": 8000,
+     "hp": 500000,
+     "atk": 160,
+     "aoe": 80,
+     "defCaps": {
+      "50": 7500,
+      "70": 15000,
+      "75": 45000
+     },
+     "difficulty": "Easy"
+    },
+    {
+     "minPower": 10500,
+     "hp": 650000,
+     "atk": 180,
+     "aoe": 90,
+     "defCaps": {
+      "50": 8200,
+      "70": 16400,
+      "75": 49200
+     },
+     "difficulty": "Medium"
+    },
+    {
+     "minPower": 12000,
+     "hp": 900000,
+     "atk": 200,
+     "aoe": 100,
+     "defCaps": {
+      "50": 8600,
+      "70": 17200,
+      "75": 51600
+     },
+     "difficulty": "Hard"
+    },
+    {
+     "minPower": 15000,
+     "hp": 2400000,
+     "atk": 240,
+     "aoe": 120,
+     "defCaps": {
+      "50": 10400,
+      "70": 20800,
+      "75": 62400
+     },
+     "difficulty": "Extreme"
+    }
+   ]
+  },
+  {
+   "name": "Mountain Core",
+   "levels": [
+    {
+     "minPower": 11000,
+     "hp": 800000,
+     "atk": 180,
+     "aoe": 90,
+     "defCaps": {
+      "50": 7800,
+      "70": 15600,
+      "75": 46800
+     },
+     "barrier": "Water",
+     "barrierHp": 165,
+     "difficulty": "Easy"
+    },
+    {
+     "minPower": 13000,
+     "hp": 1250000,
+     "atk": 205,
+     "aoe": 100,
+     "defCaps": {
+      "50": 8700,
+      "70": 17400,
+      "75": 52200
+     },
+     "barrier": "Water",
+     "barrierHp": 170,
+     "difficulty": "Medium"
+    },
+    {
+     "minPower": 14000,
+     "hp": 1800000,
+     "atk": 225,
+     "aoe": 110,
+     "defCaps": {
+      "50": 10600,
+      "70": 21200,
+      "75": 63600
+     },
+     "barrier": "Water",
+     "barrierHp": 175,
+     "difficulty": "Hard"
+    },
+    {
+     "minPower": 18500,
+     "hp": 4000000,
+     "atk": 280,
+     "aoe": 140,
+     "defCaps": {
+      "50": 13000,
+      "70": 26000,
+      "75": 78000
+     },
+     "barrier": "Water",
+     "barrierHp": 180,
+     "difficulty": "Extreme"
+    }
+   ],
+   "bossOf": "Cinderlake Volcano"
+  },
+  {
+   "name": "Void Dimension",
+   "levels": [
+    {
+     "minPower": 9500,
+     "hp": 620000,
+     "atk": 190,
+     "aoe": 95,
+     "defCaps": {
+      "50": 8000,
+      "70": 16000,
+      "75": 48000
+     },
+     "difficulty": "Easy"
+    },
+    {
+     "minPower": 12000,
+     "hp": 800000,
+     "atk": 210,
+     "aoe": 105,
+     "defCaps": {
+      "50": 8700,
+      "70": 17400,
+      "75": 52200
+     },
+     "difficulty": "Medium"
+    },
+    {
+     "minPower": 14250,
+     "hp": 1100000,
+     "atk": 245,
+     "aoe": 120,
+     "defCaps": {
+      "50": 9600,
+      "70": 19200,
+      "75": 57600
+     },
+     "difficulty": "Hard"
+    },
+    {
+     "minPower": 16500,
+     "hp": 2740000,
+     "atk": 270,
+     "aoe": 135,
+     "defCaps": {
+      "50": 11000,
+      "70": 22000,
+      "75": 66000
+     },
+     "difficulty": "Extreme"
+    }
+   ]
+  },
+  {
+   "name": "Coalesced Materium",
+   "levels": [
+    {
+     "minPower": 12500,
+     "hp": 1050000,
+     "atk": 215,
+     "aoe": 110,
+     "defCaps": {
+      "50": 8200,
+      "70": 16400,
+      "75": 49200
+     },
+     "barrier": "Light",
+     "barrierHp": 185,
+     "difficulty": "Easy"
+    },
+    {
+     "minPower": 14500,
+     "hp": 1550000,
+     "atk": 240,
+     "aoe": 120,
+     "defCaps": {
+      "50": 9200,
+      "70": 18400,
+      "75": 55200
+     },
+     "barrier": "Light",
+     "barrierHp": 190,
+     "difficulty": "Medium"
+    },
+    {
+     "minPower": 15500,
+     "hp": 2150000,
+     "atk": 260,
+     "aoe": 130,
+     "defCaps": {
+      "50": 11200,
+      "70": 22400,
+      "75": 67200
+     },
+     "barrier": "Light",
+     "barrierHp": 195,
+     "difficulty": "Hard"
+    },
+    {
+     "minPower": 20500,
+     "hp": 5000000,
+     "atk": 320,
+     "aoe": 160,
+     "defCaps": {
+      "50": 13500,
+      "70": 27000,
+      "75": 81000
+     },
+     "barrier": "Light",
+     "barrierHp": 200,
+     "difficulty": "Extreme"
+    }
+   ],
+   "bossOf": "Void Dimension"
+  },
+  {
+   "name": "Elysium",
+   "levels": [
+    {
+     "minPower": 13000,
+     "hp": 900000,
+     "atk": 220,
+     "aoe": 125,
+     "defCaps": {
+      "50": 10000,
+      "70": 20000,
+      "75": 60000
+     },
+     "difficulty": "Easy"
+    },
+    {
+     "minPower": 15000,
+     "hp": 1200000,
+     "atk": 230,
+     "aoe": 130,
+     "defCaps": {
+      "50": 11000,
+      "70": 22000,
+      "75": 66000
+     },
+     "difficulty": "Medium"
+    },
+    {
+     "minPower": 17000,
+     "hp": 1500000,
+     "atk": 290,
+     "aoe": 150,
+     "defCaps": {
+      "50": 13000,
+      "70": 26000,
+      "75": 78000
+     },
+     "difficulty": "Hard"
+    },
+    {
+     "minPower": 22500,
+     "hp": 4000000,
+     "atk": 320,
+     "aoe": 180,
+     "defCaps": {
+      "50": 15000,
+      "70": 30000,
+      "75": 90000
+     },
+     "difficulty": "Extreme"
+    }
+   ]
+  },
+  {
+   "name": "Apex of Divinity",
+   "levels": [
+    {
+     "minPower": 15000,
+     "hp": 1800000,
+     "atk": 245,
+     "aoe": 140,
+     "defCaps": {
+      "50": 12000,
+      "70": 24000,
+      "75": 72000
+     },
+     "barrier": "Dark",
+     "barrierHp": 190,
+     "difficulty": "Easy"
+    },
+    {
+     "minPower": 17500,
+     "hp": 2200000,
+     "atk": 270,
+     "aoe": 150,
+     "defCaps": {
+      "50": 13000,
+      "70": 26000,
+      "75": 78000
+     },
+     "barrier": "Dark",
+     "barrierHp": 220,
+     "difficulty": "Medium"
+    },
+    {
+     "minPower": 20000,
+     "hp": 2800000,
+     "atk": 300,
+     "aoe": 170,
+     "defCaps": {
+      "50": 17000,
+      "70": 34000,
+      "75": 102000
+     },
+     "barrier": "Dark",
+     "barrierHp": 260,
+     "difficulty": "Hard"
+    },
+    {
+     "minPower": 30000,
+     "hp": 8000000,
+     "atk": 360,
+     "aoe": 210,
+     "defCaps": {
+      "50": 20000,
+      "70": 40000,
+      "75": 120000
+     },
+     "barrier": "Dark",
+     "barrierHp": 320,
+     "difficulty": "Extreme"
+    }
+   ],
+   "bossOf": "Elysium"
+  },
+  {
+   "name": "Ancient Jungle",
+   "levels": [
+    {
+     "minPower": 16000,
+     "hp": 1400000,
+     "atk": 285,
+     "aoe": 150,
+     "defCaps": {
+      "50": 14100,
+      "70": 28200,
+      "75": 84600
+     },
+     "difficulty": "Easy"
+    },
+    {
+     "minPower": 18000,
+     "hp": 1800000,
+     "atk": 310,
+     "aoe": 160,
+     "defCaps": {
+      "50": 15400,
+      "70": 30800,
+      "75": 92400
+     },
+     "difficulty": "Medium"
+    },
+    {
+     "minPower": 20000,
+     "hp": 2500000,
+     "atk": 330,
+     "aoe": 170,
+     "defCaps": {
+      "50": 17600,
+      "70": 35200,
+      "75": 105600
+     },
+     "difficulty": "Hard"
+    },
+    {
+     "minPower": 26000,
+     "hp": 7000000,
+     "atk": 360,
+     "aoe": 235,
+     "defCaps": {
+      "50": 22000,
+      "70": 44000,
+      "75": 132000
+     },
+     "difficulty": "Extreme"
+    }
+   ]
+  },
+  {
+   "name": "Giant Boneyard",
+   "levels": [
+    {
+     "minPower": 20000,
+     "hp": 2800000,
+     "atk": 300,
+     "aoe": 175,
+     "defCaps": {
+      "50": 18700,
+      "70": 37400,
+      "75": 112200
+     },
+     "barrier": "Fire",
+     "barrierHp": 210,
+     "difficulty": "Easy"
+    },
+    {
+     "minPower": 22000,
+     "hp": 3500000,
+     "atk": 330,
+     "aoe": 190,
+     "defCaps": {
+      "50": 22000,
+      "70": 44000,
+      "75": 132000
+     },
+     "barrier": "Fire",
+     "barrierHp": 240,
+     "difficulty": "Medium"
+    },
+    {
+     "minPower": 24000,
+     "hp": 5000000,
+     "atk": 370,
+     "aoe": 215,
+     "defCaps": {
+      "50": 24200,
+      "70": 48400,
+      "75": 145200
+     },
+     "barrier": "Fire",
+     "barrierHp": 280,
+     "difficulty": "Hard"
+    },
+    {
+     "minPower": 34000,
+     "hp": 15000000,
+     "atk": 410,
+     "aoe": 250,
+     "defCaps": {
+      "50": 28000,
+      "70": 56000,
+      "75": 168000
+     },
+     "barrier": "Fire",
+     "barrierHp": 360,
+     "difficulty": "Extreme"
+    }
+   ],
+   "bossOf": "Ancient Jungle"
+  },
+  {
+   "name": "Meteor Zone",
+   "levels": [
+    {
+     "minPower": 19000,
+     "hp": 1900000,
+     "atk": 355,
+     "aoe": 185,
+     "defCaps": {
+      "50": 18800,
+      "70": 37600,
+      "75": 112800
+     },
+     "difficulty": "Easy"
+    },
+    {
+     "minPower": 21000,
+     "hp": 2400000,
+     "atk": 370,
+     "aoe": 195,
+     "defCaps": {
+      "50": 20000,
+      "70": 40000,
+      "75": 120000
+     },
+     "difficulty": "Medium"
+    },
+    {
+     "minPower": 23000,
+     "hp": 3400000,
+     "atk": 390,
+     "aoe": 205,
+     "defCaps": {
+      "50": 22400,
+      "70": 44800,
+      "75": 134400
+     },
+     "difficulty": "Hard"
+    },
+    {
+     "minPower": 30000,
+     "hp": 10000000,
+     "atk": 410,
+     "aoe": 280,
+     "defCaps": {
+      "50": 26600,
+      "70": 53200,
+      "75": 159600
+     },
+     "difficulty": "Extreme"
+    }
+   ]
+  },
+  {
+   "name": "Ground Zero",
+   "levels": [
+    {
+     "minPower": 24000,
+     "hp": 3800000,
+     "atk": 365,
+     "aoe": 210,
+     "defCaps": {
+      "50": 24000,
+      "70": 48000,
+      "75": 144000
+     },
+     "barrier": "Dark",
+     "barrierHp": 230,
+     "difficulty": "Easy"
+    },
+    {
+     "minPower": 26000,
+     "hp": 4800000,
+     "atk": 395,
+     "aoe": 230,
+     "defCaps": {
+      "50": 27200,
+      "70": 54400,
+      "75": 163200
+     },
+     "barrier": "Dark",
+     "barrierHp": 260,
+     "difficulty": "Medium"
+    },
+    {
+     "minPower": 28000,
+     "hp": 7000000,
+     "atk": 425,
+     "aoe": 255,
+     "defCaps": {
+      "50": 29600,
+      "70": 59200,
+      "75": 177600
+     },
+     "barrier": "Dark",
+     "barrierHp": 300,
+     "difficulty": "Hard"
+    },
+    {
+     "minPower": 38000,
+     "hp": 22000000,
+     "atk": 470,
+     "aoe": 290,
+     "defCaps": {
+      "50": 33600,
+      "70": 67200,
+      "75": 201600
+     },
+     "barrier": "Dark",
+     "barrierHp": 400,
+     "difficulty": "Extreme"
+    }
+   ],
+   "bossOf": "Meteor Zone"
+  }
+ ]
+}

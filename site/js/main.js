@@ -1,6 +1,7 @@
 // Point d'entrée : routeur par hash (#/vue?param=valeur) + chrome de l'application.
 import { loadData, D, uiIcon } from './data.js';
 import './i18n-extra.js';
+import './i18n-guide.js';
 import { t, getLang, setLang, onLangChange } from './i18n.js';
 import { h, clear, icon, creditImages } from './dom.js';
 import * as builds from './views/builds.js';
@@ -9,6 +10,9 @@ import * as team from './views/team.js';
 import * as skills from './views/skills.js';
 import * as roster from './views/roster.js';
 import * as tower from './views/tower.js';
+import * as guide from './views/guide.js';
+import * as elements from './views/elements.js';
+import * as dragon from './views/dragon.js';
 import * as about from './views/about.js';
 
 const ROUTES = {
@@ -18,6 +22,9 @@ const ROUTES = {
   team: { mod: team, label: 'nav.team', ico: 'quest' },
   tower: { mod: tower, label: 'nav.tower', ico: 'gem' },
   skills: { mod: skills, label: 'nav.skills', ico: 'skilltree' },
+  guide: { mod: guide, label: 'nav.guide', ico: 'tier' },
+  elements: { mod: elements, label: 'nav.elements', ico: 'gold' },
+  dragon: { mod: dragon, label: 'nav.dragon', ico: 'breakchance' },
   about: { mod: about, label: 'nav.about', ico: 'help' },
 };
 const root = document.getElementById('main');
@@ -45,8 +52,13 @@ function makeSetParams(path) {
 function renderNav() {
   const nav = document.getElementById('nav');
   clear(nav);
-  nav.append(h('ul', {}, Object.entries(ROUTES).map(([k, r]) =>
-    h('li', {}, h('a', { href: `#/${k}`, 'aria-current': k === current ? 'page' : null }, icon(uiIcon(r.ico), { size: 28 }), h('span', {}, t(r.label)))))));
+  const ul = h('ul', { id: 'nav-list' }, Object.entries(ROUTES).map(([k, r]) =>
+    h('li', {}, h('a', { href: `#/${k}`, 'aria-current': k === current ? 'page' : null }, icon(uiIcon(r.ico), { size: 28 }), h('span', {}, t(r.label))))));
+  // Mobile : menu repliable (bouton visible sous 760 px, liste toujours visible au-delà).
+  const btn = h('button', { type: 'button', class: 'nav-toggle', 'aria-expanded': 'false', 'aria-controls': 'nav-list',
+    onclick: () => { const open = !ul.classList.contains('open'); ul.classList.toggle('open', open); btn.setAttribute('aria-expanded', String(open)); } },
+  icon(uiIcon(ROUTES[current].ico), { size: 24 }), h('span', {}, `${t('nav.menu')} · ${t(ROUTES[current].label)}`));
+  nav.append(btn, ul);
 }
 
 function renderFooter() {

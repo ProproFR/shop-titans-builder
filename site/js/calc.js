@@ -135,7 +135,22 @@ export function scoreItem(it, w, quality, mods) {
   return w.atk * atk + w.def * def + w.hp * hp + w.eva * (it.eva || 0) * 100 + w.crit * (it.crit || 0) * 100;
 }
 
-export const isPackItem = (it) => !!it.antique || /pack|parck|offer|content pass/i.test(it.source || '');
+/** Provenance d'un objet : 'base' | 'chest' | 'antique' | 'paid' (champ `origin` de items.json). */
+export const originOf = (it) => it.origin || 'base';
+
+/** Modes de filtre « Objets accessibles » : all = tout ; free = sans achat ; base = craft de base uniquement. */
+export const ACCESS_MODES = ['all', 'free', 'base'];
+
+/**
+ * Objet accessible dans ce mode ?
+ * free : base + coffres + antiquaire (jetons gagnés en jeu) + objets de pack revenus à l'antiquaire (antiqueTokens > 0).
+ */
+export function isAllowed(it, mode) {
+  if (!mode || mode === 'all') return true;
+  const o = originOf(it);
+  if (mode === 'base') return o === 'base';
+  return o !== 'paid' || (it.antiqueTokens || 0) > 0;
+}
 
 /**
  * Classement des objets pour un emplacement.
@@ -144,7 +159,7 @@ export const isPackItem = (it) => !!it.antique || /pack|parck|offer|content pass
 export function rankSlot(items, slotTypes, o) {
   const types = new Set(slotTypes);
   let pool = items.filter((i) => types.has(i.type) && i.tier <= o.maxTier);
-  if (o.excludePacks) pool = pool.filter((i) => !isPackItem(i));
+  if (o.access && o.access !== 'all') pool = pool.filter((i) => isAllowed(i, o.access));
   let relaxed = false;
   if (o.element) {
     const f = pool.filter((i) => i.elemAff.includes(o.element) || i.elemAff.includes('All'));

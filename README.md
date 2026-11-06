@@ -12,7 +12,8 @@ Interface en français et en anglais.
 |---|---|---|
 | [Shop Titans Data Spreadsheet](https://docs.google.com/spreadsheets/d/1WLa7X8h3O0-aGKxeAlCL7bnN8-FhGd3t7pz2RCzSg8c) (officiel, Kabam) | Objets, classes, compétences, champions, quêtes | © Kabam Games, Inc. |
 | [STC Hub – Best In Slot](https://stcentral-hub.github.io/tools/bis-heroes/) (Nerilea, Reiga & Yuki) | Builds recommandés, affichés tels quels avec crédit | CC BY-NC-ND 4.0 |
-| [Shop Titans Central](https://st-central.net) | Formules de combat ([Combat Compendium](https://st-central.net/combat-compendium/)), guides | CC BY-NC-ND 4.0 |
+| [STC Hub – Main Quests](https://stcentral-hub.github.io/posts/main-quests/) et [Event Quests](https://stcentral-hub.github.io/posts/event-quests/) | Seuils de défense, PV/ATK des monstres, barrières (quêtes principales et Tour des Titans) | CC BY-NC-ND 4.0 |
+| [Shop Titans Central](https://st-central.net) | Formules de combat ([Combat Compendium](https://st-central.net/combat-compendium/)), modificateurs de la Tour, guides, rosters exemples | CC BY-NC-ND 4.0 |
 | Fan Kit officiel (lien en bas de [playshoptitans.com](https://playshoptitans.com)) | Images : objets, compétences, classes, stats, éléments | © Kabam : projets de fans autorisés, pas de redistribution du kit ni de monétisation |
 | [Blueprint Browser officiel](https://playshoptitans.com/blueprints/featured/new) | Correspondance nom d'objet ↔ nom du fichier image (`site/data/name2uid.json`) | © Kabam |
 
@@ -24,6 +25,8 @@ Les builds STC sont reproduits **sans modification**, avec attribution et lien, 
 ```
 scripts/build_data.py      # sheet officiel (.xlsx) -> site/data/*.json
 scripts/scrape_stc_bis.py  # page BiS de STC Hub -> site/data/bis.json
+scripts/scrape_stc_quests.py  # quêtes principales + Tour (STC Hub) -> questcaps.json, tower.json
+scripts/build_icons.py     # images du Fan Kit -> site/img + icons.json (manuel)
 site/                      # site statique (HTML/CSS/JS, aucune étape de build)
 site/data/                 # données générées
 .github/workflows/         # mise à jour hebdomadaire + déploiement GitHub Pages
@@ -35,6 +38,7 @@ site/data/                 # données générées
 pip install openpyxl
 python scripts/build_data.py          # télécharge la dernière version du sheet
 python scripts/scrape_stc_bis.py      # récupère les derniers builds STC
+python scripts/scrape_stc_quests.py   # quêtes principales et Tour des Titans
 ```
 
 Avec un fichier téléchargé : `python scripts/build_data.py --local "Shop Titans Data Spreadsheet ….xlsx"`.

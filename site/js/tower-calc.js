@@ -124,7 +124,11 @@ export function recommend(candidates, size, mob, fx, opts = {}, top = 3) {
   const n = Math.min(size, pool.length + (champs.length ? 1 : 0));
   if (n < 1) return [];
   const out = [];
-  const consider = (members) => { const ev = evaluateParty(members, mob, fx, opts); out.push({ members, ev }); };
+  const consider = (members) => {
+    if (!members.length) return; // sans héros sauvegardés, combos(pool, 0) renvoie un groupe vide
+    const ev = evaluateParty(members, mob, fx, opts);
+    out.push({ members, ev });
+  };
   for (const c of combos(pool, Math.min(n, pool.length))) consider(c);
   if (champs.length && pool.length >= n - 1) {
     for (const ch of champs) for (const c of combos(pool, n - 1)) consider([...c, ch]);

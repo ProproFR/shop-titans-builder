@@ -1,5 +1,5 @@
 // Chargement des JSON + index. Chemins relatifs (compatible GitHub Pages en sous-chemin).
-const FILES = ['meta', 'classes', 'items', 'skills', 'enchantments', 'champions', 'quests', 'heroLevels', 'bis', 'icons', 'tower', 'modifiers'];
+const FILES = ['meta', 'classes', 'items', 'skills', 'enchantments', 'champions', 'quests', 'heroLevels', 'bis', 'icons', 'tower', 'modifiers', 'questcaps'];
 
 export const D = {};
 
@@ -25,6 +25,8 @@ function buildIndex() {
   D.enchantByName = new Map(D.enchantments.map((e) => [e.name, e]));
   D.maxTierByLevel = new Map(D.heroLevels.map((l) => [l.level, l.maxTier]));
   D.maxLevel = Math.max(...D.heroLevels.map((l) => l.level));
+  D.questcapByName = new Map(D.questcaps.areas.map((a) => [a.name.toLowerCase(), a]));
+  D.questByLowerName = new Map(D.quests.map((q) => [q.name.toLowerCase(), q]));
   D.maxItemTier = Math.max(...D.items.map((i) => i.tier));
   // Compétences regroupées par famille+type : { key, family, type, tiers: Map(tier -> skill) }
   const fam = new Map();

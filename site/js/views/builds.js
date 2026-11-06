@@ -2,7 +2,7 @@
 import { D, classIcon, skillIcon, elemIcon, statIcon } from '../data.js';
 import { t } from '../i18n.js';
 import { advisorPanel } from '../advisor.js';
-import { h, combo, table, elBadge, fmt, pct, icon, statLabel, withIcon, gearTile } from '../dom.js';
+import { h, combo, table, elBadge, fmt, pct, icon, statLabel, withIcon, gearTile, originBadge } from '../dom.js';
 
 export function itemStatsText(it) {
   if (!it) return t('builds.unknownItem');
@@ -39,6 +39,7 @@ export function variantBox(bis, v, vi) {
         gearTile(it || { name: s.name }, { tier: s.tier, size: 72 }),
         h('strong', { class: 'gear-name' }, s.name),
         it ? h('span', { class: 'muted small' }, it.type) : null,
+        originBadge(it),
         h('div', { class: 'gear-aff', 'aria-label': t('builds.affinity') },
           s.affinity.map((a) => elemIcon(a) && a !== 'All' ? elBadge(a) : h('span', { class: 'tag' }, a))),
         s.enchants.length ? h('div', { class: 'gear-ench small' }, h('span', { class: 'muted' }, `${t('builds.enchants')} : `), s.enchants.join(', ')) : null,
