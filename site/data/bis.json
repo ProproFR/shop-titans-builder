@@ -1,0 +1,2506 @@
+{
+ "source": "https://stcentral-hub.github.io/tools/bis-heroes/",
+ "authors": "Nerilea, Reiga & Yuki — STC Hub",
+ "license": "CC BY-NC-ND 4.0",
+ "licenseUrl": "https://creativecommons.org/licenses/by-nc-nd/4.0/",
+ "pageUpdated": "August 19, 2026 01:46 UTC",
+ "fetchedAt": "2026-11-06T10:21:47+00:00",
+ "heroes": [
+  {
+   "id": "soldier",
+   "classes": [
+    "Soldier",
+    "Mercenary"
+   ],
+   "variants": [
+    {
+     "notes": [
+      "Enchant the weapon with Titan if promoted",
+      "Enchant remaining items with Ouroboros"
+     ],
+     "slots": [
+      {
+       "tier": 15,
+       "name": "Titan Admiral Arms",
+       "affinity": [
+        "Light",
+        "Water",
+        "Titan Spirit"
+       ],
+       "enchants": [
+        "Gaia Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "BIT.Runner Armor",
+       "affinity": [],
+       "enchants": [
+        "Gaia Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Xenotype Forelimbs",
+       "affinity": [],
+       "enchants": [
+        "Gaia Element"
+       ]
+      },
+      {
+       "tier": 14,
+       "name": "Rock Stompers",
+       "affinity": [
+        "Earth"
+       ],
+       "enchants": [
+        "Gaia Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Bubbling Cauldron",
+       "affinity": [
+        "Dark",
+        "Earth"
+       ],
+       "enchants": [
+        "Gaia Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Cardboard Guard",
+       "affinity": [
+        "Earth"
+       ],
+       "enchants": [
+        "Gaia Element"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "barbarian",
+   "classes": [
+    "Barbarian",
+    "Chieftain"
+   ],
+   "variants": [
+    {
+     "notes": [
+      "Enchant the Idol with Titan if promoted",
+      "Enchant remaining items with Ouroboros"
+     ],
+     "slots": [
+      {
+       "tier": 15,
+       "name": "Titan Admiral Arms",
+       "affinity": [
+        "Light",
+        "Water",
+        "Titan Spirit"
+       ],
+       "enchants": [
+        "Blistering Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Teddy Bear Head",
+       "affinity": [
+        "Bear Spirit"
+       ],
+       "enchants": [
+        "Blistering Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Xenotype Forelimbs",
+       "affinity": [],
+       "enchants": [
+        "Blistering Element"
+       ]
+      },
+      {
+       "tier": 14,
+       "name": "Rock Stompers",
+       "affinity": [
+        "Earth"
+       ],
+       "enchants": [
+        "Blistering Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Avatar of Magic",
+       "affinity": [
+        "All"
+       ],
+       "enchants": [
+        "Blistering Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Sia's Royal Mantle",
+       "affinity": [
+        "Air",
+        "Fire"
+       ],
+       "enchants": [
+        "Blistering Element"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "knight",
+   "classes": [
+    "Knight"
+   ],
+   "variants": [
+    {
+     "notes": [
+      "Enchant all items with Ouroboros"
+     ],
+     "slots": [
+      {
+       "tier": 16,
+       "name": "Poseidon's Might",
+       "affinity": [
+        "Water",
+        "Leviathan Spirit"
+       ],
+       "enchants": [
+        "Apotheosis Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "BIT.Runner Armor",
+       "affinity": [],
+       "enchants": [
+        "Apotheosis Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Xenotype Forelimbs",
+       "affinity": [],
+       "enchants": [
+        "Apotheosis Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Teddy Bear Head",
+       "affinity": [
+        "Bear Spirit"
+       ],
+       "enchants": [
+        "Apotheosis Element"
+       ]
+      },
+      {
+       "tier": 14,
+       "name": "Rock Stompers",
+       "affinity": [
+        "Earth"
+       ],
+       "enchants": [
+        "Apotheosis Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Cardboard Guard",
+       "affinity": [
+        "Earth"
+       ],
+       "enchants": [
+        "Apotheosis Element"
+       ]
+      }
+     ]
+    },
+    {
+     "notes": [
+      "Enchant the weapon with Titan",
+      "Enchant remaining items with Ouroboros"
+     ],
+     "slots": [
+      {
+       "tier": 15,
+       "name": "Titan Admiral Arms",
+       "affinity": [
+        "Light",
+        "Water",
+        "Titan Spirit"
+       ],
+       "enchants": [
+        "Apotheosis Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "BIT.Runner Armor",
+       "affinity": [],
+       "enchants": [
+        "Apotheosis Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Xenotype Forelimbs",
+       "affinity": [],
+       "enchants": [
+        "Apotheosis Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Teddy Bear Head",
+       "affinity": [
+        "Bear Spirit"
+       ],
+       "enchants": [
+        "Apotheosis Element"
+       ]
+      },
+      {
+       "tier": 14,
+       "name": "Rock Stompers",
+       "affinity": [
+        "Earth"
+       ],
+       "enchants": [
+        "Apotheosis Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Cardboard Guard",
+       "affinity": [
+        "Earth"
+       ],
+       "enchants": [
+        "Apotheosis Element"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ranger",
+   "classes": [
+    "Ranger"
+   ],
+   "variants": [
+    {
+     "notes": [
+      "T16 Cloak Mantle of Splendor can be better if you have evasion skills",
+      "Enchant with Ouroboros or Griffin",
+      "Griffin is ideal when paired with evasion skills/champion"
+     ],
+     "slots": [
+      {
+       "tier": 16,
+       "name": "Water Gun",
+       "affinity": [
+        "All"
+       ],
+       "enchants": [
+        "Tornado Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "BIT.Runner Armor",
+       "affinity": [],
+       "enchants": [
+        "Tornado Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Xenotype Forelimbs",
+       "affinity": [],
+       "enchants": [
+        "Tornado Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Teddy Bear Head",
+       "affinity": [
+        "Bear Spirit"
+       ],
+       "enchants": [
+        "Tornado Element"
+       ]
+      },
+      {
+       "tier": 14,
+       "name": "Divine Contained",
+       "affinity": [
+        "Light"
+       ],
+       "enchants": [
+        "Tornado Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Sia's Royal Mantle",
+       "affinity": [
+        "Air",
+        "Fire"
+       ],
+       "enchants": [
+        "Tornado Element"
+       ]
+      }
+     ]
+    },
+    {
+     "notes": [
+      "T16 Cloak Mantle of Splendor can be better if you have evasion skills",
+      "Enchant the gauntlet with Titan",
+      "Enchant remaining items with Ouroboros",
+      "Griffin is ideal when paired with evasion skills/champion"
+     ],
+     "slots": [
+      {
+       "tier": 16,
+       "name": "Water Gun",
+       "affinity": [
+        "All"
+       ],
+       "enchants": [
+        "Tornado Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "BIT.Runner Armor",
+       "affinity": [],
+       "enchants": [
+        "Tornado Element"
+       ]
+      },
+      {
+       "tier": 14,
+       "name": "Titan Gauntlets",
+       "affinity": [
+        "Light",
+        "Titan Spirit"
+       ],
+       "enchants": [
+        "Tornado Element",
+        "Titan Spirit"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Teddy Bear Head",
+       "affinity": [
+        "Bear Spirit"
+       ],
+       "enchants": [
+        "Tornado Element"
+       ]
+      },
+      {
+       "tier": 14,
+       "name": "Divine Contained",
+       "affinity": [
+        "Light"
+       ],
+       "enchants": [
+        "Tornado Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Sia's Royal Mantle",
+       "affinity": [
+        "Air",
+        "Fire"
+       ],
+       "enchants": [
+        "Tornado Element"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "samurai",
+   "classes": [
+    "Samurai",
+    "Daimyo"
+   ],
+   "variants": [
+    {
+     "notes": [
+      "Use this setup if you have Sword master/Warlord and do not have CHC (Critical hit chance) skills",
+      "Enchant the gauntlet with Titan if promoted",
+      "Enchant the remaining items with Behemoth or Ouroboros if you need defensive stats"
+     ],
+     "slots": [
+      {
+       "tier": 14,
+       "name": "Kiku-Ichimonji",
+       "affinity": [
+        "Water"
+       ],
+       "enchants": [
+        "Maelstrom Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "BIT.Runner Armor",
+       "affinity": [],
+       "enchants": [
+        "Maelstrom Element"
+       ]
+      },
+      {
+       "tier": 14,
+       "name": "Titan Gauntlets",
+       "affinity": [
+        "Light",
+        "Titan Spirit"
+       ],
+       "enchants": [
+        "Maelstrom Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Teddy Bear Head",
+       "affinity": [
+        "Bear Spirit"
+       ],
+       "enchants": [
+        "Maelstrom Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Teddy Bear Feet",
+       "affinity": [
+        "Bear Spirit"
+       ],
+       "enchants": [
+        "Maelstrom Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Bubbling Cauldron",
+       "affinity": [
+        "Dark",
+        "Earth"
+       ],
+       "enchants": [
+        "Maelstrom Element"
+       ]
+      }
+     ]
+    },
+    {
+     "notes": [
+      "Use this setup if you have Sword master/Warlord and your samurai has CHC (Critical hit chance) skills",
+      "Enchant the weapon with Titan if promoted",
+      "Enchant the remaining items with Leviathan, Behemoth, or Ouroboros if you need defensive stats"
+     ],
+     "slots": [
+      {
+       "tier": 15,
+       "name": "Titan Admiral Arms",
+       "affinity": [
+        "Light",
+        "Water",
+        "Titan Spirit"
+       ],
+       "enchants": [
+        "Maelstrom Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "BIT.Runner Armor",
+       "affinity": [],
+       "enchants": [
+        "Maelstrom Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Xenotype Forelimbs",
+       "affinity": [],
+       "enchants": [
+        "Maelstrom Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Teddy Bear Head",
+       "affinity": [
+        "Bear Spirit"
+       ],
+       "enchants": [
+        "Maelstrom Element"
+       ]
+      },
+      {
+       "tier": 14,
+       "name": "Rock Stompers",
+       "affinity": [
+        "Earth"
+       ],
+       "enchants": [
+        "Maelstrom Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Bubbling Cauldron",
+       "affinity": [
+        "Dark",
+        "Earth"
+       ],
+       "enchants": [
+        "Maelstrom Element"
+       ]
+      }
+     ]
+    },
+    {
+     "notes": [
+      "Use this setup if you have bow master/marksman",
+      "Enchant the gauntlet with Titan if promoted",
+      "Enchant the remaining items with Leviathan, Behemoth, or Ouroboros if you need defensive stats"
+     ],
+     "slots": [
+      {
+       "tier": 15,
+       "name": "Banana Royale",
+       "affinity": [
+        "Earth",
+        "Water"
+       ],
+       "enchants": [
+        "Maelstrom Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "BIT.Runner Armor",
+       "affinity": [],
+       "enchants": [
+        "Maelstrom Element"
+       ]
+      },
+      {
+       "tier": 14,
+       "name": "Titan Gauntlets",
+       "affinity": [
+        "Light",
+        "Titan Spirit"
+       ],
+       "enchants": [
+        "Maelstrom Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Teddy Bear Head",
+       "affinity": [
+        "Bear Spirit"
+       ],
+       "enchants": [
+        "Maelstrom Element"
+       ]
+      },
+      {
+       "tier": 14,
+       "name": "Rock Stompers",
+       "affinity": [
+        "Earth"
+       ],
+       "enchants": [
+        "Maelstrom Element"
+       ]
+      },
+      {
+       "tier": 16,
+       "name": "Zeus' Thunderbolts",
+       "affinity": [
+        "Air"
+       ],
+       "enchants": [
+        "Maelstrom Element"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "berserker",
+   "classes": [
+    "Berserker"
+   ],
+   "variants": [
+    {
+     "notes": [
+      "Obsidian Lavacake (T15 Dessert) can be better with an evasion based berserker",
+      "Enchant everything with Ouroboros",
+      "Go Griffin if you’re building for an evasion based berserker"
+     ],
+     "slots": [
+      {
+       "tier": 15,
+       "name": "Crushtacean Pincers",
+       "affinity": [
+        "Fire"
+       ],
+       "enchants": [
+        "Blistering Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "BIT.Runner Armor",
+       "affinity": [],
+       "enchants": [
+        "Blistering Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Xenotype Forelimbs",
+       "affinity": [],
+       "enchants": [
+        "Blistering Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Teddy Bear Feet",
+       "affinity": [
+        "Bear Spirit"
+       ],
+       "enchants": [
+        "Blistering Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Avatar of Magic",
+       "affinity": [
+        "All"
+       ],
+       "enchants": [
+        "Blistering Element"
+       ]
+      },
+      {
+       "tier": 14,
+       "name": "Divine Contained",
+       "affinity": [
+        "Light"
+       ],
+       "enchants": [
+        "Blistering Element"
+       ]
+      }
+     ]
+    },
+    {
+     "notes": [
+      "Obsidian Lavacake (T15 Dessert) can be better with an evasion based jarl",
+      "Enchant the Idol with Titan",
+      "Enchant remaining items with Ouroboros",
+      "Go Griffin if you’re building for an evasion based jarl"
+     ],
+     "slots": [
+      {
+       "tier": 15,
+       "name": "Crushtacean Pincers",
+       "affinity": [
+        "Fire"
+       ],
+       "enchants": [
+        "Blistering Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "BIT.Runner Armor",
+       "affinity": [],
+       "enchants": [
+        "Blistering Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Teddy Bear Head",
+       "affinity": [
+        "Bear Spirit"
+       ],
+       "enchants": [
+        "Blistering Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Teddy Bear Feet",
+       "affinity": [
+        "Bear Spirit"
+       ],
+       "enchants": [
+        "Blistering Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Avatar of Magic",
+       "affinity": [
+        "All"
+       ],
+       "enchants": [
+        "Blistering Element"
+       ]
+      },
+      {
+       "tier": 14,
+       "name": "Divine Contained",
+       "affinity": [
+        "Light"
+       ],
+       "enchants": [
+        "Blistering Element"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "dark-knight",
+   "classes": [
+    "Dark Knight",
+    "Death Knight"
+   ],
+   "variants": [
+    {
+     "notes": [
+      "Enchant the Idol with Titan if promoted",
+      "Enchant remaining items with Ouroboros"
+     ],
+     "slots": [
+      {
+       "tier": 15,
+       "name": "Titan Admiral Arms",
+       "affinity": [
+        "Light",
+        "Water",
+        "Titan Spirit"
+       ],
+       "enchants": [
+        "Oblivion Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "BIT.Runner Armor",
+       "affinity": [],
+       "enchants": [
+        "Oblivion Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Teddy Bear Head",
+       "affinity": [
+        "Bear Spirit"
+       ],
+       "enchants": [
+        "Oblivion Element"
+       ]
+      },
+      {
+       "tier": 14,
+       "name": "Rock Stompers",
+       "affinity": [
+        "Earth"
+       ],
+       "enchants": [
+        "Oblivion Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Avatar of Magic",
+       "affinity": [
+        "All"
+       ],
+       "enchants": [
+        "Oblivion Element",
+        "Titan Spirit"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Avatar of Magic",
+       "affinity": [
+        "All"
+       ],
+       "enchants": [
+        "Oblivion Element"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "thief",
+   "classes": [
+    "Thief",
+    "Trickster"
+   ],
+   "variants": [
+    {
+     "notes": [
+      "Use this setup if your thief/trickster has instrument master/adept",
+      "Enchant the light armor with titan if promoted",
+      "Enchant with Griffin until 95% EVA for extreme quests (Polonia’s innate adds up to 10% EVA) or Ouroboros.",
+      "Extreme quests have a -20% penalty to evasion"
+     ],
+     "slots": [
+      {
+       "tier": 15,
+       "name": "Equine Liuqin",
+       "affinity": [
+        "Kirin Spirit"
+       ],
+       "enchants": [
+        "Tornado Element"
+       ]
+      },
+      {
+       "tier": 16,
+       "name": "Clovered Gambeson",
+       "affinity": [
+        "Light",
+        "Titan Spirit"
+       ],
+       "enchants": [
+        "Tornado Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Facechanger",
+       "affinity": [
+        "Kirin Spirit"
+       ],
+       "enchants": [
+        "Tornado Element"
+       ]
+      },
+      {
+       "tier": 16,
+       "name": "Gemmed Footpaws",
+       "affinity": [
+        "Light",
+        "Bunny Spirit"
+       ],
+       "enchants": [
+        "Tornado Element"
+       ]
+      },
+      {
+       "tier": 16,
+       "name": "Mantle of Splendor",
+       "affinity": [
+        "Light",
+        "Titan Spirit"
+       ],
+       "enchants": [
+        "Tornado Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Ring of Midas",
+       "affinity": [
+        "Gold",
+        "Ancestor Spirit"
+       ],
+       "enchants": [
+        "Tornado Element"
+       ]
+      }
+     ]
+    },
+    {
+     "notes": [
+      "Use this setup if your thief/trickster has dagger master/warlord",
+      "Enchant the weapon with titan if promoted",
+      "Enchant with Griffin until 95% EVA for extreme quests (Polonia’s innate adds up to 10% EVA) or Ouroboros.",
+      "Extreme quests have a -20% penalty to evasion"
+     ],
+     "slots": [
+      {
+       "tier": 15,
+       "name": "Titan Admiral Arms",
+       "affinity": [
+        "Light",
+        "Water",
+        "Titan Spirit"
+       ],
+       "enchants": [
+        "Tornado Element"
+       ]
+      },
+      {
+       "tier": 16,
+       "name": "Clovered Gambeson",
+       "affinity": [
+        "Light",
+        "Titan Spirit"
+       ],
+       "enchants": [
+        "Tornado Element"
+       ]
+      },
+      {
+       "tier": 16,
+       "name": "Hermes' Hat",
+       "affinity": [
+        "Air"
+       ],
+       "enchants": [
+        "Tornado Element"
+       ]
+      },
+      {
+       "tier": 16,
+       "name": "Gemmed Footpaws",
+       "affinity": [
+        "Light",
+        "Bunny Spirit"
+       ],
+       "enchants": [
+        "Tornado Element"
+       ]
+      },
+      {
+       "tier": 16,
+       "name": "Mantle of Splendor",
+       "affinity": [
+        "Light",
+        "Titan Spirit"
+       ],
+       "enchants": [
+        "Tornado Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Ring of Midas",
+       "affinity": [
+        "Gold",
+        "Ancestor Spirit"
+       ],
+       "enchants": [
+        "Tornado Element"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "monk",
+   "classes": [
+    "Monk",
+    "Grandmaster"
+   ],
+   "variants": [
+    {
+     "notes": [
+      "T15 Clothes Phoenix Feathers and T15 Dessert Obsidian Lava Cake are both better if built for high evasion",
+      "Enchant the idol with titan if promoted",
+      "Then enchant the rest with",
+      "Griffin to 95% EVA for extreme quests or Ouroboros",
+      "Extreme quests have a -20% penalty to evasion"
+     ],
+     "slots": [
+      {
+       "tier": 15,
+       "name": "Malady's Robe",
+       "affinity": [
+        "Light",
+        "Ouroboros Spirit"
+       ],
+       "enchants": [
+        "Maelstrom Element"
+       ]
+      },
+      {
+       "tier": 14,
+       "name": "Torc of Peace",
+       "affinity": [
+        "Light"
+       ],
+       "enchants": [
+        "Maelstrom Element"
+       ]
+      },
+      {
+       "tier": 16,
+       "name": "Poisoned Apple Pie",
+       "affinity": [],
+       "enchants": [
+        "Maelstrom Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Avatar of Magic",
+       "affinity": [
+        "All"
+       ],
+       "enchants": [
+        "Maelstrom Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Unbroken Signet",
+       "affinity": [],
+       "enchants": [
+        "Maelstrom Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Unbroken Signet",
+       "affinity": [],
+       "enchants": [
+        "Maelstrom Element"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "musketeer",
+   "classes": [
+    "Musketeer",
+    "Conquistador"
+   ],
+   "variants": [
+    {
+     "notes": [
+      "Use this setup if your musketeer/conquistador has a ranged weapon skill (Gun Master, Marksman)",
+      "If your musketeer has crossbow master, replace the weapon for a crossbow instead",
+      "Use T16 Gemmed Footpaws instead of Teddy Bear Feet if you have a Conquistador with evasion skills",
+      "Enchant with:",
+      "Griffin to 95% EVA for extreme quests or Ouroboros"
+     ],
+     "slots": [
+      {
+       "tier": 16,
+       "name": "Water Gun",
+       "affinity": [
+        "All"
+       ],
+       "enchants": [
+        "Blistering Element"
+       ]
+      },
+      {
+       "tier": 16,
+       "name": "Clovered Gambeson",
+       "affinity": [
+        "Light",
+        "Titan Spirit"
+       ],
+       "enchants": [
+        "Blistering Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Titan Admiral Gloves",
+       "affinity": [
+        "Light",
+        "Water",
+        "Titan Spirit"
+       ],
+       "enchants": [
+        "Blistering Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Teddy Bear Feet",
+       "affinity": [
+        "Bear Spirit"
+       ],
+       "enchants": [
+        "Blistering Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Bubbling Cauldron",
+       "affinity": [
+        "Dark",
+        "Earth"
+       ],
+       "enchants": [
+        "Blistering Element"
+       ]
+      },
+      {
+       "tier": 16,
+       "name": "Zeus' Thunderbolts",
+       "affinity": [
+        "Air"
+       ],
+       "enchants": [
+        "Blistering Element"
+       ]
+      }
+     ]
+    },
+    {
+     "notes": [
+      "Use this setup if your musketeer/conquistador has sword master/warlord",
+      "Use T16 Gemmed Footpaw instead of Teddy Bear Feet if you have a Conquistador with evasion skills",
+      "Enchant with:",
+      "Griffin to 95% EVA for extreme quests or Ouroboros"
+     ],
+     "slots": [
+      {
+       "tier": 15,
+       "name": "Titan Admiral Arms",
+       "affinity": [
+        "Light",
+        "Water",
+        "Titan Spirit"
+       ],
+       "enchants": [
+        "Blistering Element"
+       ]
+      },
+      {
+       "tier": 16,
+       "name": "Clovered Gambeson",
+       "affinity": [
+        "Light",
+        "Titan Spirit"
+       ],
+       "enchants": [
+        "Blistering Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Titan Admiral Gloves",
+       "affinity": [
+        "Light",
+        "Water",
+        "Titan Spirit"
+       ],
+       "enchants": [
+        "Blistering Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Teddy Bear Feet",
+       "affinity": [
+        "Bear Spirit"
+       ],
+       "enchants": [
+        "Blistering Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Bubbling Cauldron",
+       "affinity": [
+        "Dark",
+        "Earth"
+       ],
+       "enchants": [
+        "Blistering Element"
+       ]
+      },
+      {
+       "tier": 16,
+       "name": "Fell Spectator",
+       "affinity": [
+        "Dark",
+        "Fire"
+       ],
+       "enchants": [
+        "Blistering Element"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "wanderer",
+   "classes": [
+    "Wanderer",
+    "Pathfinder"
+   ],
+   "variants": [
+    {
+     "notes": [
+      "Use this setup if your wanderer/pathfinder has gun master/marksman",
+      "Enchant the cloak with Titan if promoted",
+      "Enchant with griffin to 95% EVA (98% EVA if it’s a pathfinder because of their innate) for extreme quests or Ouroboros",
+      "Extreme quests have a -20% penalty to evasion"
+     ],
+     "slots": [
+      {
+       "tier": 16,
+       "name": "Water Gun",
+       "affinity": [
+        "All"
+       ],
+       "enchants": [
+        "Gaia Element"
+       ]
+      },
+      {
+       "tier": 16,
+       "name": "Clovered Gambeson",
+       "affinity": [
+        "Light",
+        "Titan Spirit"
+       ],
+       "enchants": [
+        "Gaia Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Facechanger",
+       "affinity": [
+        "Kirin Spirit"
+       ],
+       "enchants": [
+        "Gaia Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Slathered Slippers",
+       "affinity": [
+        "Earth",
+        "Water"
+       ],
+       "enchants": [
+        "Gaia Element"
+       ]
+      },
+      {
+       "tier": 16,
+       "name": "Mantle of Splendor",
+       "affinity": [
+        "Light",
+        "Titan Spirit"
+       ],
+       "enchants": [
+        "Gaia Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Obsidian Lava Cake",
+       "affinity": [
+        "Fire"
+       ],
+       "enchants": [
+        "Gaia Element"
+       ]
+      }
+     ]
+    },
+    {
+     "notes": [
+      "Use this setup if your wanderer/pathfinder has dagger master/warlord",
+      "Enchant the weapon with Titan if promoted",
+      "Enchant with griffin to 95% EVA (98% EVA if it’s a pathfinder because of their innate) for extreme quests or Ouroboros",
+      "Extreme quests have a -20% penalty to evasion"
+     ],
+     "slots": [
+      {
+       "tier": 15,
+       "name": "Titan Admiral Arms",
+       "affinity": [
+        "Light",
+        "Water",
+        "Titan Spirit"
+       ],
+       "enchants": [
+        "Gaia Element"
+       ]
+      },
+      {
+       "tier": 16,
+       "name": "Clovered Gambeson",
+       "affinity": [
+        "Light",
+        "Titan Spirit"
+       ],
+       "enchants": [
+        "Gaia Element"
+       ]
+      },
+      {
+       "tier": 16,
+       "name": "Hermes' Hat",
+       "affinity": [
+        "Air"
+       ],
+       "enchants": [
+        "Gaia Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Slathered Slippers",
+       "affinity": [
+        "Earth",
+        "Water"
+       ],
+       "enchants": [
+        "Gaia Element"
+       ]
+      },
+      {
+       "tier": 16,
+       "name": "Mantle of Splendor",
+       "affinity": [
+        "Light",
+        "Titan Spirit"
+       ],
+       "enchants": [
+        "Gaia Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Obsidian Lava Cake",
+       "affinity": [
+        "Fire"
+       ],
+       "enchants": [
+        "Gaia Element"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ninja",
+   "classes": [
+    "Ninja",
+    "Sensei"
+   ],
+   "variants": [
+    {
+     "notes": [
+      "Use this setup if your ninja/sensei has dagger master, sword master, or warlord",
+      "Enchant the weapon with titan if promoted",
+      "Then enchant with griffin to 95% EVA for extreme quests or Ouroboros",
+      "Extreme quests have a -20% penalty to evasion"
+     ],
+     "slots": [
+      {
+       "tier": 15,
+       "name": "Titan Admiral Arms",
+       "affinity": [
+        "Light",
+        "Water",
+        "Titan Spirit"
+       ],
+       "enchants": [
+        "Oblivion Element"
+       ]
+      },
+      {
+       "tier": 16,
+       "name": "Clovered Gambeson",
+       "affinity": [
+        "Light",
+        "Titan Spirit"
+       ],
+       "enchants": [
+        "Oblivion Element"
+       ]
+      },
+      {
+       "tier": 16,
+       "name": "Hermes' Hat",
+       "affinity": [
+        "Air"
+       ],
+       "enchants": [
+        "Oblivion Element"
+       ]
+      },
+      {
+       "tier": 13,
+       "name": "Pure Heart Gloves",
+       "affinity": [],
+       "enchants": [
+        "Oblivion Element"
+       ]
+      },
+      {
+       "tier": 16,
+       "name": "Gemmed Footpaws",
+       "affinity": [
+        "Light",
+        "Bunny Spirit"
+       ],
+       "enchants": [
+        "Oblivion Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Ring of Midas",
+       "affinity": [
+        "Gold",
+        "Ancestor Spirit"
+       ],
+       "enchants": [
+        "Oblivion Element"
+       ]
+      }
+     ]
+    },
+    {
+     "notes": [
+      "Use this setup if your ninja/sensei has bow master or marksman",
+      "Enchant the gloves with titan if promoted",
+      "Enchant the rest with Griffin to 95% EVA for extreme quests or Ouroboros",
+      "Extreme quests have a -20% penalty to evasion"
+     ],
+     "slots": [
+      {
+       "tier": 15,
+       "name": "Banana Royale",
+       "affinity": [
+        "Earth",
+        "Water"
+       ],
+       "enchants": [
+        "Oblivion Element"
+       ]
+      },
+      {
+       "tier": 16,
+       "name": "Clovered Gambeson",
+       "affinity": [
+        "Light",
+        "Titan Spirit"
+       ],
+       "enchants": [
+        "Oblivion Element"
+       ]
+      },
+      {
+       "tier": 16,
+       "name": "Hermes' Hat",
+       "affinity": [
+        "Air"
+       ],
+       "enchants": [
+        "Oblivion Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Titan Admiral Gloves",
+       "affinity": [
+        "Light",
+        "Water",
+        "Titan Spirit"
+       ],
+       "enchants": [
+        "Oblivion Element"
+       ]
+      },
+      {
+       "tier": 16,
+       "name": "Gemmed Footpaws",
+       "affinity": [
+        "Light",
+        "Bunny Spirit"
+       ],
+       "enchants": [
+        "Oblivion Element"
+       ]
+      },
+      {
+       "tier": 16,
+       "name": "Zeus' Thunderbolts",
+       "affinity": [
+        "Air"
+       ],
+       "enchants": [
+        "Oblivion Element"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "dancer",
+   "classes": [
+    "Dancer",
+    "Acrobat"
+   ],
+   "variants": [
+    {
+     "notes": [
+      "Use this setup if your dancer/acrobat has instrument master/adept",
+      "Enchant the idol with titan if promoted",
+      "Enchant with griffin to 95% EVA for extreme quests or Ouroboros",
+      "Extreme quests have a -20% penalty to evasion"
+     ],
+     "slots": [
+      {
+       "tier": 15,
+       "name": "Equine Liuqin",
+       "affinity": [
+        "Kirin Spirit"
+       ],
+       "enchants": [
+        "Tornado Element"
+       ]
+      },
+      {
+       "tier": 16,
+       "name": "Clovered Gambeson",
+       "affinity": [
+        "Light",
+        "Titan Spirit"
+       ],
+       "enchants": [
+        "Tornado Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Facechanger",
+       "affinity": [
+        "Kirin Spirit"
+       ],
+       "enchants": [
+        "Tornado Element"
+       ]
+      },
+      {
+       "tier": 13,
+       "name": "Pure Heart Gloves",
+       "affinity": [],
+       "enchants": [
+        "Tornado Element"
+       ]
+      },
+      {
+       "tier": 16,
+       "name": "Gemmed Footpaws",
+       "affinity": [
+        "Light",
+        "Bunny Spirit"
+       ],
+       "enchants": [
+        "Tornado Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Avatar of Magic",
+       "affinity": [
+        "All"
+       ],
+       "enchants": [
+        "Tornado Element"
+       ]
+      }
+     ]
+    },
+    {
+     "notes": [
+      "Use this setup if your dancer/acrobat has dagger master/warlord",
+      "Enchant the idol with titan if promoted",
+      "Enchant with griffin to 95% EVA for extreme quests or Ouroboros",
+      "Extreme quests have a -20% penalty to evasion"
+     ],
+     "slots": [
+      {
+       "tier": 15,
+       "name": "Titan Admiral Arms",
+       "affinity": [
+        "Light",
+        "Water",
+        "Titan Spirit"
+       ],
+       "enchants": [
+        "Tornado Element"
+       ]
+      },
+      {
+       "tier": 16,
+       "name": "Clovered Gambeson",
+       "affinity": [
+        "Light",
+        "Titan Spirit"
+       ],
+       "enchants": [
+        "Tornado Element"
+       ]
+      },
+      {
+       "tier": 16,
+       "name": "Hermes' Hat",
+       "affinity": [
+        "Air"
+       ],
+       "enchants": [
+        "Tornado Element"
+       ]
+      },
+      {
+       "tier": 13,
+       "name": "Pure Heart Gloves",
+       "affinity": [],
+       "enchants": [
+        "Tornado Element"
+       ]
+      },
+      {
+       "tier": 16,
+       "name": "Gemmed Footpaws",
+       "affinity": [
+        "Light",
+        "Bunny Spirit"
+       ],
+       "enchants": [
+        "Tornado Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Avatar of Magic",
+       "affinity": [
+        "All"
+       ],
+       "enchants": [
+        "Tornado Element"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "velite",
+   "classes": [
+    "Velite",
+    "Praetorian"
+   ],
+   "variants": [
+    {
+     "notes": [
+      "Enchant the gloves with titan if promoted",
+      "Enchant with griffin to 95% EVA for extreme quests or Ouroboros",
+      "Extreme quests have a -20% penalty to evasion"
+     ],
+     "slots": [
+      {
+       "tier": 15,
+       "name": "Cardboard Guard",
+       "affinity": [
+        "Earth"
+       ],
+       "enchants": [
+        "Apotheosis Element"
+       ]
+      },
+      {
+       "tier": 16,
+       "name": "Clovered Gambeson",
+       "affinity": [
+        "Light",
+        "Titan Spirit"
+       ],
+       "enchants": [
+        "Apotheosis Element"
+       ]
+      },
+      {
+       "tier": 16,
+       "name": "Hermes' Hat",
+       "affinity": [
+        "Air"
+       ],
+       "enchants": [
+        "Apotheosis Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Titan Admiral Gloves",
+       "affinity": [
+        "Light",
+        "Water",
+        "Titan Spirit"
+       ],
+       "enchants": [
+        "Apotheosis Element"
+       ]
+      },
+      {
+       "tier": 16,
+       "name": "Gemmed Footpaws",
+       "affinity": [
+        "Light",
+        "Bunny Spirit"
+       ],
+       "enchants": [
+        "Apotheosis Element"
+       ]
+      },
+      {
+       "tier": 14,
+       "name": "Torc of Peace",
+       "affinity": [
+        "Light"
+       ],
+       "enchants": [
+        "Apotheosis Element"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "mage",
+   "classes": [
+    "Mage",
+    "Archmage"
+   ],
+   "variants": [
+    {
+     "notes": [
+      "Enchant the Idol with Titan if promoted",
+      "Enchant all other items with Leviathan"
+     ],
+     "slots": [
+      {
+       "tier": 16,
+       "name": "Blackthorn Scepter",
+       "affinity": [
+        "Earth",
+        "Dark"
+       ],
+       "enchants": [
+        "Blistering Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Malady's Robe",
+       "affinity": [
+        "Light",
+        "Ouroboros Spirit"
+       ],
+       "enchants": [
+        "Blistering Element"
+       ]
+      },
+      {
+       "tier": 16,
+       "name": "All-Knowing Cone",
+       "affinity": [],
+       "enchants": [
+        "Blistering Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Titan Admiral Boots",
+       "affinity": [
+        "Light",
+        "Water",
+        "Titan Spirit"
+       ],
+       "enchants": [
+        "Blistering Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Ghost Trap",
+       "affinity": [],
+       "enchants": [
+        "Blistering Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Avatar of Magic",
+       "affinity": [
+        "All"
+       ],
+       "enchants": [
+        "Blistering Element"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "cleric",
+   "classes": [
+    "Cleric",
+    "Bishop"
+   ],
+   "variants": [
+    {
+     "notes": [
+      "Enchant the Idol with Titan if promoted",
+      "Enchant all other items with Leviathan"
+     ],
+     "slots": [
+      {
+       "tier": 15,
+       "name": "Eclipsed Wand",
+       "affinity": [
+        "Light",
+        "Dark"
+       ],
+       "enchants": [
+        "Apotheosis Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Malady's Robe",
+       "affinity": [
+        "Light",
+        "Ouroboros Spirit"
+       ],
+       "enchants": [
+        "Apotheosis Element"
+       ]
+      },
+      {
+       "tier": 16,
+       "name": "All-Knowing Cone",
+       "affinity": [],
+       "enchants": [
+        "Apotheosis Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Titan Admiral Boots",
+       "affinity": [
+        "Light",
+        "Water",
+        "Titan Spirit"
+       ],
+       "enchants": [
+        "Apotheosis Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Ghost Trap",
+       "affinity": [],
+       "enchants": [
+        "Apotheosis Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Avatar of Magic",
+       "affinity": [
+        "All"
+       ],
+       "enchants": [
+        "Apotheosis Element"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "druid",
+   "classes": [
+    "Druid",
+    "Arch Druid"
+   ],
+   "variants": [
+    {
+     "notes": [
+      "Enchant any item with titan if promoted",
+      "Enchant all items with Leviathan"
+     ],
+     "slots": [
+      {
+       "tier": 15,
+       "name": "Equine Liuqin",
+       "affinity": [
+        "Kirin Spirit"
+       ],
+       "enchants": [
+        "Gaia Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Malady's Robe",
+       "affinity": [
+        "Light",
+        "Ouroboros Spirit"
+       ],
+       "enchants": [
+        "Gaia Element"
+       ]
+      },
+      {
+       "tier": 16,
+       "name": "Enchanted Rose",
+       "affinity": [],
+       "enchants": [
+        "Gaia Element"
+       ]
+      },
+      {
+       "tier": 16,
+       "name": "Enchanted Rose",
+       "affinity": [],
+       "enchants": [
+        "Gaia Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Elephant Amulet",
+       "affinity": [
+        "Earth",
+        "Behemoth Spirit"
+       ],
+       "enchants": [
+        "Gaia Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Ghost Trap",
+       "affinity": [],
+       "enchants": [
+        "Gaia Element"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "sorcerer",
+   "classes": [
+    "Sorcerer",
+    "Warlock"
+   ],
+   "variants": [
+    {
+     "notes": [
+      "Enchant the boots with titan if promoted",
+      "Enchant all items with Leviathan"
+     ],
+     "slots": [
+      {
+       "tier": 15,
+       "name": "Eclipsed Wand",
+       "affinity": [
+        "Light",
+        "Dark"
+       ],
+       "enchants": [
+        "Oblivion Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Malady's Robe",
+       "affinity": [
+        "Light",
+        "Ouroboros Spirit"
+       ],
+       "enchants": [
+        "Oblivion Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Krampus Cookies",
+       "affinity": [
+        "Dark",
+        "Krampus Spirit"
+       ],
+       "enchants": [
+        "Oblivion Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Titan Admiral Boots",
+       "affinity": [
+        "Light",
+        "Water",
+        "Titan Spirit"
+       ],
+       "enchants": [
+        "Oblivion Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Ghost Trap",
+       "affinity": [],
+       "enchants": [
+        "Oblivion Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Ghost Trap",
+       "affinity": [],
+       "enchants": [
+        "Oblivion Element"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "spellblade",
+   "classes": [
+    "Spellblade",
+    "Spellknight"
+   ],
+   "variants": [
+    {
+     "notes": [
+      "Use this build if your spellknight has staff master/adept",
+      "If your Spellblade isn’t promoted, use T15 Instrument Equine Liuqin instead",
+      "Enchant the Idol with Titan if promoted",
+      "Enchant all other items with Leviathan",
+      "If it has no affinity use the cheapest T14 element"
+     ],
+     "slots": [
+      {
+       "tier": 16,
+       "name": "Fragment of Apocal",
+       "affinity": [
+        "Blistering Element",
+        "Bahamut Spirit"
+       ],
+       "enchants": [
+        "Blistering Element"
+       ]
+      },
+      {
+       "tier": 16,
+       "name": "Clovered Gambeson",
+       "affinity": [
+        "Light",
+        "Titan Spirit"
+       ],
+       "enchants": [
+        "Apotheosis Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Pyroclastic Crown",
+       "affinity": [
+        "Blistering Element"
+       ],
+       "enchants": [
+        "Blistering Element"
+       ]
+      },
+      {
+       "tier": 14,
+       "name": "Rock Stompers",
+       "affinity": [
+        "Earth"
+       ],
+       "enchants": [
+        "Gaia Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Ghost Trap",
+       "affinity": [],
+       "enchants": []
+      },
+      {
+       "tier": 15,
+       "name": "Avatar of Magic",
+       "affinity": [
+        "All"
+       ],
+       "enchants": []
+      }
+     ]
+    },
+    {
+     "notes": [
+      "Use this build if your spellknight has sword master/warlord",
+      "If your Spellblade isn’t promoted, use T15 Spell Ghost Trap instead",
+      "Enchant the Idol with Titan if promoted",
+      "Enchant all other items with Leviathan",
+      "If it has no affinity use the cheapest T14 element"
+     ],
+     "slots": [
+      {
+       "tier": 15,
+       "name": "Titan Admiral Arms",
+       "affinity": [
+        "Light",
+        "Water",
+        "Titan Spirit"
+       ],
+       "enchants": [
+        "Apotheosis Element"
+       ]
+      },
+      {
+       "tier": 16,
+       "name": "Clovered Gambeson",
+       "affinity": [
+        "Light",
+        "Titan Spirit"
+       ],
+       "enchants": [
+        "Apotheosis Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Pyroclastic Crown",
+       "affinity": [
+        "Blistering Element"
+       ],
+       "enchants": [
+        "Blistering Element"
+       ]
+      },
+      {
+       "tier": 14,
+       "name": "Rock Stompers",
+       "affinity": [
+        "Earth"
+       ],
+       "enchants": [
+        "Gaia Element"
+       ]
+      },
+      {
+       "tier": 16,
+       "name": "Precursor's Ultimatum",
+       "affinity": [
+        "Oblivion Element",
+        "Ouroboros Spirit"
+       ],
+       "enchants": [
+        "Abyssal Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Avatar of Magic",
+       "affinity": [
+        "All"
+       ],
+       "enchants": []
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "geomancer",
+   "classes": [
+    "Geomancer",
+    "Astramancer"
+   ],
+   "variants": [
+    {
+     "notes": [
+      "Enchant gloves with titan if promoted",
+      "Enchant remaining items with Leviathan",
+      "Enchant with the highest tier elements available to you",
+      "Due to their innate, it is recommended to enchant the weapon with dark element and the dessert with dark element but only if use T14 enchants for everything."
+     ],
+     "slots": [
+      {
+       "tier": 15,
+       "name": "Darkensmog",
+       "affinity": [
+        "Dark"
+       ],
+       "enchants": [
+        "Oblivion Element"
+       ]
+      },
+      {
+       "tier": 14,
+       "name": "Wave Abbot Gi",
+       "affinity": [
+        "Water"
+       ],
+       "enchants": [
+        "Maelstrom Element"
+       ]
+      },
+      {
+       "tier": 14,
+       "name": "Lilu's Secret Hat",
+       "affinity": [
+        "Water",
+        "Owl Spirit"
+       ],
+       "enchants": [
+        "Maelstrom Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Titan Admiral Gloves",
+       "affinity": [
+        "Light",
+        "Water",
+        "Titan Spirit"
+       ],
+       "enchants": [
+        "Maelstrom Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Ghost Trap",
+       "affinity": [],
+       "enchants": [
+        "Maelstrom Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Krampus Cookies",
+       "affinity": [
+        "Dark",
+        "Krampus Spirit"
+       ],
+       "enchants": [
+        "Oblivion Element"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "chronomancer",
+   "classes": [
+    "Chronomancer",
+    "Fateweaver"
+   ],
+   "variants": [
+    {
+     "notes": [
+      "Use this build if your chronomancer/fateweaver has instrument master/adept",
+      "Enchant the Idol with Titan if promoted",
+      "Enchant all other items with Leviathan."
+     ],
+     "slots": [
+      {
+       "tier": 15,
+       "name": "Equine Liuqin",
+       "affinity": [
+        "Kirin Spirit"
+       ],
+       "enchants": [
+        "Tornado Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Malady's Robe",
+       "affinity": [
+        "Light",
+        "Ouroboros Spirit"
+       ],
+       "enchants": [
+        "Tornado Element"
+       ]
+      },
+      {
+       "tier": 16,
+       "name": "All-Knowing Cone",
+       "affinity": [],
+       "enchants": [
+        "Tornado Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Titan Admiral Boots",
+       "affinity": [
+        "Light",
+        "Water",
+        "Titan Spirit"
+       ],
+       "enchants": [
+        "Tornado Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Ghost Trap",
+       "affinity": [],
+       "enchants": [
+        "Tornado Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Avatar of Magic",
+       "affinity": [
+        "All"
+       ],
+       "enchants": [
+        "Tornado Element"
+       ]
+      }
+     ]
+    },
+    {
+     "notes": [
+      "Use this build if your chronomancer/fateweaver has sword master/warlord",
+      "Enchant the Idol with Titan if promoted",
+      "Enchant all other items with Leviathan",
+      "If you go with a Kiku-Ichimonji Chrono use Behemoth instead."
+     ],
+     "slots": [
+      {
+       "tier": 15,
+       "name": "Titan Admiral Arms",
+       "affinity": [
+        "Light",
+        "Water",
+        "Titan Spirit"
+       ],
+       "enchants": [
+        "Tornado Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Malady's Robe",
+       "affinity": [
+        "Light",
+        "Ouroboros Spirit"
+       ],
+       "enchants": [
+        "Tornado Element"
+       ]
+      },
+      {
+       "tier": 16,
+       "name": "All-Knowing Cone",
+       "affinity": [],
+       "enchants": [
+        "Tornado Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Titan Admiral Boots",
+       "affinity": [
+        "Light",
+        "Water",
+        "Titan Spirit"
+       ],
+       "enchants": [
+        "Tornado Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Ghost Trap",
+       "affinity": [],
+       "enchants": [
+        "Tornado Element"
+       ]
+      },
+      {
+       "tier": 15,
+       "name": "Avatar of Magic",
+       "affinity": [
+        "All"
+       ],
+       "enchants": [
+        "Tornado Element"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

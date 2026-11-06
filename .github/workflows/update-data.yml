@@ -1,0 +1,61 @@
+name: Mise à jour des données et déploiement
+
+on:
+  schedule:
+    - cron: "0 6 * * 1"   # chaque lundi à 06:00 UTC
+  workflow_dispatch:       # bouton « Run workflow » manuel
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  data:
+    if: github.event_name != 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install openpyxl==3.1.5
+      - name: Télécharger le sheet officiel et convertir
+        run: python scripts/build_data.py
+      - name: Récupérer les builds STC Hub
+        run: python scripts/scrape_stc_bis.py
+      - name: Commit si les données ont changé
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add site/data
+          if git diff --cached --quiet; then
+            echo "Aucun changement de données."
+          else
+            git commit -m "data: mise à jour automatique depuis le sheet officiel"
+            git push
+          fi
+
+  deploy:
+    needs: [data]
+    if: always() && (needs.data.result == 'success' || needs.data.result == 'skipped')
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - id: deployment
+        uses: actions/deploy-pages@v4

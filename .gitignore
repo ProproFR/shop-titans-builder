@@ -1,0 +1,8 @@
+# Fichier source téléchargé (les données sont régénérées depuis le sheet en ligne)
+*.xlsx
+__pycache__/
+.DS_Store
+Thumbs.db
+
+# Config locale de Claude Code
+.claude/
