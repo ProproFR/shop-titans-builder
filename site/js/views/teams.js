@@ -4,7 +4,6 @@ import { D, champIcon, classIcon, elemIcon } from '../data.js';
 import { t } from '../i18n.js';
 import { h, clear, icon, fmt, pct } from '../dom.js';
 import { combineModifiers, heroCandidate, championCandidates, recommend, explain } from '../tower-calc.js';
-import { gearRow } from './roster.js';
 import * as store from '../store.js';
 
 const ELEMS = ['Fire', 'Water', 'Air', 'Earth', 'Light', 'Dark'];
@@ -26,8 +25,7 @@ function memberLine(m, el) {
     h('div', { class: 'with-ico' }, icon(classIcon(m.cls.name), { size: 40, cls: 'portrait' }),
       h('span', {}, h('strong', {}, hero.name), ' ', h('span', { class: 'muted small' }, `${m.cls.name} · ${t('ro.level')} ${hero.level}`),
         el ? h('span', { class: `tag ${elOk ? 'tag-ok' : 'tag-est'}` }, elOk ? t('tm.elemOk', { el: elName(el) }) : t('tm.elemNo', { el: elName(el) })) : null)),
-    h('p', { class: 'small muted' }, `HP ${fmt(m.hp)} · ATK ${fmt(m.atk)} · DEF ${fmt(m.def)} · EVA ${pct(m.eva, 0)}${m.crit != null ? ` · CRIT ${pct(m.crit, 0)}` : ''}${m.estimated ? ` (${t('ro.estimated')})` : ''}`),
-    gearRow(hero, 32));
+    h('p', { class: 'small muted' }, `HP ${fmt(m.hp)} · ATK ${fmt(m.atk)} · DEF ${fmt(m.def)} · EVA ${pct(m.eva, 0)}${m.crit != null ? ` · CRIT ${pct(m.crit, 0)}` : ''}${m.estimated ? ` (${t('ro.estimated')})` : ''}`));
 }
 
 function teamCard(title, ico, res, size, el) {
