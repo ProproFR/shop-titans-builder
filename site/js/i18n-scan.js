@@ -3,7 +3,10 @@ import { addMessages } from './i18n.js';
 
 addMessages('fr', {
   'nav.scan': 'Importer & mes héros', 'nav.teams': 'Équipes proposées',
-  'sc.readingName': '(lecture du nom…)', 'sc.evaReal': 'ESQ % (réelle)', 'sc.evaCapped': 'Esquive affichée {shown} %, plafonnée à {real} % : {lost} points d\'esquive ne servent à rien (on garde {real} %).', 'sc.spiritKnown': 'esprit reconnu', 'sc.spiritPick': 'Choisissez l\'esprit une fois : il sera reconnu aux prochains imports.', 'sc.nameRead': 'Nom lu sur la capture.', 'sc.nameNotRead': 'Nom non lu : saisissez-le.',
+  'sc.readingName': '(lecture du nom…)', 'sc.update': 'Mettre à jour « {name} »', 'sc.saveAsNew': 'Non, enregistrer comme un autre héros',
+  'sc.alreadySaved': '« {name} » est déjà enregistré.', 'sc.savedOn': '(sauvegarde du {date})', 'sc.changes': 'Cette capture change {n} élément(s) :',
+  'sc.upToDate': 'Déjà à jour : la capture correspond à la sauvegarde.', 'sc.looksLike': 'Ce héros ressemble à « {name} » ({n} objets identiques, même classe). Est-ce lui ?',
+  'sc.yesUpdate': 'Oui, mettre à jour « {name} »', 'sc.noOther': 'Non, c\'est un autre héros', 'sc.skillN': 'Compétence {n}', 'sc.evaReal': 'ESQ % (réelle)', 'sc.evaCapped': 'Esquive affichée {shown} %, plafonnée à {real} % : {lost} points d\'esquive ne servent à rien (on garde {real} %).', 'sc.spiritKnown': 'esprit reconnu', 'sc.spiritPick': 'Choisissez l\'esprit une fois : il sera reconnu aux prochains imports.', 'sc.nameRead': 'Nom lu sur la capture.', 'sc.nameNotRead': 'Nom non lu : saisissez-le.',
   'sc.willUpdate': 'Ce héros existe déjà : « {name} » sera mis à jour.', 'sc.willCreate': 'Nouveau héros.',
   'sc.needName': 'Indiquez le nom du héros : il sert à le reconnaître lors des prochains imports.',
   'sc.updated': '« {name} » est mis à jour.', 'sc.toTeams': 'Voir les équipes proposées',
@@ -44,7 +47,10 @@ addMessages('fr', {
 
 addMessages('en', {
   'nav.scan': 'Import & my heroes', 'nav.teams': 'Suggested teams',
-  'sc.readingName': '(reading the name…)', 'sc.evaReal': 'EVA % (actual)', 'sc.evaCapped': 'Evasion shows {shown}%, capped at {real}%: {lost} evasion points are wasted ({real}% is kept).', 'sc.spiritKnown': 'spirit recognized', 'sc.spiritPick': 'Pick the spirit once: it will be recognized on later imports.', 'sc.nameRead': 'Name read from the screenshot.', 'sc.nameNotRead': 'Name not read: please type it.',
+  'sc.readingName': '(reading the name…)', 'sc.update': 'Update "{name}"', 'sc.saveAsNew': 'No, save as another hero',
+  'sc.alreadySaved': '"{name}" is already saved.', 'sc.savedOn': '(saved on {date})', 'sc.changes': 'This screenshot changes {n} item(s):',
+  'sc.upToDate': 'Already up to date: the screenshot matches the saved hero.', 'sc.looksLike': 'This hero looks like "{name}" ({n} identical items, same class). Is it them?',
+  'sc.yesUpdate': 'Yes, update "{name}"', 'sc.noOther': 'No, it\'s another hero', 'sc.skillN': 'Skill {n}', 'sc.evaReal': 'EVA % (actual)', 'sc.evaCapped': 'Evasion shows {shown}%, capped at {real}%: {lost} evasion points are wasted ({real}% is kept).', 'sc.spiritKnown': 'spirit recognized', 'sc.spiritPick': 'Pick the spirit once: it will be recognized on later imports.', 'sc.nameRead': 'Name read from the screenshot.', 'sc.nameNotRead': 'Name not read: please type it.',
   'sc.willUpdate': 'This hero already exists: "{name}" will be updated.', 'sc.willCreate': 'New hero.',
   'sc.needName': 'Enter the hero\'s name: it is used to recognize them on later imports.',
   'sc.updated': '"{name}" has been updated.', 'sc.toTeams': 'See suggested teams',

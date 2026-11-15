@@ -15,6 +15,68 @@ import { heroCard, deleteButton } from './roster.js';
 /** Héros déjà enregistré portant ce nom (comparaison sans accents ni symboles), ou null. */
 const sameName = (name) => { const n = normName(name); return n ? store.listHeroes().find((x) => normName(x.name) === n) || null : null; };
 
+/**
+ * Héros déjà enregistré correspondant à la capture : par le nom d'abord ; sinon (nom non lu ou mal lu),
+ * un héros de même classe qui porte au moins 4 des mêmes objets.
+ * @returns {{hero, how:'name'|'gear', same?:number}|null}
+ */
+function findExisting(name, classId, gear) {
+  const byName = sameName(name);
+  if (byName) return { hero: byName, how: 'name' };
+  if (!classId) return null;
+  let best = null;
+  for (const x of store.listHeroes()) {
+    if (x.classId !== classId) continue;
+    const same = (x.gear || []).filter((g, i) => g && g.item && gear[i] && gear[i].item === g.item).length;
+    if (same >= 4 && (!best || same > best.same)) best = { hero: x, how: 'gear', same };
+  }
+  return best;
+}
+
+/** Complète le brouillon avec la sauvegarde pour ce que la capture ne donne pas (esprit non reconnu, palier non lu…). */
+function mergeFromSaved(d, saved) {
+  if (!saved) return;
+  (saved.gear || []).forEach((g, i) => {
+    const cur = d.gear[i];
+    if (!g || !cur || !cur.item || cur.item !== g.item) return; // objet changé : on ne reprend rien
+    if (!cur.spirit && g.spirit) cur.spirit = g.spirit;
+    if (!cur.element && g.element) cur.element = g.element;
+  });
+  d.skills = d.skills.map((sk, k) => {
+    const old = saved.skills && saved.skills[k];
+    if (!sk && old) { const f = findFamily(old.family); return f ? { family: f.family, key: f.key, tier: old.tier } : sk; }
+    return sk;
+  });
+}
+
+const fmt = (v) => (v == null || v === '' ? '—' : typeof v === 'number' ? v.toLocaleString('fr-FR') : String(v));
+
+/** Différences entre le brouillon et la sauvegarde, en phrases courtes. */
+function diffWithSaved(d, saved) {
+  const out = [];
+  const add = (label, a, b) => { if ((a ?? '') !== (b ?? '')) out.push(`${label} : ${fmt(a)} → ${fmt(b)}`); };
+  if (saved.classId !== d.classId) add(t('sc.class'), D.classById.get(saved.classId)?.name, D.classById.get(d.classId)?.name);
+  add(t('sc.level'), saved.level, d.level);
+  const st = saved.stats || {};
+  add(t('sc.power'), st.power, d.power ?? st.power);
+  for (const [k, lbl] of [['atk', 'ATK'], ['def', 'DEF'], ['hp', 'HP'], ['eva', 'ESQ %']]) if (d.stats[k] != null) add(lbl, st[k], d.stats[k]);
+  d.gear.forEach((g, i) => {
+    const o = (saved.gear || [])[i] || {};
+    const n = t('sc.slot', { n: i + 1 });
+    if ((o.item || '') !== (g.item || '')) { add(n, o.item, g.item); return; }
+    add(`${n} · ${t('sc.quality')}`, o.quality && qualityName(o.quality), g.quality && qualityName(g.quality));
+    add(`${n} · ${t('sc.element')}`, o.element, g.element);
+    add(`${n} · ${t('sc.spirit')}`, o.spirit && spiritLabel(o.spirit), g.spirit && spiritLabel(g.spirit));
+  });
+  d.skills.forEach((sk, k) => {
+    const o = (saved.skills || [])[k];
+    const a = o ? `${o.family} ${['', 'I', 'II', 'III', 'IV'][o.tier] || ''}`.trim() : '';
+    const b = sk ? `${sk.family} ${['', 'I', 'II', 'III', 'IV'][sk.tier] || ''}`.trim() : '';
+    if (b) add(`${t('sc.skillN', { n: k + 1 })}`, a, b);
+  });
+  return out;
+}
+
 const SURE = 0.6; // seuil de confiance pour « sûr »
 const SPIRITS = () => sortSpirits(D.enchantments.filter((e) => e.type === 'Spirit'));
 const ELEMENT_ENCHANTS = () => D.enchantments.filter((e) => e.type === 'Element');
@@ -37,15 +99,25 @@ const tierFor = (f, wanted) => (wanted && f.tiers.has(wanted) ? wanted : Math.ma
 /** Brouillon de héros à partir du résultat d'analyse. */
 function draftFrom(res) {
   const cls = res.cls;
-  const existing = sameName(res.name);
-  const d = { id: existing ? existing.id : store.newId('h'), existing, name: res.name || '', classId: cls ? cls.id : '', level: res.level || D.maxLevel, skills: [], gear: cls ? emptyGear(cls) : [], stats: {} };
+  const d = { id: store.newId('h'), existing: null, match: null, name: res.name || '', classId: cls ? cls.id : '', level: res.level || D.maxLevel, skills: [], gear: cls ? emptyGear(cls) : [], stats: {} };
   fillSkills(d, res, cls);
   fillGear(d, res, cls);
   if (res.stats) {
     for (const k of ['atk', 'def', 'hp', 'eva']) if (res.stats[k] != null) d.stats[k] = res.stats[k];
     d.power = res.stats.power;
   }
+  const m = findExisting(d.name, d.classId, d.gear);
+  if (m && m.how === 'name') useSaved(d, m.hero);
+  else d.match = m; // ressemblance par l'équipement : on demande confirmation
   return d;
+}
+
+/** Rattache le brouillon à un héros enregistré (mise à jour). */
+function useSaved(d, hero) {
+  d.newId ||= d.id;
+  d.existing = hero; d.id = hero.id; d.match = null;
+  d.name = hero.name; // on garde le nom tel qu'enregistré (le nom lu peut différer : accents, OCR…)
+  mergeFromSaved(d, hero);
 }
 
 function fillSkills(d, res, cls) {
@@ -98,6 +170,28 @@ function renderCard(card, img, res, fileName, onSaved) {
     d.existing ? h('strong', {}, t('sc.willUpdate', { name: d.existing.name })) : (d.name ? h('span', {}, t('sc.willCreate')) : null),
   ];
 
+  // Comparaison avec la sauvegarde (mise à jour) ou proposition de rattachement (même équipement).
+  const cmp = h('div', { 'aria-live': 'polite' });
+  const saveLabel = () => (d.existing ? t('sc.update', { name: d.existing.name }) : t('sc.save'));
+  let saveBtn = h('button');
+  const compare = () => {
+    if (d.match && !d.existing) {
+      const x = d.match.hero;
+      return [h('div', { class: 'note' }, h('p', {}, h('strong', {}, t('sc.looksLike', { name: x.name, n: d.match.same }))),
+        h('div', { class: 'actions' },
+          h('button', { type: 'button', class: 'button', onclick: () => { useSaved(d, x); draw(); } }, t('sc.yesUpdate', { name: x.name })),
+          h('button', { type: 'button', class: 'btn-small', onclick: () => { d.match = null; draw(); } }, t('sc.noOther'))))];
+    }
+    if (!d.existing) return [];
+    const diffs = diffWithSaved(d, d.existing);
+    const when = d.existing.updatedAt ? new Date(d.existing.updatedAt).toLocaleDateString('fr-FR') : null;
+    return [h('div', { class: 'note' },
+      h('p', {}, h('strong', {}, t('sc.alreadySaved', { name: d.existing.name })), when ? ` ${t('sc.savedOn', { date: when })}` : ''),
+      diffs.length
+        ? [h('p', { class: 'small' }, t('sc.changes', { n: diffs.length })), h('ul', { class: 'small diff-list' }, diffs.map((x) => h('li', {}, x)))]
+        : h('p', { class: 'small' }, t('sc.upToDate')))];
+  };
+
   const draw = () => {
     clear(card);
     const cls = D.classById.get(d.classId) || null;
@@ -115,12 +209,15 @@ function renderCard(card, img, res, fileName, onSaved) {
     right.append(h('fieldset', {}, h('legend', {}, t('sc.identity')),
       h('div', { class: 'row' },
         h('div', { class: 'field' }, h('label', { for: `${d.id}-name` }, t('sc.name')),
-          h('input', { type: 'text', id: `${d.id}-name`, value: d.name, maxlength: 60, placeholder: t('sc.namePh'), oninput: (e) => { d.name = e.target.value; const ex = sameName(d.name); d.existing = ex; d.id = ex ? ex.id : (d.newId ||= store.newId('h')); nameNote.replaceChildren(...nameInfo()); } })),
+          h('input', { type: 'text', id: `${d.id}-name`, value: d.name, maxlength: 60, placeholder: t('sc.namePh'), oninput: (e) => { d.name = e.target.value; const ex = sameName(d.name); if (ex) useSaved(d, ex); else { d.existing = null; d.id = (d.newId ||= store.newId('h')); } nameNote.replaceChildren(...nameInfo()); cmp.replaceChildren(...compare()); saveBtn.textContent = saveLabel(); } })),
         select({ label: t('sc.class'), id: `${d.id}-cls`, value: d.classId, options: [{ value: '', label: '–' }, ...clsOpts.map((c) => ({ value: c.id, label: c.name }))],
           onChange: async (v) => { const c = D.classById.get(v); d.classId = v; if (c) { await rerankGear(res, c); fillGear(d, res, c); fillSkills(d, res, c); } draw(); } }),
         numberField({ label: t('sc.level'), id: `${d.id}-lvl`, value: d.level, min: 1, max: D.maxLevel, step: 1, onChange: (v) => { d.level = v || D.maxLevel; } })),
       (nameNote.replaceChildren(...nameInfo()), nameNote),
       cls ? h('p', { class: 'with-ico small' }, icon(classIcon(cls.name), { size: 28 }), h('span', {}, `${cls.name} · ${cls.group}`)) : null));
+
+    cmp.replaceChildren(...compare());
+    right.append(cmp);
 
     // --- Compétences
     const inn = res.skills[0];
@@ -184,7 +281,9 @@ function renderCard(card, img, res, fileName, onSaved) {
           ? h('p', { class: 'note small' }, t('sc.evaCapped', { shown: res.stats.evaShown, real: res.stats.eva, lost: res.stats.evaShown - res.stats.eva })) : null);
     }
 
-    right.append(h('div', { class: 'actions' }, h('button', { type: 'button', class: 'button', onclick: save }, t('sc.save'))), msg);
+    saveBtn = h('button', { type: 'button', class: 'button', onclick: () => save(false) }, saveLabel());
+    right.append(h('div', { class: 'actions' }, saveBtn,
+      d.existing ? h('button', { type: 'button', class: 'btn-small', onclick: () => save(true) }, t('sc.saveAsNew')) : null), msg);
     body.append(right);
     card.append(body);
   };
@@ -203,7 +302,13 @@ function renderCard(card, img, res, fileName, onSaved) {
     draw();
   }
 
-  function save() {
+  function save(asNew) {
+    if (asNew && d.existing) {
+      // Autre héros du même nom : nouvel identifiant et nom distinct (sinon il serait pris pour le premier).
+      d.existing = null; d.id = (d.newId ||= store.newId('h'));
+      let n = 2; const base = d.name.trim(); while (sameName(`${base} (${n})`)) n++;
+      d.name = `${base} (${n})`;
+    }
     const cls = D.classById.get(d.classId);
     if (!cls) { msg.replaceChildren(h('p', { class: 'error' }, t('sc.saveFail'))); return; }
     d.updated = !!d.existing;
@@ -213,11 +318,12 @@ function renderCard(card, img, res, fileName, onSaved) {
     if (!d.name.trim()) { msg.replaceChildren(h('p', { class: 'error' }, t('sc.needName'))); return; }
     const saved = store.saveHero(hero);
     if (!saved) { msg.replaceChildren(h('p', { class: 'error' }, t('sc.saveFail'))); return; }
-    d.existing = saved; onSaved();
+    d.existing = saved; d.id = saved.id; onSaved();
     // Apprentissage : la pastille de chaque esprit choisi servira à le reconnaître aux prochains imports.
     d.gear.forEach((g, i) => { if (g.spirit && res.gear[i]) learnSpirit(g.spirit, res.gear[i].spiritSig); });
     msg.replaceChildren(h('p', { class: 'note' }, t(d.updated ? 'sc.updated' : 'sc.saved', { name: saved.name }), ' ',
       h('a', { href: `#/roster?edit=${saved.id}` }, t('sc.openEditor')), ' · ', h('a', { href: '#/teams' }, t('sc.toTeams'))));
+    draw();
   }
 
   draw();

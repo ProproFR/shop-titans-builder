@@ -358,3 +358,5 @@ input[type=search] { width: 100%; min-height: 42px; padding: 6px 10px; font: inh
 .team-member .tag { margin-left: 6px; }
 .team-member p { margin: 4px 0; }
 .my-heroes { margin-top: 24px; }
+
+.diff-list { margin: 4px 0 0; padding-left: 18px; }
