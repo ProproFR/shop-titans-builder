@@ -68,6 +68,11 @@ const median = (a) => { const b = a.filter((x) => Number.isFinite(x)).sort((x, y
  */
 export function ownedChampionCandidate(champ, owned, heroes, tier = 4) {
   const c = championCandidate(champ, tier);
+  // Stats lues sur la fiche du champion : on les prend telles quelles.
+  if (owned && owned.atk > 0 && owned.hp > 0) {
+    return { ...c, owned: true, level: owned.level, power: owned.power, atk: owned.atk, def: owned.def || 0, hp: owned.hp,
+      eva: owned.eva != null ? owned.eva / 100 : c.eva, estimated: false };
+  }
   if (!owned || !owned.power) return c;
   const withPw = heroes.filter((x) => x.stats && x.stats.power > 0 && x.stats.atk > 0);
   const same = withPw.filter((x) => (D.classById.get(x.classId) || {}).group === champ.group);

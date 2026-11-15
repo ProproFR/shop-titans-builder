@@ -131,9 +131,22 @@ export function duplicateHero(id, suffix = ' (copie)') {
 export function sanitizeChampion(o) {
   if (!o || typeof o !== 'object' || !D.champions.some((c) => c.name === o.name)) return null;
   const lvl = Math.round(Number(o.level)), pw = Math.round(Number(o.power));
-  return { name: o.name, level: lvl >= 1 && lvl <= 99 ? lvl : null, power: pw > 0 && pw < 1e9 ? pw : null, updatedAt: Number(o.updatedAt) || Date.now() };
+  const out = { name: o.name, level: lvl >= 1 && lvl <= 99 ? lvl : null, power: pw > 0 && pw < 1e9 ? pw : null, updatedAt: Number(o.updatedAt) || Date.now() };
+  // Stats lues sur la fiche du champion (import d'une capture), facultatives.
+  for (const [k, hi] of [['hp', 1e8], ['atk', 1e8], ['def', 1e8], ['eva', 100], ['elem', 1e5]]) {
+    const v = Number(o[k]); if (o[k] != null && Number.isFinite(v) && v >= 0 && v <= hi) out[k] = v;
+  }
+  return out;
 }
 export const listChampions = () => load().champions.slice();
+/** Ajoute ou met à jour un champion possédé (par son nom). */
+export function saveChampion(c) {
+  const clean = sanitizeChampion({ ...c, updatedAt: Date.now() });
+  if (!clean) return null;
+  const list = load().champions; const i = list.findIndex((x) => x.name === clean.name);
+  if (i >= 0) list[i] = { ...list[i], ...clean }; else list.push(clean);
+  return save() ? clean : null;
+}
 /** Remplace la liste des champions possédés. */
 export function saveChampions(list) { load().champions = list.map(sanitizeChampion).filter(Boolean); return save(); }
 

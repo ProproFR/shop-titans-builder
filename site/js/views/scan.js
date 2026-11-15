@@ -1,5 +1,5 @@
 // Vue « Importer une capture » (#/scan) : lecture automatique de la fiche d'un héros, validation, enregistrement.
-import { D, itemIcon, skillIcon, classIcon, findFamily, applyBuiltIns } from '../data.js';
+import { D, itemIcon, skillIcon, classIcon, champIcon, findFamily, applyBuiltIns } from '../data.js';
 import { t } from '../i18n.js';
 import { h, clear, icon, combo, select, numberField, gearTile } from '../dom.js';
 import { classMatches, QUALITY } from '../calc.js';
@@ -160,6 +160,36 @@ function preview(img, res) {
 /** Bouton de choix (alternative) avec icône. */
 const choice = (label, src, pressed, onclick) => h('button', { type: 'button', class: 'q-btn compact', 'aria-pressed': String(pressed), onclick, title: label },
   icon(src, { size: 28 }), h('span', {}, label));
+
+/** Fiche d'un champion ? Son nom commence par celui d'un champion (« Lilu and Nippy »). */
+function championOf(name) {
+  const n = normName(name);
+  if (!n) return null;
+  return D.champions.filter((c) => n.startsWith(normName(c.name.replace(/\s*\(.*\)$/, '')))).sort((a, b) => b.name.length - a.name.length)[0] || null;
+}
+
+/** Carte de validation pour un champion : niveau, puissance et stats, enregistrés dans « Mes champions ». */
+function renderChampionCard(card, img, res, champ, fileName) {
+  const c = { name: champ.name, level: res.level, power: res.stats && res.stats.power, hp: res.stats && res.stats.hp, atk: res.stats && res.stats.atk,
+    def: res.stats && res.stats.def, eva: res.stats && res.stats.eva, elem: res.stats && res.stats.elem };
+  const old = store.listChampions().find((x) => x.name === champ.name);
+  const msg = h('div', { role: 'status', 'aria-live': 'polite' });
+  clear(card);
+  card.append(h('div', { class: 'scan-head' },
+    h('h2', { class: 'with-ico-h' }, icon(champIcon(champ.name), { size: 40, cls: 'portrait' }), champ.name, ' ', h('span', { class: 'tag' }, t('sc.champion')), ' ', h('span', { class: 'muted small' }, fileName)),
+    h('button', { type: 'button', class: 'btn-small danger', onclick: () => card.remove() }, t('sc.remove'))));
+  const fields = [['level', t('ch.level')], ['power', t('ch.power')], ['hp', 'HP'], ['atk', 'ATK'], ['def', 'DEF'], ['eva', 'EVA %'], ['elem', t('sc.elemPts')]];
+  card.append(h('div', { class: 'scan-body' }, h('div', { class: 'scan-left' }, preview(img, res)),
+    h('div', { class: 'scan-right' },
+      h('p', { class: 'note' }, old ? t('sc.champUpdate', { name: champ.name }) : t('sc.champNew', { name: champ.name })),
+      h('fieldset', {}, h('legend', {}, t('sc.stats')), h('div', { class: 'row' },
+        fields.map(([k, lbl]) => numberField({ label: lbl, id: `ch-${champ.name}-${k}`, value: c[k], min: 0, step: 1, onChange: (v) => { c[k] = v; } })))),
+      h('div', { class: 'actions' }, h('button', { type: 'button', class: 'button', onclick: () => {
+        const saved = store.saveChampion(c);
+        msg.replaceChildren(h('p', { class: saved ? 'note' : 'error' }, saved ? t('sc.champSaved', { name: champ.name }) : t('ch.saveFail'), ' ',
+          saved ? h('a', { href: '#/champions' }, t('nav.champions')) : '', saved ? ' · ' : '', saved ? h('a', { href: '#/teams' }, t('sc.toTeams')) : ''));
+      } }, old ? t('sc.update', { name: champ.name }) : t('sc.champSave'))), msg)));
+}
 
 function renderCard(card, img, res, fileName, onSaved) {
   const d = draftFrom(res);
@@ -339,7 +369,9 @@ export function render(root) {
       const img = await loadImage(file);
       const status = card.querySelector('[role=status]');
       const res = await analyze(img, { onProgress: (n, total) => { status.textContent = n == null ? `${t('sc.loading')} ${t('sc.readingName')}` : `${t('sc.loading')} ${t('sc.icons', { n, total })}`; } });
-      renderCard(card, img, res, file.name || '', drawHeroes);
+      const champ = championOf(res.name);
+      if (champ) renderChampionCard(card, img, res, champ, file.name || '');
+      else renderCard(card, img, res, file.name || '', drawHeroes);
     } catch (e) {
       console.error(e);
       const key = e.message === 'panel' ? 'sc.noPanel' : null;

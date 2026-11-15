@@ -2,8 +2,8 @@
 import { addMessages } from './i18n.js';
 
 addMessages('fr', {
-  'nav.champions': 'Mes champions', 'tm.champOwned': '(votre champion · niv. {lvl} · puissance {pw})', 'tm.champsOwned': 'Champions : vos {n} champions enregistrés.', 'tm.champsNone': 'Champions : suggestions parmi tous les champions.', 'tm.champsGo': 'Indiquer mes champions',
-  'ch.title': 'Mes champions', 'ch.intro': 'Cochez les champions que vous possédez et indiquez leur niveau et leur puissance (l\'étoile sur leur carte dans le jeu). Les équipes proposées n\'utiliseront plus que ceux-là.',
+  'nav.champions': 'Mes champions', 'sc.champion': 'champion', 'sc.elemPts': 'Élément (points)', 'sc.champNew': 'Fiche de champion reconnue : « {name} » sera ajouté à vos champions avec ces stats.', 'sc.champUpdate': 'Fiche de champion reconnue : les stats de « {name} » seront mises à jour.', 'sc.champSave': 'Enregistrer ce champion', 'sc.champSaved': '« {name} » est enregistré dans vos champions.', 'tm.champOwned': '(votre champion · niv. {lvl} · puissance {pw})', 'tm.champsOwned': 'Champions : vos {n} champions enregistrés.', 'tm.champsNone': 'Champions : suggestions parmi tous les champions.', 'tm.champsGo': 'Indiquer mes champions',
+  'ch.fromSheet': 'stats lues sur la fiche', 'ch.tipScan': 'Astuce : importez la capture de la fiche d\'un champion (onglet Info) comme pour un héros, ses vraies stats seront utilisées.', 'ch.title': 'Mes champions', 'ch.intro': 'Cochez les champions que vous possédez et indiquez leur niveau et leur puissance (l\'étoile sur leur carte dans le jeu). Les équipes proposées n\'utiliseront plus que ceux-là.',
   'ch.preset': '{n} champions pré-remplis depuis le lien : vérifiez puis cliquez sur « Enregistrer ».', 'ch.level': 'Niveau', 'ch.power': 'Puissance', 'ch.save': 'Enregistrer mes champions',
   'ch.saved': '{n} champions enregistrés.', 'ch.saveFail': 'Enregistrement impossible (stockage du navigateur indisponible).',
   'ch.how': 'Les stats d\'un champion sont estimées d\'après sa puissance et celles de vos héros du même type (combattant, voleur, lanceur de sorts) : c\'est une approximation, suffisante pour comparer des groupes.',
@@ -64,8 +64,8 @@ addMessages('fr', {
 });
 
 addMessages('en', {
-  'nav.champions': 'My champions', 'tm.champOwned': '(your champion · lvl {lvl} · power {pw})', 'tm.champsOwned': 'Champions: your {n} saved champions.', 'tm.champsNone': 'Champions: suggestions among all champions.', 'tm.champsGo': 'Enter my champions',
-  'ch.title': 'My champions', 'ch.intro': 'Tick the champions you own and enter their level and power (the star on their card in the game). Suggested teams will then only use those.',
+  'nav.champions': 'My champions', 'sc.champion': 'champion', 'sc.elemPts': 'Element (points)', 'sc.champNew': 'Champion sheet detected: "{name}" will be added to your champions with these stats.', 'sc.champUpdate': 'Champion sheet detected: "{name}" stats will be updated.', 'sc.champSave': 'Save this champion', 'sc.champSaved': '"{name}" is saved in your champions.', 'tm.champOwned': '(your champion · lvl {lvl} · power {pw})', 'tm.champsOwned': 'Champions: your {n} saved champions.', 'tm.champsNone': 'Champions: suggestions among all champions.', 'tm.champsGo': 'Enter my champions',
+  'ch.fromSheet': 'stats read from the sheet', 'ch.tipScan': 'Tip: import a screenshot of a champion\'s sheet (Info tab) like a hero, and its real stats will be used.', 'ch.title': 'My champions', 'ch.intro': 'Tick the champions you own and enter their level and power (the star on their card in the game). Suggested teams will then only use those.',
   'ch.preset': '{n} champions pre-filled from the link: check them, then click "Save".', 'ch.level': 'Level', 'ch.power': 'Power', 'ch.save': 'Save my champions',
   'ch.saved': '{n} champions saved.', 'ch.saveFail': 'Could not save (browser storage unavailable).',
   'ch.how': 'A champion\'s stats are estimated from its power and from your heroes of the same type (fighter, rogue, spellcaster): an approximation, good enough to compare groups.',

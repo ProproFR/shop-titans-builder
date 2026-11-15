@@ -28,7 +28,7 @@ export function render(root, ctx) {
   });
   const msg = h('p', { role: 'status', 'aria-live': 'polite' });
 
-  root.append(h('h1', {}, t('ch.title')), h('p', { class: 'lead' }, t('ch.intro')));
+  root.append(h('h1', {}, t('ch.title')), h('p', { class: 'lead' }, t('ch.intro')), h('p', { class: 'small' }, t('ch.tipScan'), ' ', h('a', { href: '#/scan' }, t('nav.scan'))));
   if (preset) root.append(h('p', { class: 'note' }, t('ch.preset', { n: preset.size })));
 
   const list = h('div', { class: 'champ-list' });
@@ -38,14 +38,16 @@ export function render(root, ctx) {
     list.append(h('div', { class: 'card champ-row' },
       h('div', { class: 'with-ico' }, icon(champIcon(c.name), { size: 48, cls: 'portrait' }),
         h('div', {}, h('label', { for: `own-${r.name}`, class: 'check' }, box, ' ', h('strong', {}, c.name)),
-          h('div', { class: 'muted small with-ico' }, icon(elemIcon(c.element), { size: 18 }), `${elementName(c.element)} · ${c.group}`))),
+          h('div', { class: 'muted small with-ico' }, icon(elemIcon(c.element), { size: 18 }), `${elementName(c.element)} · ${c.group}`),
+          saved.get(r.name) && saved.get(r.name).atk ? h('div', { class: 'small' }, `HP ${saved.get(r.name).hp} · ATK ${saved.get(r.name).atk} · DEF ${saved.get(r.name).def} · EVA ${saved.get(r.name).eva ?? 0} %`, ' ', h('span', { class: 'tag tag-ok' }, t('ch.fromSheet'))) : null)),
       h('div', { class: 'row' },
         numberField({ label: t('ch.level'), id: `lvl-${r.name}`, value: r.level, min: 1, max: 99, step: 1, onChange: (v) => { r.level = v; if (v) { r.owned = true; box.checked = true; } } }),
         numberField({ label: t('ch.power'), id: `pw-${r.name}`, value: r.power, min: 0, step: 1, onChange: (v) => { r.power = v; if (v) { r.owned = true; box.checked = true; } } }))));
   });
 
   const saveBtn = h('button', { type: 'button', class: 'button', onclick: () => {
-    const okSave = store.saveChampions(rows.filter((r) => r.owned).map((r) => ({ name: r.name, level: r.level, power: r.power, updatedAt: Date.now() })));
+    // On garde les stats déjà lues sur les fiches (import de capture).
+    const okSave = store.saveChampions(rows.filter((r) => r.owned).map((r) => ({ ...(saved.get(r.name) || {}), name: r.name, level: r.level, power: r.power, updatedAt: Date.now() })));
     msg.className = okSave ? 'note' : 'error';
     msg.replaceChildren(okSave ? t('ch.saved', { n: rows.filter((r) => r.owned).length }) : t('ch.saveFail'), ' ', okSave ? h('a', { href: '#/teams' }, t('sc.toTeams')) : '');
     if (preset) history.replaceState(null, '', '#/champions');
