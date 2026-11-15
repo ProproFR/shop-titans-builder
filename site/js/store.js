@@ -160,16 +160,37 @@ export function exportJSON() {
   setTimeout(() => URL.revokeObjectURL(url), 2000);
 }
 
-/** Fusionne des héros/équipes déjà validés. Un même id est remplacé seulement si l'import est plus récent. */
+// Nom comparé sans accents, majuscules ni symboles (« Laurène ~ » = « laurene »).
+const normName = (s) => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]/g, '');
+
+/** Garde ce que l'import n'a pas (esprit, élément, compétence) quand l'objet est le même. */
+function keepMissing(x, old) {
+  const gear = (x.gear || []).map((g, i) => {
+    const o = (old.gear || [])[i];
+    if (!g || !o || g.item !== o.item) return g;
+    return { ...g, spirit: g.spirit || o.spirit, element: g.element || o.element };
+  });
+  const skills = (x.skills && x.skills.length) ? x.skills : old.skills;
+  return { ...old, ...x, id: old.id, gear, skills, notes: x.notes || old.notes, stats: { ...(old.stats || {}), ...(x.stats || {}) } };
+}
+
+/**
+ * Fusionne des héros/équipes déjà validés. Même id, ou à défaut même nom (héros) : remplacé seulement si
+ * l'import est plus récent, en gardant ce que l'import ne précise pas. Sinon ajouté.
+ */
 export function mergeData(heroes, teams) {
   const s = load();
   let nh = 0, nt = 0;
-  for (const [src, dst, key] of [[heroes, s.heroes, 'h'], [teams, s.teams, 't']]) {
-    for (const x of src) {
-      const i = dst.findIndex((y) => y.id === x.id);
-      if (i < 0) { dst.push(x); key === 'h' ? nh++ : nt++; }
-      else if (x.updatedAt > dst[i].updatedAt) { dst[i] = x; key === 'h' ? nh++ : nt++; }
-    }
+  for (const x of heroes) {
+    let i = s.heroes.findIndex((y) => y.id === x.id);
+    if (i < 0 && normName(x.name)) i = s.heroes.findIndex((y) => normName(y.name) === normName(x.name));
+    if (i < 0) { s.heroes.push(x); nh++; }
+    else if (x.updatedAt > s.heroes[i].updatedAt) { s.heroes[i] = keepMissing(x, s.heroes[i]); nh++; }
+  }
+  for (const x of teams) {
+    const i = s.teams.findIndex((y) => y.id === x.id);
+    if (i < 0) { s.teams.push(x); nt++; }
+    else if (x.updatedAt > s.teams[i].updatedAt) { s.teams[i] = x; nt++; }
   }
   save();
   return { heroes: nh, teams: nt };
