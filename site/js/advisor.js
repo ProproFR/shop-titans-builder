@@ -1,5 +1,5 @@
 // Conseiller de build : « Meilleur combo conseillé » pour une classe (fiche Builds + éditeur de héros).
-import { D, skillIcon } from './data.js';
+import { D, skillIcon, skillLabel } from './data.js';
 import { t } from './i18n.js';
 import { h, select, icon, fmt } from './dom.js';
 import { scoreSkill, defaultRole, RARITY_RANK } from './calc.js';
@@ -72,7 +72,7 @@ export function advisorPanel(cls, o = {}) {
       skillsBox.append(h('h5', { class: 'adv-rar' }, r ? h('span', { class: `rar rar-${r.toLowerCase()}` }, r) : t('adv.otherRarity')),
         h('ul', { class: 'adv-skills' }, list.map((c) => h('li', {},
           icon(skillIcon(c.skill.name) || skillIcon(c.fam.family), { size: 36, cls: 'skill-ico' }),
-          h('span', { class: 'adv-sk' }, h('strong', {}, c.fam.family), ` T${c.tier} `, h('span', { class: 'muted small' }, `· ${t('sk.score')} ${fmt(c.score, 1)}`),
+          h('span', { class: 'adv-sk' }, h('strong', {}, skillLabel(c.fam.family, c.tier)), ' ', h('span', { class: 'muted small' }, `· ${t('sk.score')} ${fmt(c.score, 1)}`),
             h('span', { class: 'small adv-eff' }, c.skill.effect))))));
     }
     if (!ranked.length) skillsBox.append(h('p', { class: 'muted' }, '–'));
@@ -110,13 +110,13 @@ export function advisorPanel(cls, o = {}) {
       const sw = o.swaps && o.swaps.get(s.family);
       const repl = ok ? null : (sw ? rec.find((r) => r.family === sw) || { family: sw, tier: 4 } : missing.filter((r) => !(o.swaps && [...o.swaps.values()].includes(r.family)))[mi++]);
       return h('li', { class: ok ? 'ok' : 'change' },
-        icon(famIco(s.family), { size: 32, cls: 'skill-ico' }), h('strong', {}, s.family),
+        icon(famIco(s.family), { size: 32, cls: 'skill-ico' }), h('strong', {}, skillLabel(s.family, s.tier)),
         h('span', { class: `tag ${ok ? 'tag-ok' : 'tag-est'}` }, ok ? `✓ ${t('adv.keep')}` : `✗ ${t('adv.change')}`),
-        repl ? h('span', {}, ` ${t('adv.by')} `, icon(famIco(repl.family), { size: 24, cls: 'skill-ico' }), h('strong', {}, repl.family), ` T${repl.tier}`) : null);
+        repl ? h('span', {}, ` ${t('adv.by')} `, icon(famIco(repl.family), { size: 24, cls: 'skill-ico' }), h('strong', {}, skillLabel(repl.family, repl.tier))) : null);
     })));
     const used = new Set(o.swaps ? [...o.swaps.values()] : []);
     const rest = missing.filter((r) => !used.has(r.family)).slice(mi);
-    if (rest.length || o.hero.skills.length < 4) mineBox.append(h('p', { class: 'small' }, `${t('adv.missing')} : `, rest.map((r) => r.family).join(', ') || '–'));
+    if (rest.length || o.hero.skills.length < 4) mineBox.append(h('p', { class: 'small' }, `${t('adv.missing')} : `, rest.map((r) => skillLabel(r.family, r.tier)).join(', ') || '–'));
   };
   if (o.hero) {
     box.append(mineBox, h('details', {}, h('summary', {}, t('adv.allRanked')), skillsBox, h('p', { class: 'muted small' }, t('sk.heuristic'), ' ', t('sk.bestNote'))));

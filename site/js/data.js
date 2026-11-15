@@ -76,3 +76,23 @@ export function applyBuiltIns(g) {
   if (it.builtInElement) g.element = it.builtInElement;
   return g;
 }
+
+const ROMAN_T = ['', 'I', 'II', 'III', 'IV', 'V'];
+/** Nom affiché dans le jeu pour une compétence à un palier (ex. Double Cast IV = « Penta Cast »). */
+export function skillGameName(family, tier) {
+  const f = findFamily(family);
+  const sk = f && (f.tiers.get(tier) || f.tiers.get(Math.max(...f.tiers.keys())));
+  return sk ? sk.name : family;
+}
+/** Libellé complet : « Penta Cast (Double Cast IV) » — le nom du jeu d'abord, la famille du site entre parenthèses. */
+export function skillLabel(family, tier) {
+  const n = skillGameName(family, tier);
+  const r = ROMAN_T[tier] || tier || '';
+  return n && n !== family ? `${n} (${family} ${r})`.trim() : `${family} ${r}`.trim();
+}
+/** Tous les noms (famille + noms de palier) → famille, pour retrouver une compétence tapée avec le nom du jeu. */
+export function skillAliases(fams) {
+  const m = new Map();
+  for (const f of fams) { m.set(f.family.toLowerCase(), f); for (const sk of f.tiers.values()) m.set(sk.name.toLowerCase(), f); }
+  return m;
+}

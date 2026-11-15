@@ -1,6 +1,6 @@
 // Vue « Mes héros » : héros et équipes sauvegardés (localStorage), éditeur, export/import, partage par lien.
 import { typeName, enchantLabel, spiritLabel, sortSpirits, itemLabel } from '../i18n-names.js';
-import { applyBuiltIns } from '../data.js';
+import { applyBuiltIns, skillLabel, skillAliases } from '../data.js';
 import { D, classIcon, champIcon, qualityIcon, skillIcon, uiIcon, findFamily } from '../data.js';
 import { t, getLang } from '../i18n.js';
 import { h, clear, combo, select, numberField, icon, fmt, pct, gearTile, statLabel } from '../dom.js';
@@ -61,7 +61,7 @@ export function skillsRow(hero, size = 32) {
   return h('div', { class: 'skills-row' }, hero.skills.map((s) => {
     const f = findFamily(s.family);
     const sk = f && f.tiers.get(s.tier);
-    return h('span', { class: 'chip-skill', title: sk ? sk.effect : s.family }, icon(skillIcon(sk ? sk.name : s.family) || skillIcon(s.family), { size }), `${s.family} T${s.tier}`);
+    return h('span', { class: 'chip-skill', title: sk ? sk.effect : s.family }, icon(skillIcon(sk ? sk.name : s.family) || skillIcon(s.family), { size }), skillLabel(s.family, s.tier));
   }));
 }
 
@@ -258,7 +258,7 @@ function renderEditor(root, ctx) {
     // ---- Compétences
     const skBox = h('fieldset', { class: 'skillbox' }, h('legend', {}, t('opt.skills', { n: 4 })));
     const fams = skillFamiliesFor(cls).filter((f) => f.type === 'Hero');
-    const byName = new Map(fams.map((f) => [f.family.toLowerCase(), f]));
+    const byName = skillAliases(fams); // nom de famille OU nom affiché dans le jeu à n'importe quel palier
     const rows = h('div', { class: 'skill-rows' });
     const drawSkills = () => {
       clear(rows);
@@ -282,18 +282,18 @@ function renderEditor(root, ctx) {
           .sort((a, b) => (rec.includes(b.family) - rec.includes(a.family)) || a.family.localeCompare(b.family));
         rows.append(h('div', { class: `skill-row ${isRec ? 'sk-ok' : 'sk-change'}` },
           icon(skillIcon(sk.name) || skillIcon(f.family), { size: 44, cls: 'skill-ico' }),
-          h('div', { class: 'grow' }, h('strong', {}, f.family), sk.rarity ? [' ', h('span', { class: `rar rar-${sk.rarity.toLowerCase()}` }, sk.rarity)] : null,
+          h('div', { class: 'grow' }, h('strong', {}, skillLabel(f.family, s.tier)), sk.rarity ? [' ', h('span', { class: `rar rar-${sk.rarity.toLowerCase()}` }, sk.rarity)] : null,
             ' ', h('span', { class: `tag ${isRec ? 'tag-ok' : 'tag-est'}` }, isRec ? `✓ ${t('adv.keep')}` : `✗ ${t('adv.change')}`),
             h('div', { class: 'small' }, sk.effect),
-            sugg ? h('button', { type: 'button', class: 'button small-btn', onclick: () => replace(i, sugg) }, t('ro.replaceBy', { name: sugg })) : null),
+            sugg ? h('button', { type: 'button', class: 'button small-btn', onclick: () => replace(i, sugg) }, t('ro.replaceBy', { name: skillLabel(sugg, Math.max(...findFamily(sugg).tiers.keys())) })) : null),
           select({ label: t('skills.tier'), value: s.tier, options: tiers.map((x) => ({ value: x, label: `T${x}` })), onChange: (v) => { s.tier = Number(v); drawSkills(); } }),
-          select({ label: t('ro.replaceWith'), value: '', options: [{ value: '', label: '—' }, ...others.map((x) => ({ value: x.family, label: `${rec.includes(x.family) ? '★ ' : ''}${x.family}` }))], onChange: (v) => { if (v) replace(i, v); } }),
+          select({ label: t('ro.replaceWith'), value: '', options: [{ value: '', label: '—' }, ...others.map((x) => ({ value: x.family, label: `${rec.includes(x.family) ? '★ ' : ''}${skillLabel(x.family, Math.max(...x.tiers.keys()))}` }))], onChange: (v) => { if (v) replace(i, v); } }),
           h('button', { type: 'button', class: 'btn-small', 'aria-label': `${t('remove')} ${f.family}`, onclick: () => { H.skills.splice(i, 1); drawSkills(); } }, t('remove'))));
       });
       if (rec.some((r) => !H.skills.some((x) => x.family === r))) rows.append(h('p', { class: 'small muted' }, t('ro.starHint')));
     };
     drawSkills();
-    const add = combo({ label: t('opt.addSkill'), options: fams.map((f) => ({ value: f.family, label: f.type })), placeholder: t('opt.skillPh'),
+    const add = combo({ label: t('opt.addSkill'), options: fams.flatMap((f) => [{ value: f.family, label: skillLabel(f.family, Math.max(...f.tiers.keys())) }, ...[...f.tiers.values()].filter((sk) => sk.name !== f.family).map((sk) => ({ value: sk.name, label: `${f.family} ${['', 'I', 'II', 'III', 'IV'][sk.tier] || ''}` }))]), placeholder: t('opt.skillPh'),
       onPick: (name) => {
         const f = byName.get(String(name).toLowerCase());
         if (!f || H.skills.length >= 4 || H.skills.some((s) => s.family === f.family)) return;

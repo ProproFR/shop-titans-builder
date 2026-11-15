@@ -1,5 +1,5 @@
 // Vue « Importer une capture » (#/scan) : lecture automatique de la fiche d'un héros, validation, enregistrement.
-import { D, itemIcon, skillIcon, classIcon, champIcon, findFamily, applyBuiltIns } from '../data.js';
+import { D, itemIcon, skillIcon, classIcon, champIcon, findFamily, applyBuiltIns, skillLabel } from '../data.js';
 import { t } from '../i18n.js';
 import { h, clear, icon, combo, select, numberField, gearTile } from '../dom.js';
 import { classMatches, QUALITY } from '../calc.js';
@@ -70,8 +70,8 @@ function diffWithSaved(d, saved) {
   });
   d.skills.forEach((sk, k) => {
     const o = (saved.skills || [])[k];
-    const a = o ? `${o.family} ${['', 'I', 'II', 'III', 'IV'][o.tier] || ''}`.trim() : '';
-    const b = sk ? `${sk.family} ${['', 'I', 'II', 'III', 'IV'][sk.tier] || ''}`.trim() : '';
+    const a = o ? skillLabel(o.family, o.tier) : '';
+    const b = sk ? skillLabel(sk.family, sk.tier) : '';
     if (b) add(`${t('sc.skillN', { n: k + 1 })}`, a, b);
   });
   return out;
@@ -253,7 +253,7 @@ function renderCard(card, img, res, fileName, onSaved) {
     const inn = res.skills[0];
     const innFam = inn.list[0] && inn.list[0].fams[0];
     const sk = h('fieldset', {}, h('legend', {}, t('sc.skills')),
-      innFam ? h('p', { class: 'with-ico' }, icon(skillIcon(firstTier(innFam).name), { size: 32 }), h('span', {}, `${t('sc.innate')} : ${innFam.family} `), confTag(inn.conf)) : null,
+      innFam ? h('p', { class: 'with-ico' }, icon(skillIcon(firstTier(innFam).name), { size: 32 }), h('span', {}, `${t('sc.innate')} : ${skillLabel(innFam.family, inn.tier || Math.max(...innFam.tiers.keys()))} `), confTag(inn.conf)) : null,
       h('p', { class: 'muted small' }, t('sc.tierHint')));
     res.skills.slice(1).forEach((e, k) => {
       const cur = d.skills[k];
@@ -263,13 +263,13 @@ function renderCard(card, img, res, fileName, onSaved) {
       sk.append(h('div', { class: 'scan-row' },
         h('div', { class: 'scan-row-main' },
           curFam ? icon(skillIcon(firstTier(curFam).name), { size: 40 }) : h('span', { class: 'gear-empty' }, '?'),
-          h('strong', {}, curFam ? curFam.family : t('sc.unknown')), ' ', confTag(e.conf),
+          h('strong', {}, curFam ? skillLabel(curFam.family, cur.tier) : t('sc.unknown')), ' ', confTag(e.conf),
           curFam ? select({ label: t('sc.tier'), id: `${d.id}-t${k}`, value: cur.tier, options: [...curFam.tiers.keys()].map((x) => ({ value: x, label: ['', 'I', 'II', 'III', 'IV'][x] || x })),
             onChange: (v) => { cur.tier = Number(v); } }) : null),
         opts.length > 1 ? h('div', { class: 'q-group', role: 'group', 'aria-label': t('sc.alts') }, opts.map((f) => choice(f.family, skillIcon(firstTier(f).name), curFam === f,
           () => { d.skills[k] = { family: f.family, key: f.key, tier: tierFor(f, e.tier) }; draw(); }))) : null,
-        combo({ label: t('sc.alts'), id: `${d.id}-sk${k}`, options: all.map((f) => ({ value: f.family })), value: '', placeholder: '…',
-          onPick: (n) => { const f = all.find((x) => x.family === n); if (f) { d.skills[k] = { family: f.family, key: f.key, tier: tierFor(f, e.tier) }; draw(); } } })));
+        combo({ label: t('sc.alts'), id: `${d.id}-sk${k}`, options: all.flatMap((f) => [{ value: f.family }, ...[...f.tiers.values()].filter((x) => x.name !== f.family).map((x) => ({ value: x.name, label: f.family }))]), value: '', placeholder: '…',
+          onPick: (n) => { const f = all.find((x) => x.family === n || [...x.tiers.values()].some((y) => y.name === n)); if (f) { d.skills[k] = { family: f.family, key: f.key, tier: tierFor(f, e.tier) }; draw(); } } })));
     });
     right.append(sk);
 

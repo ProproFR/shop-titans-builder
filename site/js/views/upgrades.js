@@ -1,6 +1,6 @@
 // Vue « Améliorations prioritaires » (#/upgrades) : toutes les améliorations possibles de vos héros,
 // classées par priorité (gain estimé × importance du héros ÷ effort).
-import { D, classIcon, itemIcon } from '../data.js';
+import { D, classIcon, itemIcon, skillGameName, skillLabel } from '../data.js';
 import { t } from '../i18n.js';
 import { h, clear, icon, fmt, select } from '../dom.js';
 import { rankUpgrades } from '../upgrades.js';
@@ -18,8 +18,8 @@ export function describe(u) {
   switch (u.kind) {
     case 'quality': return t('up.d.quality', { slot, item: u.item, from: qualityName(u.from), to: qualityName(u.to) });
     case 'item': return t(u.item ? 'up.d.item' : 'up.d.itemEmpty', { slot, item: u.item, to: u.to, tier: u.toTier });
-    case 'skill': return t('up.d.skill', { skill: u.item, from: ROMAN[u.from] || u.from, to: ROMAN[u.to] || u.to });
-    case 'skillSwap': return t('up.d.skillSwap', { skill: u.item, to: u.to, tier: ROMAN[u.toTier] || u.toTier });
+    case 'skill': return t('up.d.skill', { skill: skillLabel(u.item, u.from), to: `${skillGameName(u.item, u.to)} (${ROMAN[u.to] || u.to})` });
+    case 'skillSwap': return t('up.d.skillSwap', { skill: skillLabel(u.item, (u.hero.skills[u.slot] || {}).tier), to: skillLabel(u.to, u.toTier) });
     case 'element': return t(u.from ? 'up.d.elementUp' : 'up.d.element', { slot, item: u.item, from: enchLbl(u.from), to: enchLbl(u.to) });
     case 'spirit': return t(u.to ? 'up.d.spirit' : 'up.d.spiritAny', { slot, item: u.item, to: spiritLabel(u.to) });
     case 'evaCap': return t('up.d.evaCap', { waste: u.waste });
