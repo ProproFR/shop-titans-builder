@@ -1,4 +1,5 @@
 // Vue « Mes héros » : héros et équipes sauvegardés (localStorage), éditeur, export/import, partage par lien.
+import { typeName, enchantLabel, spiritLabel, sortSpirits, itemLabel } from '../i18n-names.js';
 import { D, classIcon, champIcon, qualityIcon, skillIcon, uiIcon, findFamily } from '../data.js';
 import { t, getLang } from '../i18n.js';
 import { h, clear, combo, select, numberField, icon, fmt, pct, gearTile, statLabel } from '../dom.js';
@@ -268,7 +269,7 @@ function renderEditor(root, ctx) {
     // ---- Équipement
     const gearBox = h('fieldset', { class: 'gearbox' }, h('legend', {}, t('ro.gear')));
     const elems = D.enchantments.filter((e) => e.type === 'Element');
-    const spirits = D.enchantments.filter((e) => e.type === 'Spirit');
+    const spirits = sortSpirits(D.enchantments.filter((e) => e.type === 'Spirit'));
     cls.slots.forEach((types, i) => {
       const g = H.gear[i] || (H.gear[i] = { item: '', quality: 'Normal' });
       const tileHolder = h('div', {});
@@ -277,18 +278,18 @@ function renderEditor(root, ctx) {
         const it = D.itemByName.get(g.item);
         tileHolder.append(it ? gearTile(it, { tier: it.tier, quality: g.quality, size: 56 }) : h('div', { class: 'gear-tile gear-tile-empty', style: '--tile:56px' }, h('span', { class: 'gear-empty', 'aria-hidden': 'true' }, '?')));
       };
-      const opts = D.items.filter((it) => slotTypes(cls, i).includes(it.type)).sort((a, b) => b.tier - a.tier || a.name.localeCompare(b.name)).map((it) => ({ value: it.name, label: `T${it.tier} ${it.type}` }));
+      const opts = D.items.filter((it) => slotTypes(cls, i).includes(it.type)).sort((a, b) => b.tier - a.tier || a.name.localeCompare(b.name)).map((it) => ({ value: it.name, label: itemLabel(it) }));
       const qBtns = QUALITIES.map((q) => h('button', { type: 'button', class: 'q-btn compact', 'data-q': q.toLowerCase(), 'aria-pressed': String(g.quality === q), title: q, 'aria-label': `${t('opt.quality')} ${q}`,
         onclick: () => { g.quality = q; qBtns.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.q === q.toLowerCase()))); drawTile(); } }, icon(qualityIcon(q), { size: 26 })));
-      const itemField = combo({ label: `${t('builds.slot')} ${i + 1} — ${types.join(' / ')}`, options: opts, value: g.item, placeholder: t('ro.itemPh'), id: `gear-${i}`,
+      const itemField = combo({ label: `${t('builds.slot')} ${i + 1} — ${types.map(typeName).join(' / ')}`, options: opts, value: g.item, placeholder: t('ro.itemPh'), id: `gear-${i}`,
         onPick: (n) => { g.item = n; drawTile(); } });
       itemField.input.addEventListener('input', () => { if (itemField.input.value.trim() === '') { g.item = ''; drawTile(); } });
       gearBox.append(h('div', { class: 'gear-edit' }, tileHolder,
         h('div', { class: 'grow' }, itemField,
           h('div', { class: 'q-group' }, qBtns),
           h('div', { class: 'row' },
-            select({ label: t('ro.element'), value: g.element || '', options: [{ value: '', label: '—' }, ...elems.map((e) => ({ value: e.name, label: `${e.name} (${e.element} +${e.value})` }))], onChange: (v) => { if (v) g.element = v; else delete g.element; } }),
-            select({ label: t('ro.spirit'), value: g.spirit || '', options: [{ value: '', label: '—' }, ...spirits.map((e) => ({ value: e.name, label: e.name }))], onChange: (v) => { if (v) g.spirit = v; else delete g.spirit; } })))));
+            select({ label: t('ro.element'), value: g.element || '', options: [{ value: '', label: '—' }, ...elems.map((e) => ({ value: e.name, label: enchantLabel(e) }))], onChange: (v) => { if (v) g.element = v; else delete g.element; } }),
+            select({ label: t('ro.spirit'), value: g.spirit || '', options: [{ value: '', label: '—' }, ...spirits.map((e) => ({ value: e.name, label: spiritLabel(e.name) }))], onChange: (v) => { if (v) g.spirit = v; else delete g.spirit; } })))));
       drawTile();
     });
     form.append(gearBox);

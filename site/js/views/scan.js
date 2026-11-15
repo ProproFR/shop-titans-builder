@@ -9,13 +9,14 @@ import { loadImage } from '../scan/image.js';
 import { analyze, rerankGear } from '../scan/analyze.js';
 import { normName } from '../scan/name.js';
 import { learn as learnSpirit } from '../scan/spirit.js';
+import { typeName, enchantLabel, spiritLabel, sortSpirits, itemLabel, qualityName } from '../i18n-names.js';
 import { heroCard, deleteButton } from './roster.js';
 
 /** Héros déjà enregistré portant ce nom (comparaison sans accents ni symboles), ou null. */
 const sameName = (name) => { const n = normName(name); return n ? store.listHeroes().find((x) => normName(x.name) === n) || null : null; };
 
 const SURE = 0.6; // seuil de confiance pour « sûr »
-const SPIRITS = () => D.enchantments.filter((e) => e.type === 'Spirit');
+const SPIRITS = () => sortSpirits(D.enchantments.filter((e) => e.type === 'Spirit'));
 const ELEMENT_ENCHANTS = () => D.enchantments.filter((e) => e.type === 'Element');
 
 const confTag = (c) => (c == null ? null : h('span', { class: `tag ${c >= SURE ? 'tag-ok' : 'tag-est'}` }, t(c >= SURE ? 'sc.sure' : 'sc.check')));
@@ -158,15 +159,15 @@ function renderCard(card, img, res, fileName, onSaved) {
         gr.append(h('div', { class: 'scan-row' },
           h('div', { class: 'scan-row-main' },
             it ? gearTile(it, { tier: it.tier, quality: g.quality, size: 48 }) : h('span', { class: 'gear-empty' }, '?'),
-            h('div', {}, h('strong', {}, it ? it.name : t('sc.unknown')), ' ', confTag(e.conf), h('div', { class: 'muted small' }, `${t('sc.slot', { n: i + 1 })} · ${types.join(' / ')}`))),
+            h('div', {}, h('strong', {}, it ? it.name : t('sc.unknown')), ' ', confTag(e.conf), h('div', { class: 'muted small' }, `${t('sc.slot', { n: i + 1 })} · ${types.map(typeName).join(' / ')}${it ? ` · ${itemLabel(it)}` : ''}`))),
           alts.length > 1 ? h('div', { class: 'q-group', role: 'group', 'aria-label': t('sc.alts') }, alts.map((x) => choice(x.key, itemIcon(D.itemByName.get(x.key)), g.item === x.key,
             () => { g.item = x.key; draw(); }))) : null,
           h('div', { class: 'row' },
-            combo({ label: t('sc.alts'), id: `${d.id}-it${i}`, options: allItems.map((x) => ({ value: x.name, label: `T${x.tier} ${x.type}` })), value: '', placeholder: '…',
+            combo({ label: t('sc.alts'), id: `${d.id}-it${i}`, options: allItems.map((x) => ({ value: x.name, label: itemLabel(x) })), value: '', placeholder: '…',
               onPick: (n) => { if (D.itemByName.has(n)) { g.item = n; draw(); } } }),
-            select({ label: t('sc.quality'), id: `${d.id}-q${i}`, value: g.quality, options: Object.keys(QUALITY).map((q) => ({ value: q, label: q })), onChange: (v) => { g.quality = v; draw(); } }),
-            select({ label: t('sc.element'), id: `${d.id}-e${i}`, value: g.element, options: [{ value: '', label: t('sc.none') }, ...ELEMENT_ENCHANTS().map((x) => ({ value: x.name, label: `${x.name} (+${x.value})` }))], onChange: (v) => { g.element = v; } }),
-            select({ label: t('sc.spirit'), id: `${d.id}-s${i}`, value: g.spirit, options: [{ value: '', label: t('sc.none') }, ...SPIRITS().map((x) => ({ value: x.name, label: x.name }))], onChange: (v) => { setSpirit(i, v); } }),
+            select({ label: t('sc.quality'), id: `${d.id}-q${i}`, value: g.quality, options: Object.keys(QUALITY).map((q) => ({ value: q, label: qualityName(q) })), onChange: (v) => { g.quality = v; draw(); } }),
+            select({ label: t('sc.element'), id: `${d.id}-e${i}`, value: g.element, options: [{ value: '', label: t('sc.none') }, ...ELEMENT_ENCHANTS().map((x) => ({ value: x.name, label: enchantLabel(x) }))], onChange: (v) => { g.element = v; } }),
+            select({ label: t('sc.spirit'), id: `${d.id}-s${i}`, value: g.spirit, options: [{ value: '', label: t('sc.none') }, ...SPIRITS().map((x) => ({ value: x.name, label: spiritLabel(x.name) }))], onChange: (v) => { setSpirit(i, v); } }),
             h('span', { class: 'muted small' }, e.spirit && g.spirit === e.spirit ? h('span', { class: 'tag tag-ok' }, t('sc.spiritKnown')) : !g.spirit ? t('sc.spiritPick') : null))));
       });
       right.append(gr);
