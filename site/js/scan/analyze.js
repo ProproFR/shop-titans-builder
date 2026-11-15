@@ -100,17 +100,17 @@ function badgePresent(img, b) {
 /**
  * Élément d'une pastille d'après la couleur moyenne de son centre. Valeurs relevées sur de vraies
  * captures : Ténèbres = violet-gris terne (teinte ≈ 300-315, sat ≈ 0,3, sombre), Air = cyan pâle
- * (≈ 190, sat < 0,2, clair), Terre = vert vif (≈ 93). Feu / Eau / Lumière : estimés (pas encore vus).
+ * (≈ 190, sat < 0,2, clair), Terre = vert vif (≈ 93). Eau ≈ 196 (sat 0,8), Feu ≈ 12, Lumière ≈ 48 : relevés sur les captures de la guilde.
  */
 function elementByColor(I, b) {
   const [r, g, bl] = meanColor(I, { x: b.x + b.w * 0.3, y: b.y + b.h * 0.3, w: b.w * 0.4, h: b.h * 0.4 });
   const [hh, sat, v] = hsv(r, g, bl);
-  if (hh >= 280 && hh <= 335 && sat >= 0.15 && sat <= 0.42 && v >= 0.2 && v <= 0.55) return 'Dark';
+  if (hh >= 280 && hh <= 335 && sat >= 0.23 && sat <= 0.4 && v >= 0.25 && v <= 0.43) return 'Dark';
   if (hh >= 170 && hh <= 215 && sat < 0.3 && v > 0.55) return 'Air';
   if (hh >= 70 && hh <= 145 && sat > 0.4) return 'Earth';
   if ((hh < 25 || hh > 345) && sat > 0.45 && v > 0.45) return 'Fire';
-  if (hh > 205 && hh <= 255 && sat > 0.4) return 'Water';
-  if (hh >= 38 && hh < 70 && sat > 0.4 && v > 0.6) return 'Light';
+  if (hh >= 188 && hh <= 255 && sat > 0.45) return 'Water';
+  if (hh >= 38 && hh < 70 && sat > 0.3 && v > 0.6) return 'Light';
   return '';
 }
 
@@ -214,7 +214,7 @@ export async function analyze(img, { onProgress } = {}) {
   for (const g of gear) {
     const it = g.list[0] && D.itemByName.get(g.list[0].key);
     const en = it && it.builtInElement && D.enchantByName.get(it.builtInElement);
-    if (en && g.hasElemBadge !== false) { g.element = en.element; g.enchant = en.name; g.builtIn = en.value; }
+    if (en && g.hasElemBadge) { g.element = en.element; g.enchant = en.name; g.builtIn = en.value; }
   }
   // Le total « Élément » ne compte que l'élément du héros : on retire les éléments intégrés connus,
   // puis on répartit le reste sur les autres cases de cet élément.
