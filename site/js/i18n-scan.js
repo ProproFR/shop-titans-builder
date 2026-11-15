@@ -2,6 +2,9 @@
 import { addMessages } from './i18n.js';
 
 addMessages('fr', {
+  'plan.title': 'À poser sur cet objet', 'plan.element': 'Élément :', 'plan.spirit': 'Esprit :', 'plan.ifPromoted': '(si le héros est promu)', 'plan.otherwise': 'sinon', 'plan.or': 'ou',
+  'plan.griffinWhy': '(Griffon pour viser l\'esquive en quêtes extrêmes)', 'plan.useIf': 'Variante à choisir si le héros a :',
+  'plan.evaTarget': 'En quêtes extrêmes (−20 % d\'esquive), visez {n} % d\'esquive avec l\'esprit Griffon.', 'plan.notes': 'Notes de St. Central (texte original)', 'plan.enchOrig': 'Enchantements STC par emplacement :',
   'nav.champions': 'Mes champions', 'builds.enchHint': 'Élément conseillé (ajout du site)', 'sc.champion': 'champion', 'sc.elemPts': 'Élément (points)', 'sc.champNew': 'Fiche de champion reconnue : « {name} » sera ajouté à vos champions avec ces stats.', 'sc.champUpdate': 'Fiche de champion reconnue : les stats de « {name} » seront mises à jour.', 'sc.champSave': 'Enregistrer ce champion', 'sc.champSaved': '« {name} » est enregistré dans vos champions.', 'tm.champOwned': '(votre champion · niv. {lvl} · puissance {pw})', 'tm.champsOwned': 'Champions : vos {n} champions enregistrés.', 'tm.champsNone': 'Champions : suggestions parmi tous les champions.', 'tm.champsGo': 'Indiquer mes champions',
   'ch.fromSheet': 'stats lues sur la fiche', 'ch.tipScan': 'Astuce : importez la capture de la fiche d\'un champion (onglet Info) comme pour un héros, ses vraies stats seront utilisées.', 'ch.title': 'Mes champions', 'ch.intro': 'Cochez les champions que vous possédez et indiquez leur niveau et leur puissance (l\'étoile sur leur carte dans le jeu). Les équipes proposées n\'utiliseront plus que ceux-là.',
   'ch.preset': '{n} champions pré-remplis depuis le lien : vérifiez puis cliquez sur « Enregistrer ».', 'ch.level': 'Niveau', 'ch.power': 'Puissance', 'ch.save': 'Enregistrer mes champions',
@@ -66,6 +69,9 @@ addMessages('fr', {
 });
 
 addMessages('en', {
+  'plan.title': 'Put on this item', 'plan.element': 'Element:', 'plan.spirit': 'Spirit:', 'plan.ifPromoted': '(if the hero is promoted)', 'plan.otherwise': 'otherwise', 'plan.or': 'or',
+  'plan.griffinWhy': '(Griffin to reach evasion for extreme quests)', 'plan.useIf': 'Pick this variant if the hero has:',
+  'plan.evaTarget': 'For extreme quests (−20% evasion), aim for {n}% evasion with the Griffin spirit.', 'plan.notes': 'St. Central notes (original text)', 'plan.enchOrig': 'STC enchants per slot:',
   'nav.champions': 'My champions', 'builds.enchHint': 'Recommended element (added by the site)', 'sc.champion': 'champion', 'sc.elemPts': 'Element (points)', 'sc.champNew': 'Champion sheet detected: "{name}" will be added to your champions with these stats.', 'sc.champUpdate': 'Champion sheet detected: "{name}" stats will be updated.', 'sc.champSave': 'Save this champion', 'sc.champSaved': '"{name}" is saved in your champions.', 'tm.champOwned': '(your champion · lvl {lvl} · power {pw})', 'tm.champsOwned': 'Champions: your {n} saved champions.', 'tm.champsNone': 'Champions: suggestions among all champions.', 'tm.champsGo': 'Enter my champions',
   'ch.fromSheet': 'stats read from the sheet', 'ch.tipScan': 'Tip: import a screenshot of a champion\'s sheet (Info tab) like a hero, and its real stats will be used.', 'ch.title': 'My champions', 'ch.intro': 'Tick the champions you own and enter their level and power (the star on their card in the game). Suggested teams will then only use those.',
   'ch.preset': '{n} champions pre-filled from the link: check them, then click "Save".', 'ch.level': 'Level', 'ch.power': 'Power', 'ch.save': 'Save my champions',

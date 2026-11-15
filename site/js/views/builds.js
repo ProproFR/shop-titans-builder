@@ -3,7 +3,8 @@ import { D, classIcon, skillIcon, elemIcon, statIcon } from '../data.js';
 import { t } from '../i18n.js';
 import { advisorPanel } from '../advisor.js';
 import { h, combo, table, elBadge, fmt, pct, icon, statLabel, withIcon, gearTile, originBadge } from '../dom.js';
-import { elementName } from '../i18n-names.js';
+import { elementName, spiritShort } from '../i18n-names.js';
+import { spiritPlan } from '../bis-plan.js';
 
 export function itemStatsText(it) {
   if (!it) return t('builds.unknownItem');
@@ -28,11 +29,26 @@ export function itemStatsNode(it) {
   return parts.length ? h('span', { class: 'stat-line', title: itemStatsText(it) }, parts) : h('span', {}, '–');
 }
 
-/** Une variante de build STC, telle quelle (réutilisée par le conseiller). */
+/** Encadré « À poser sur cet objet » : élément (enchantement STC de l'emplacement) + esprit (déduit des notes STC). */
+function planBox(s, sp) {
+  const e = s.enchants.map((n) => D.enchantByName.get(n)).find((x) => x && x.type === 'Element');
+  if (!e && !sp) return null;
+  return h('div', { class: 'plan-box' },
+    h('div', { class: 'plan-title' }, t('plan.title')),
+    e ? h('div', { class: 'plan-line' }, icon(elemIcon(e.element), { size: 22 }), h('span', {}, t('plan.element'), ' ', h('strong', {}, `${elementName(e.element)} +${e.value}`))) : null,
+    sp ? h('div', { class: 'plan-line' }, h('span', { class: 'plan-ico', 'aria-hidden': 'true' }, '✦'),
+      h('span', {}, t('plan.spirit'), ' ', h('strong', {}, spiritShort(sp.spirit)),
+        sp.cond === 'promoted' ? h('span', { class: 'muted' }, ` ${t('plan.ifPromoted')}`) : null,
+        sp.alt.length ? h('span', { class: 'muted' }, ` · ${sp.cond === 'promoted' ? t('plan.otherwise') : t('plan.or')} ${sp.alt.map(spiritShort).join(', ')}`) : null)) : null);
+}
+
+/** Une variante de build STC (objets tels quels) + ce qu'il faut poser sur chaque objet, déduit par le site. */
 export function variantBox(bis, v, vi) {
+  const plan = spiritPlan(v);
   return h('section', { class: 'variant', 'aria-label': `${t('builds.variant')} ${vi + 1}` },
     h('h4', {}, `${t('builds.variant')} ${vi + 1}${bis.variants.length > 1 ? ` / ${bis.variants.length}` : ''}`),
-    v.notes.length ? h('ul', { class: 'notes' }, v.notes.map((n) => h('li', {}, n))) : null,
+    plan.useIf ? h('p', { class: 'plan-useif' }, t('plan.useIf'), ' ', h('strong', {}, plan.useIf)) : null,
+    plan.evaTarget ? h('p', { class: 'small muted' }, t('plan.evaTarget', { n: plan.evaTarget })) : null,
     h('ol', { class: 'gear-grid' }, v.slots.map((s, i) => {
       const it = D.itemByName.get(s.name);
       return h('li', { class: 'gear-card' },
@@ -43,15 +59,12 @@ export function variantBox(bis, v, vi) {
         originBadge(it),
         h('div', { class: 'gear-aff', 'aria-label': t('builds.affinity') },
           s.affinity.map((a) => elemIcon(a) && a !== 'All' ? elBadge(a) : h('span', { class: 'tag' }, a))),
-        // Texte STC tel quel ; le site ajoute seulement, à côté, l'icône et la valeur de l'élément conseillé.
-        s.enchants.length ? h('div', { class: 'gear-ench small' }, h('span', { class: 'muted' }, `${t('builds.enchants')} : `),
-          s.enchants.map((name, k) => {
-            const e = D.enchantByName.get(name);
-            return h('span', { class: 'ench-item' }, k ? ', ' : '', name,
-              e && e.type === 'Element' ? h('span', { class: 'ench-hint', title: t('builds.enchHint') }, ' ', icon(elemIcon(e.element), { size: 18 }), ` ${elementName(e.element)} +${e.value}`) : null);
-          })) : null,
+        planBox(s, plan.slots[i]),
         h('div', { class: 'small' }, itemStatsNode(it)));
-    })));
+    })),
+    // Notes STC d'origine, non modifiées (licence CC BY-NC-ND) : repliées, consultables à tout moment.
+    v.notes.length ? h('details', { class: 'stc-notes' }, h('summary', {}, t('plan.notes')), h('ul', { class: 'notes' }, v.notes.map((n) => h('li', {}, n))),
+      h('p', { class: 'small muted' }, t('plan.enchOrig'), ' ', v.slots.map((s, i) => `${i + 1}: ${s.enchants.join(', ') || '–'}`).join(' · '))) : null);
 }
 
 export function render(root, ctx) {

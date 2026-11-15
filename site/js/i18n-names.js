@@ -68,3 +68,9 @@ export const itemLabel = (it) => `T${it.tier} · ${typeName(it.type)}`;
 const QUALITIES = { Normal: 'Normale', Superior: 'Supérieure', Flawless: 'Impeccable', Epic: 'Épique', Legendary: 'Légendaire' };
 /** Qualité dans la langue de l'interface. */
 export const qualityName = (q) => (fr() && QUALITIES[q]) || q;
+
+/** Nom court d'un esprit (« Griffon », « Titan ») : sans le mot « Spirit » ni le nom anglais entre parenthèses. */
+export function spiritShort(name) {
+  const k = String(name || '').replace(/ Spirit$/, '');
+  return (fr() && SPIRITS[k]) || k;
+}
