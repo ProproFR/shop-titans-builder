@@ -1,0 +1,37 @@
+name: Installer l'OCR (lecture des noms)
+
+# À lancer à la main une fois (onglet Actions → « Installer l'OCR » → Run workflow), puis à chaque mise à jour voulue.
+# Télécharge Tesseract.js (Apache-2.0) et les données de langue française (Apache-2.0) dans site/vendor/tesseract/,
+# pour que le site les héberge lui-même : aucun appel à un service tiers lors de l'utilisation.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Télécharger Tesseract.js et le français
+        run: |
+          set -e
+          D=site/vendor/tesseract
+          mkdir -p "$D"
+          JS=https://cdn.jsdelivr.net/npm
+          curl -fsSL "$JS/tesseract.js@5/dist/tesseract.min.js" -o "$D/tesseract.min.js"
+          curl -fsSL "$JS/tesseract.js@5/dist/worker.min.js" -o "$D/worker.min.js"
+          for f in tesseract-core-lstm.wasm.js tesseract-core-simd-lstm.wasm.js; do
+            curl -fsSL "$JS/tesseract.js-core@5/$f" -o "$D/$f"
+          done
+          curl -fsSL "$JS/@tesseract.js-data/fra/4.0.0_best_int/fra.traineddata.gz" -o "$D/fra.traineddata.gz"
+          curl -fsSL "$JS/tesseract.js@5/LICENSE.md" -o "$D/LICENSE-tesseract.js.md" || true
+          printf 'Tesseract.js 5.x et tesseract.js-core 5.x (Apache-2.0, https://github.com/naptha/tesseract.js)\nDonnées de langue fra (tessdata, Apache-2.0, https://github.com/tesseract-ocr/tessdata)\n' > "$D/README.txt"
+          ls -la "$D"
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add site/vendor/tesseract
+          if git diff --cached --quiet; then echo "Rien de nouveau."; else git commit -m "vendor: Tesseract.js pour lire le nom des héros" && git push; fi

@@ -2,7 +2,20 @@
 import { addMessages } from './i18n.js';
 
 addMessages('fr', {
-  'nav.scan': 'Importer',
+  'nav.scan': 'Importer & mes héros', 'nav.teams': 'Équipes proposées',
+  'sc.readingName': '(lecture du nom…)', 'sc.nameRead': 'Nom lu sur la capture.', 'sc.nameNotRead': 'Nom non lu : saisissez-le.',
+  'sc.willUpdate': 'Ce héros existe déjà : « {name} » sera mis à jour.', 'sc.willCreate': 'Nouveau héros.',
+  'sc.needName': 'Indiquez le nom du héros : il sert à le reconnaître lors des prochains imports.',
+  'sc.updated': '« {name} » est mis à jour.', 'sc.toTeams': 'Voir les équipes proposées',
+  'sc.myHeroes': 'Mes héros', 'sc.noHeroes': 'Aucun héros pour l\'instant : importez une capture ci-dessus.',
+  'sc.seeTeams': 'Voir les équipes proposées', 'sc.transfer': 'Transférer mes héros vers un autre appareil',
+  'sc.transferTxt': 'Vos héros sont enregistrés dans ce navigateur uniquement. Exportez-les ici, puis importez le fichier sur votre autre appareil.',
+  'tm.title': 'Équipes proposées', 'tm.intro': 'Les meilleurs groupes formés avec vos héros enregistrés : un groupe général, puis un par élément (barrière des boss de cet élément).',
+  'tm.disclaimer': 'Calcul indicatif : il compare vos groupes face à un monstre de référence (stats lues sur vos captures, sinon estimées). Le champion est une suggestion ; vérifiez que vous l\'avez.',
+  'tm.noHeroes': 'Aucun héros enregistré pour l\'instant.', 'tm.goImport': 'Importer mes héros',
+  'tm.basedOn': 'Calculé à partir de vos {n} héros enregistrés.', 'tm.general': 'Meilleur groupe général', 'tm.elemTitle': 'Contre les boss {el}',
+  'tm.champSuggested': '(champion conseillé)', 'tm.elemOk': 'élément {el} ✓', 'tm.elemNo': 'pas {el}',
+  'tm.el.Fire': 'Feu', 'tm.el.Water': 'Eau', 'tm.el.Air': 'Air', 'tm.el.Earth': 'Terre', 'tm.el.Light': 'Lumière', 'tm.el.Dark': 'Ténèbres', 'tm.why': 'Pourquoi ce groupe ?', 'tm.score': 'Marge de survie estimée : {score}', 'tm.noResult': 'Pas assez de héros pour proposer un groupe.',
   'sc.title': 'Importer un héros depuis une capture',
   'sc.intro': 'Faites une capture de la fiche d\'un héros dans le jeu (onglet « Infos »), puis déposez-la ici. Le site reconnaît la classe, les compétences, les objets, leur qualité, l\'élément et les stats. Vous vérifiez, puis vous enregistrez.',
   'sc.private': 'L\'image est analysée dans votre navigateur : elle n\'est envoyée nulle part.',
@@ -30,7 +43,20 @@ addMessages('fr', {
 });
 
 addMessages('en', {
-  'nav.scan': 'Import',
+  'nav.scan': 'Import & my heroes', 'nav.teams': 'Suggested teams',
+  'sc.readingName': '(reading the name…)', 'sc.nameRead': 'Name read from the screenshot.', 'sc.nameNotRead': 'Name not read: please type it.',
+  'sc.willUpdate': 'This hero already exists: "{name}" will be updated.', 'sc.willCreate': 'New hero.',
+  'sc.needName': 'Enter the hero\'s name: it is used to recognize them on later imports.',
+  'sc.updated': '"{name}" has been updated.', 'sc.toTeams': 'See suggested teams',
+  'sc.myHeroes': 'My heroes', 'sc.noHeroes': 'No heroes yet: import a screenshot above.',
+  'sc.seeTeams': 'See suggested teams', 'sc.transfer': 'Move my heroes to another device',
+  'sc.transferTxt': 'Your heroes are saved in this browser only. Export them here, then import the file on your other device.',
+  'tm.title': 'Suggested teams', 'tm.intro': 'The best groups made from your saved heroes: one general group, then one per element (barrier of that element\'s bosses).',
+  'tm.disclaimer': 'Indicative calculation: it compares your groups against a reference monster (stats read from your screenshots, otherwise estimated). The champion is a suggestion; check that you own it.',
+  'tm.noHeroes': 'No saved heroes yet.', 'tm.goImport': 'Import my heroes',
+  'tm.basedOn': 'Calculated from your {n} saved heroes.', 'tm.general': 'Best general group', 'tm.elemTitle': 'Against {el} bosses',
+  'tm.champSuggested': '(suggested champion)', 'tm.elemOk': '{el} element ✓', 'tm.elemNo': 'not {el}',
+  'tm.el.Fire': 'Fire', 'tm.el.Water': 'Water', 'tm.el.Air': 'Air', 'tm.el.Earth': 'Earth', 'tm.el.Light': 'Light', 'tm.el.Dark': 'Dark', 'tm.why': 'Why this group?', 'tm.score': 'Estimated survival margin: {score}', 'tm.noResult': 'Not enough heroes to suggest a group.',
   'sc.title': 'Import a hero from a screenshot',
   'sc.intro': 'Take a screenshot of a hero\'s sheet in the game ("Info" tab), then drop it here. The site recognizes the class, skills, items, their quality, the element and the stats. You check, then you save.',
   'sc.private': 'The image is analysed in your browser: it is never uploaded.',

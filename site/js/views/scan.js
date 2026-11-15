@@ -7,6 +7,11 @@ import { emptyGear, slotTypes } from '../hero.js';
 import * as store from '../store.js';
 import { loadImage } from '../scan/image.js';
 import { analyze, rerankGear } from '../scan/analyze.js';
+import { normName } from '../scan/name.js';
+import { heroCard, deleteButton } from './roster.js';
+
+/** Héros déjà enregistré portant ce nom (comparaison sans accents ni symboles), ou null. */
+const sameName = (name) => { const n = normName(name); return n ? store.listHeroes().find((x) => normName(x.name) === n) || null : null; };
 
 const SURE = 0.6; // seuil de confiance pour « sûr »
 const SPIRITS = () => D.enchantments.filter((e) => e.type === 'Spirit');
@@ -30,7 +35,8 @@ const tierFor = (f, wanted) => (wanted && f.tiers.has(wanted) ? wanted : Math.ma
 /** Brouillon de héros à partir du résultat d'analyse. */
 function draftFrom(res) {
   const cls = res.cls;
-  const d = { id: store.newId('h'), name: '', classId: cls ? cls.id : '', level: res.level || D.maxLevel, skills: [], gear: cls ? emptyGear(cls) : [], stats: {} };
+  const existing = sameName(res.name);
+  const d = { id: existing ? existing.id : store.newId('h'), existing, name: res.name || '', classId: cls ? cls.id : '', level: res.level || D.maxLevel, skills: [], gear: cls ? emptyGear(cls) : [], stats: {} };
   fillSkills(d, res, cls);
   fillGear(d, res, cls);
   if (res.stats) {
@@ -81,9 +87,14 @@ function preview(img, res) {
 const choice = (label, src, pressed, onclick) => h('button', { type: 'button', class: 'q-btn compact', 'aria-pressed': String(pressed), onclick, title: label },
   icon(src, { size: 28 }), h('span', {}, label));
 
-function renderCard(card, img, res, fileName) {
+function renderCard(card, img, res, fileName, onSaved) {
   const d = draftFrom(res);
   const msg = h('div', { role: 'status', 'aria-live': 'polite' });
+  const nameNote = h('p', { class: 'small', 'aria-live': 'polite' });
+  const nameInfo = () => [
+    res.name ? h('span', { class: 'muted' }, t('sc.nameRead'), ' ') : h('span', { class: 'muted' }, t('sc.nameNotRead'), ' '),
+    d.existing ? h('strong', {}, t('sc.willUpdate', { name: d.existing.name })) : (d.name ? h('span', {}, t('sc.willCreate')) : null),
+  ];
 
   const draw = () => {
     clear(card);
@@ -102,10 +113,11 @@ function renderCard(card, img, res, fileName) {
     right.append(h('fieldset', {}, h('legend', {}, t('sc.identity')),
       h('div', { class: 'row' },
         h('div', { class: 'field' }, h('label', { for: `${d.id}-name` }, t('sc.name')),
-          h('input', { type: 'text', id: `${d.id}-name`, value: d.name, maxlength: 60, placeholder: t('sc.namePh'), oninput: (e) => { d.name = e.target.value; } })),
+          h('input', { type: 'text', id: `${d.id}-name`, value: d.name, maxlength: 60, placeholder: t('sc.namePh'), oninput: (e) => { d.name = e.target.value; const ex = sameName(d.name); d.existing = ex; d.id = ex ? ex.id : (d.newId ||= store.newId('h')); nameNote.replaceChildren(...nameInfo()); } })),
         select({ label: t('sc.class'), id: `${d.id}-cls`, value: d.classId, options: [{ value: '', label: '–' }, ...clsOpts.map((c) => ({ value: c.id, label: c.name }))],
           onChange: async (v) => { const c = D.classById.get(v); d.classId = v; if (c) { await rerankGear(res, c); fillGear(d, res, c); fillSkills(d, res, c); } draw(); } }),
         numberField({ label: t('sc.level'), id: `${d.id}-lvl`, value: d.level, min: 1, max: D.maxLevel, step: 1, onChange: (v) => { d.level = v || D.maxLevel; } })),
+      (nameNote.replaceChildren(...nameInfo()), nameNote),
       cls ? h('p', { class: 'with-ico small' }, icon(classIcon(cls.name), { size: 28 }), h('span', {}, `${cls.name} · ${cls.group}`)) : null));
 
     // --- Compétences
@@ -174,13 +186,16 @@ function renderCard(card, img, res, fileName) {
   function save() {
     const cls = D.classById.get(d.classId);
     if (!cls) { msg.replaceChildren(h('p', { class: 'error' }, t('sc.saveFail'))); return; }
-    const hero = { id: d.id, name: d.name.trim() || cls.name, classId: cls.id, level: d.level, skills: d.skills.filter(Boolean).map((s) => ({ family: s.family, tier: s.tier })),
+    d.updated = !!d.existing;
+    const hero = { id: d.id, name: d.name.trim(), classId: cls.id, level: d.level, skills: d.skills.filter(Boolean).map((s) => ({ family: s.family, tier: s.tier })),
       gear: d.gear.map((g) => ({ item: g.item, quality: g.quality, element: g.element, spirit: g.spirit })), stats: { ...d.stats }, notes: '' };
     if (d.power) hero.stats.power = d.power;
+    if (!d.name.trim()) { msg.replaceChildren(h('p', { class: 'error' }, t('sc.needName'))); return; }
     const saved = store.saveHero(hero);
     if (!saved) { msg.replaceChildren(h('p', { class: 'error' }, t('sc.saveFail'))); return; }
-    msg.replaceChildren(h('p', { class: 'note' }, t('sc.saved', { name: saved.name }), ' ',
-      h('a', { href: `#/roster?edit=${saved.id}` }, t('sc.openEditor')), ' · ', h('a', { href: '#/roster' }, t('sc.toRoster'))));
+    d.existing = saved; onSaved();
+    msg.replaceChildren(h('p', { class: 'note' }, t(d.updated ? 'sc.updated' : 'sc.saved', { name: saved.name }), ' ',
+      h('a', { href: `#/roster?edit=${saved.id}` }, t('sc.openEditor')), ' · ', h('a', { href: '#/teams' }, t('sc.toTeams'))));
   }
 
   draw();
@@ -195,8 +210,8 @@ export function render(root) {
     try {
       const img = await loadImage(file);
       const status = card.querySelector('[role=status]');
-      const res = await analyze(img, { onProgress: (n, total) => { status.textContent = `${t('sc.loading')} ${t('sc.icons', { n, total })}`; } });
-      renderCard(card, img, res, file.name || '');
+      const res = await analyze(img, { onProgress: (n, total) => { status.textContent = n == null ? `${t('sc.loading')} ${t('sc.readingName')}` : `${t('sc.loading')} ${t('sc.icons', { n, total })}`; } });
+      renderCard(card, img, res, file.name || '', drawHeroes);
     } catch (e) {
       console.error(e);
       const key = e.message === 'panel' ? 'sc.noPanel' : null;
@@ -220,8 +235,37 @@ export function render(root) {
   };
   document.addEventListener('paste', onPaste);
 
+  // --- Mes héros (sous la zone d'import)
+  const heroesBox = h('section', { class: 'my-heroes', 'aria-labelledby': 'my-heroes-h' });
+  const backupMsg = h('p', { class: 'small', role: 'status', 'aria-live': 'polite' });
+  function drawHeroes() {
+    clear(heroesBox);
+    const heroes = store.listHeroes().filter((x) => D.classById.has(x.classId));
+    heroesBox.append(h('h2', { id: 'my-heroes-h' }, `${t('sc.myHeroes')} (${heroes.length})`));
+    if (!heroes.length) { heroesBox.append(h('p', { class: 'muted' }, t('sc.noHeroes'))); }
+    else {
+      heroesBox.append(h('p', { class: 'actions' }, h('a', { class: 'button', href: '#/teams' }, t('sc.seeTeams'))),
+        h('div', { class: 'hero-grid' }, heroes.map((hero) => heroCard(hero, h('div', { class: 'actions' },
+          h('a', { class: 'btn-small', href: `#/roster?edit=${hero.id}` }, t('ro.edit')),
+          deleteButton(`${t('ro.delete')} ${hero.name}`, () => { store.deleteHero(hero.id); drawHeroes(); }))))));
+    }
+    const file = h('input', { type: 'file', id: 'imp-json', accept: 'application/json,.json', onchange: async () => {
+      const f = file.files[0]; if (!f) return;
+      try { const r = await store.importJSON(f); backupMsg.className = 'small'; backupMsg.textContent = t('ro.importOk', { h: r.heroes, t: r.teams }); drawHeroes(); }
+      catch (e) { backupMsg.className = 'small error'; backupMsg.textContent = t(e.message === 'json' ? 'ro.importJson' : 'ro.importShape'); }
+    } });
+    heroesBox.append(h('details', { class: 'card' }, h('summary', {}, t('sc.transfer')),
+      h('p', { class: 'small' }, t('sc.transferTxt')),
+      h('div', { class: 'actions' },
+        h('button', { type: 'button', class: 'button secondary', onclick: () => store.exportJSON() }, t('ro.export')),
+        h('div', { class: 'field' }, h('label', { for: 'imp-json' }, t('ro.import')), file)),
+      backupMsg));
+  }
+
   root.append(h('h1', {}, t('sc.title')), h('p', { class: 'lead' }, t('sc.intro')),
     h('p', { class: 'small' }, t('sc.private'), ' ', t('sc.tips')),
     h('p', { class: 'note' }, t('sc.estimate')),
-    drop, list);
+    ...(store.storageOk() ? [] : [h('p', { class: 'note', role: 'alert' }, t('ro.noStorage'))]),
+    drop, list, heroesBox);
+  drawHeroes();
 }

@@ -55,6 +55,7 @@ export function render(root) {
       h('h2', {}, t('lg.ip')),
       h('p', {}, t('lg.ipTxt')),
       h('p', { class: 'note' }, t('lg.fan')),
+      h('p', {}, t('lg.ocr')),
       h('h2', {}, t('lg.calc')),
       h('p', {}, t('lg.calcTxt')),
       h('h2', {}, t('lg.a11y')),

@@ -6,6 +6,7 @@ import { integral } from './image.js';
 import { detectPanel, regions } from './layout.js';
 import { readNumber, readRoman } from './ocr.js';
 import { loadSignatures, rank, confidence, guessQuality } from './match.js';
+import { readName } from './name.js';
 
 const TOP = 6; // candidats gardés par case
 
@@ -131,7 +132,10 @@ export async function analyze(img, { onProgress } = {}) {
   for (const g of gear) g.enchant = g.element ? enchantFor(g.element, elemTotal && nEl ? elemTotal / nEl : 0) : '';
 
   const lv = readNumber(img, R.level);
+  if (onProgress) onProgress(null, null, 'name');
+  const nm = await readName(img, R.name);
   return {
+    name: nm ? nm.name : '', nameConfidence: nm ? nm.confidence : 0,
     tab: R.tab, panel, regions: R, _I: I, _ref: ref,
     classes, cls,
     level: lv.value && lv.value <= D.maxLevel ? lv.value : null,

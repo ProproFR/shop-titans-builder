@@ -18,7 +18,7 @@ export async function copyText(text, btn, holder) {
 }
 
 /** Bouton « Supprimer » en deux temps (confirmation sans boîte de dialogue). */
-function deleteButton(label, onConfirm) {
+export function deleteButton(label, onConfirm) {
   const wrap = h('span', { class: 'confirm-wrap' });
   const start = () => {
     wrap.replaceChildren(h('span', { class: 'warn small', role: 'alert' }, t('ro.confirmDelete')), ' ',

@@ -55,6 +55,7 @@ export function detectPanel(img) {
 // [dx, dy, largeur, hauteur]
 const Z = {
   level: [-1, -13, 27, 24],
+  name: [100, 0, 200, 28], // nom du héros, à droite du portrait
   infosTab: [10, 64, 230, 28],
   capsTab: [254, 64, 230, 28],
   classIcon: [11, 104, 22, 22],
@@ -108,5 +109,5 @@ export function regions(img, P) {
   }
   const stats = {};
   for (const [k, z] of Object.entries(Z.stats)) stats[k] = box(P, z);
-  return { tab, layout, level: box(P, Z.level), classIcon: box(P, Z.classIcon), power: box(P, Z.power), stats, tiles, skills };
+  return { tab, layout, name: box(P, Z.name), level: box(P, Z.level), classIcon: box(P, Z.classIcon), power: box(P, Z.power), stats, tiles, skills };
 }

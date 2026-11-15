@@ -45,6 +45,7 @@ addMessages('fr', {
   'lg.ip': 'Propriété intellectuelle',
   'lg.ipTxt': 'Shop Titans, ses noms, images et données sont la propriété de Kabam Games, Inc. Les images proviennent du Fan Kit officiel, utilisé pour un projet de fan non commercial ; le kit n\'est pas redistribué. Les builds et données de STC Hub et Shop Titans Central sont reproduits sans modification, avec attribution, sous licence CC BY-NC-ND 4.0 (détails dans « À propos »).',
   'lg.fan': 'Appli de fans non affiliée à Kabam, ni approuvée par Kabam.',
+  'lg.ocr': 'La lecture du nom des héros utilise Tesseract.js et les données de langue Tesseract (licence Apache 2.0), hébergés dans le site : les captures restent dans votre navigateur.',
 
   'lg.calc': 'Calculs',
   'lg.calcTxt': 'Les stats, recommandations et scores sont des estimations indicatives. Ils ne remplacent pas un test en jeu.',
@@ -98,6 +99,7 @@ addMessages('en', {
   'lg.ip': 'Intellectual property',
   'lg.ipTxt': 'Shop Titans, its names, images and data belong to Kabam Games, Inc. Images come from the official Fan Kit, used for a non-commercial fan project; the kit is not redistributed. Builds and data from STC Hub and Shop Titans Central are reproduced unmodified, with attribution, under CC BY-NC-ND 4.0 (details in "About").',
   'lg.fan': 'Fan app, not affiliated with or endorsed by Kabam.',
+  'lg.ocr': 'Hero names are read with Tesseract.js and the Tesseract language data (Apache 2.0 licence), hosted within the site: screenshots stay in your browser.',
 
   'lg.calc': 'Calculations',
   'lg.calcTxt': 'Stats, recommendations and scores are indicative estimates. They do not replace testing in game.',

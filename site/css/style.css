@@ -351,3 +351,10 @@ input[type=search] { width: 100%; min-height: 42px; padding: 6px 10px; font: inh
 .scan-row .q-btn.compact span { max-width: 16ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .tag-ok { color: var(--q-uncommon); border-color: var(--q-uncommon); }
 .scan-card .tag { white-space: nowrap; }
+
+/* Équipes proposées (#/teams) */
+.team-list { list-style: none; padding: 0; margin: 8px 0; display: grid; gap: 10px; }
+.team-member { padding: 8px; border: 2px solid var(--border); border-radius: 12px; background: var(--surface); }
+.team-member .tag { margin-left: 6px; }
+.team-member p { margin: 4px 0; }
+.my-heroes { margin-top: 24px; }

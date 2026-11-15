@@ -18,28 +18,36 @@ import * as dragon from './views/dragon.js';
 import * as about from './views/about.js';
 import * as legal from './views/legal.js';
 import * as scan from './views/scan.js';
+import * as teams from './views/teams.js';
 
+// Menu simplifié : deux pages. Les autres outils restent accessibles par lien direct (#/builds, #/tower…)
+// mais n'apparaissent plus dans le menu.
 const ROUTES = {
-  builds: { mod: builds, label: 'nav.builds', ico: 'heroes' },
-  roster: { mod: roster, label: 'nav.roster', ico: 'champion' },
   scan: { mod: scan, label: 'nav.scan', ico: 'quest' },
-  optimizer: { mod: optimizer, label: 'nav.optimizer', ico: 'craft' },
-  team: { mod: team, label: 'nav.team', ico: 'quest' },
-  tower: { mod: tower, label: 'nav.tower', ico: 'gem' },
-  skills: { mod: skills, label: 'nav.skills', ico: 'skilltree' },
-  guide: { mod: guide, label: 'nav.guide', ico: 'tier' },
-  elements: { mod: elements, label: 'nav.elements', ico: 'gold' },
-  dragon: { mod: dragon, label: 'nav.dragon', ico: 'breakchance' },
-  about: { mod: about, label: 'nav.about', ico: 'help' },
+  teams: { mod: teams, label: 'nav.teams', ico: 'champion' },
+  roster: { mod: roster, label: 'nav.roster', ico: 'champion', hidden: true }, // éditeur d'un héros (#/roster?edit=…)
+  builds: { mod: builds, label: 'nav.builds', ico: 'heroes', hidden: true },
+  optimizer: { mod: optimizer, label: 'nav.optimizer', ico: 'craft', hidden: true },
+  team: { mod: team, label: 'nav.team', ico: 'quest', hidden: true },
+  tower: { mod: tower, label: 'nav.tower', ico: 'gem', hidden: true },
+  skills: { mod: skills, label: 'nav.skills', ico: 'skilltree', hidden: true },
+  guide: { mod: guide, label: 'nav.guide', ico: 'tier', hidden: true },
+  elements: { mod: elements, label: 'nav.elements', ico: 'gold', hidden: true },
+  dragon: { mod: dragon, label: 'nav.dragon', ico: 'breakchance', hidden: true },
+  about: { mod: about, label: 'nav.about', ico: 'help', hidden: true }, // lien dans le pied de page
   legal: { mod: legal, label: 'nav.legal', ico: 'help', hidden: true }, // lien dans le pied de page
 };
 const root = document.getElementById('main');
-let current = 'builds';
+let current = 'scan';
 
 function parseHash() {
   const raw = location.hash.replace(/^#\/?/, '');
   const [path, query = ''] = raw.split('?');
-  return { path: ROUTES[path] ? path : 'builds', params: new URLSearchParams(query) };
+  const params = new URLSearchParams(query);
+  let p = ROUTES[path] ? path : 'scan';
+  // L'ancienne liste « Mes héros » est maintenant sur la page Importer ; l'éditeur et les liens de partage restent.
+  if (p === 'roster' && !params.has('edit') && !params.has('share')) p = 'scan';
+  return { path: p, params };
 }
 
 /** Écrit l'état du formulaire dans l'URL sans re-rendre (replaceState ne déclenche pas hashchange). */
@@ -75,7 +83,7 @@ function renderFooter() {
     h('p', {}, t('footer.versions', { game: m.clientVersion, sheet: m.sheetVersion, date: new Date(m.generatedAt).toLocaleDateString(getLang() === 'fr' ? 'fr-FR' : 'en-GB') })),
     h('p', { class: 'muted' }, t('footer.disclaimer')),
     h('p', { class: 'muted' }, creditImages()),
-    h('p', {}, h('a', { href: '#/legal' }, t('footer.legal'))),
+    h('p', {}, h('a', { href: '#/about' }, t('nav.about')), ' · ', h('a', { href: '#/legal' }, t('footer.legal'))),
   );
 }
 
