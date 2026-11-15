@@ -50,7 +50,7 @@ export function skillsRow(hero, size = 32) {
 export function statsLine(hero) {
   const st = effectiveStats(hero);
   return h('div', { class: 'stat-line small' },
-    statLabel('attack', fmt(st.atk)), statLabel('defense', fmt(st.def)), statLabel('health', fmt(st.hp)),
+    statLabel('health', fmt(st.hp)), statLabel('attack', fmt(st.atk)), statLabel('defense', fmt(st.def)),
     statLabel('evasion', pct(st.eva, 1)), statLabel('critchance', pct(st.crit, 1)),
     h('span', { class: st.estimated ? 'tag tag-est' : 'tag' }, st.estimated ? t('ro.estimated') : t('ro.entered')));
 }
@@ -310,7 +310,7 @@ function renderEditor(root, ctx) {
     const drawEst = () => { clear(est); est.append(statsLine({ ...H, stats: cleanStats(H.stats) })); };
     const sf = (k, label, scale) => numberField({ label, value: H.stats[k] ?? '', min: 0, step: 'any', onChange: (v) => { if (v === null) delete H.stats[k]; else H.stats[k] = v; drawEst(); } });
     form.append(h('fieldset', { class: 'statbox' }, h('legend', {}, t('ro.gameStats')), h('p', { class: 'muted small' }, t('ro.gameStatsHint')),
-      h('div', { class: 'row' }, sf('atk', 'ATK'), sf('def', 'DEF'), sf('hp', 'HP'), sf('eva', 'EVA %'), sf('crit', 'CRIT %')), est));
+      h('div', { class: 'row' }, sf('hp', 'HP'), sf('atk', 'ATK'), sf('def', 'DEF'), sf('eva', 'EVA %'), sf('crit', 'CRIT %')), est));
     drawEst();
 
     form.append(h('div', { class: 'field' }, h('label', { for: 'hero-notes' }, t('ro.notes')),

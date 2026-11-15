@@ -59,7 +59,7 @@ function diffWithSaved(d, saved) {
   add(t('sc.level'), saved.level, d.level);
   const st = saved.stats || {};
   add(t('sc.power'), st.power, d.power ?? st.power);
-  for (const [k, lbl] of [['atk', 'ATK'], ['def', 'DEF'], ['hp', 'HP'], ['eva', 'ESQ %']]) if (d.stats[k] != null) add(lbl, st[k], d.stats[k]);
+  for (const [k, lbl] of [['hp', 'HP'], ['atk', 'ATK'], ['def', 'DEF'], ['eva', 'EVA %'], ['crit', 'CRIT %']]) if (d.stats[k] != null) add(lbl, st[k], d.stats[k]);
   d.gear.forEach((g, i) => {
     const o = (saved.gear || [])[i] || {};
     const n = t('sc.slot', { n: i + 1 });
@@ -276,7 +276,7 @@ function renderCard(card, img, res, fileName, onSaved) {
       right.append(h('fieldset', {}, h('legend', {}, t('sc.stats')), h('p', { class: 'muted small' }, t('sc.statsHint')),
         h('div', { class: 'row' },
           numberField({ label: t('sc.power'), id: `${d.id}-pw`, value: d.power, min: 0, step: 1, onChange: (v) => { d.power = v; } }),
-          ...[['atk', 'ATK'], ['def', 'DEF'], ['hp', 'HP'], ['eva', t('sc.evaReal')]].map(([k, lbl]) => numberField({ label: lbl, id: `${d.id}-${k}`, value: d.stats[k], min: 0, step: 1, onChange: (v) => { if (v == null) delete d.stats[k]; else d.stats[k] = v; } })))),
+          ...[['hp', 'HP'], ['atk', 'ATK'], ['def', 'DEF'], ['eva', t('sc.evaReal')], ['crit', t('sc.critManual')]].map(([k, lbl]) => numberField({ label: lbl, id: `${d.id}-${k}`, value: d.stats[k], min: 0, step: 1, onChange: (v) => { if (v == null) delete d.stats[k]; else d.stats[k] = v; } })))),
         res.stats.evaShown != null && res.stats.eva != null && res.stats.evaShown > res.stats.eva
           ? h('p', { class: 'note small' }, t('sc.evaCapped', { shown: res.stats.evaShown, real: res.stats.eva, lost: res.stats.evaShown - res.stats.eva })) : null);
     }

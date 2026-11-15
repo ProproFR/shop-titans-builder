@@ -26,7 +26,7 @@ function memberLine(m, el) {
     h('div', { class: 'with-ico' }, icon(classIcon(m.cls.name), { size: 40, cls: 'portrait' }),
       h('span', {}, h('strong', {}, hero.name), ' ', h('span', { class: 'muted small' }, `${m.cls.name} · ${t('ro.level')} ${hero.level}`),
         el ? h('span', { class: `tag ${elOk ? 'tag-ok' : 'tag-est'}` }, elOk ? t('tm.elemOk', { el: elName(el) }) : t('tm.elemNo', { el: elName(el) })) : null)),
-    h('p', { class: 'small muted' }, `ATQ ${fmt(m.atk)} · DEF ${fmt(m.def)} · PV ${fmt(m.hp)} · ESQ ${pct(m.eva, 0)}${m.estimated ? ` (${t('ro.estimated')})` : ''}`),
+    h('p', { class: 'small muted' }, `HP ${fmt(m.hp)} · ATK ${fmt(m.atk)} · DEF ${fmt(m.def)} · EVA ${pct(m.eva, 0)}${m.crit != null ? ` · CRIT ${pct(m.crit, 0)}` : ''}${m.estimated ? ` (${t('ro.estimated')})` : ''}`),
     gearRow(hero, 32));
 }
 
