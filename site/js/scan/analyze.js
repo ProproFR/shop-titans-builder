@@ -7,6 +7,7 @@ import { detectPanel, regions } from './layout.js';
 import { readNumber, readRoman } from './ocr.js';
 import { loadSignatures, rank, confidence, guessQuality } from './match.js';
 import { readName } from './name.js';
+import { recognize as recognizeSpirit } from './spirit.js';
 
 const TOP = 6; // candidats gardés par case
 
@@ -120,7 +121,9 @@ export async function analyze(img, { onProgress } = {}) {
     const el = nums ? rank(I, t.element, ref.elements, { scales: [0.7, 0.85, 1], shift: 0.1 }) : [];
     // Pastille reconnue si nettement plus proche d'un élément que des autres (sinon : vide, ou à choisir).
     const hasEl = el.length > 1 && el[1].d - el[0].d >= 15;
-    return { box: t.tile, list, conf: confidence(list), quality: nums ? guessQuality(img, t.tile) : 'Normal', element: hasEl ? el[0].key : '', elemList: el.slice(0, 3) };
+    const sp = nums ? recognizeSpirit(I, t.spirit) : null;
+    return { box: t.tile, list, conf: confidence(list), quality: nums ? guessQuality(img, t.tile) : 'Normal', element: hasEl ? el[0].key : '', elemList: el.slice(0, 3),
+      spirit: sp ? sp.name : '', spiritScore: sp ? sp.score : 0, spiritSig: sp ? sp.sig : null };
   });
   // Les 6 pastilles portent souvent le même élément : si la majorité est sûre, on l'applique aux cases
   // dont le meilleur candidat est le même élément mais avec une marge plus faible.

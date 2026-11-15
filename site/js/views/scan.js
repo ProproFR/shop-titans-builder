@@ -8,6 +8,7 @@ import * as store from '../store.js';
 import { loadImage } from '../scan/image.js';
 import { analyze, rerankGear } from '../scan/analyze.js';
 import { normName } from '../scan/name.js';
+import { learn as learnSpirit } from '../scan/spirit.js';
 import { heroCard, deleteButton } from './roster.js';
 
 /** Héros déjà enregistré portant ce nom (comparaison sans accents ni symboles), ou null. */
@@ -61,7 +62,7 @@ function fillGear(d, res, cls) {
     const g = res.gear[i] || {};
     const allowed = cls ? new Set(slotTypes(cls, i)) : null;
     const first = (g.list || []).find((x) => !allowed || allowed.has(x.type));
-    return { item: first ? first.key : '', quality: g.quality || 'Normal', element: g.enchant || '', spirit: '' };
+    return { item: first ? first.key : '', quality: g.quality || 'Normal', element: g.enchant || '', spirit: g.spirit || '' };
   });
 }
 
@@ -165,7 +166,8 @@ function renderCard(card, img, res, fileName, onSaved) {
               onPick: (n) => { if (D.itemByName.has(n)) { g.item = n; draw(); } } }),
             select({ label: t('sc.quality'), id: `${d.id}-q${i}`, value: g.quality, options: Object.keys(QUALITY).map((q) => ({ value: q, label: q })), onChange: (v) => { g.quality = v; draw(); } }),
             select({ label: t('sc.element'), id: `${d.id}-e${i}`, value: g.element, options: [{ value: '', label: t('sc.none') }, ...ELEMENT_ENCHANTS().map((x) => ({ value: x.name, label: `${x.name} (+${x.value})` }))], onChange: (v) => { g.element = v; } }),
-            select({ label: t('sc.spirit'), id: `${d.id}-s${i}`, value: g.spirit, options: [{ value: '', label: t('sc.none') }, ...SPIRITS().map((x) => ({ value: x.name, label: x.name }))], onChange: (v) => { g.spirit = v; } }))));
+            select({ label: t('sc.spirit'), id: `${d.id}-s${i}`, value: g.spirit, options: [{ value: '', label: t('sc.none') }, ...SPIRITS().map((x) => ({ value: x.name, label: x.name }))], onChange: (v) => { setSpirit(i, v); } }),
+            h('span', { class: 'muted small' }, e.spirit && g.spirit === e.spirit ? h('span', { class: 'tag tag-ok' }, t('sc.spiritKnown')) : !g.spirit ? t('sc.spiritPick') : null))));
       });
       right.append(gr);
     }
@@ -183,6 +185,20 @@ function renderCard(card, img, res, fileName, onSaved) {
     card.append(body);
   };
 
+  // Choisir un esprit pour une case l'applique aussi aux autres cases de la capture dont la pastille
+  // est identique (et encore vides) : souvent plusieurs objets portent le même esprit.
+  function setSpirit(i, v) {
+    const ref = res.gear[i] && res.gear[i].spiritSig;
+    d.gear[i].spirit = v;
+    if (v && ref && ref.v) d.gear.forEach((g, k) => {
+      const o = res.gear[k] && res.gear[k].spiritSig;
+      if (k === i || g.spirit || !o || !o.v) return;
+      let c = 0; for (let n = 0; n < o.v.length; n++) c += o.v[n] * ref.v[n];
+      if (c >= 0.9) g.spirit = v;
+    });
+    draw();
+  }
+
   function save() {
     const cls = D.classById.get(d.classId);
     if (!cls) { msg.replaceChildren(h('p', { class: 'error' }, t('sc.saveFail'))); return; }
@@ -194,6 +210,8 @@ function renderCard(card, img, res, fileName, onSaved) {
     const saved = store.saveHero(hero);
     if (!saved) { msg.replaceChildren(h('p', { class: 'error' }, t('sc.saveFail'))); return; }
     d.existing = saved; onSaved();
+    // Apprentissage : la pastille de chaque esprit choisi servira à le reconnaître aux prochains imports.
+    d.gear.forEach((g, i) => { if (g.spirit && res.gear[i]) learnSpirit(g.spirit, res.gear[i].spiritSig); });
     msg.replaceChildren(h('p', { class: 'note' }, t(d.updated ? 'sc.updated' : 'sc.saved', { name: saved.name }), ' ',
       h('a', { href: `#/roster?edit=${saved.id}` }, t('sc.openEditor')), ' · ', h('a', { href: '#/teams' }, t('sc.toTeams'))));
   }

@@ -95,7 +95,7 @@ export function regions(img, P) {
       // Zone du dessin de l'objet (hors pastilles), carrée.
       art: { x: t.x + 8 * u, y: t.y + 10 * u, w: 74 * u, h: 74 * u },
       element: { x: t.x + 74 * u, y: t.y - 3 * u, w: 20 * u, h: 20 * u },
-      spirit: { x: t.x + 74 * u, y: t.y + 21 * u, w: 20 * u, h: 20 * u },
+      spirit: { x: t.x + 73.5 * u, y: t.y + 23 * u, w: 21.5 * u, h: 21.5 * u }, // cadre extérieur de la pastille
     });
   }
   // Sur PC (paysage) les compétences sont à gauche du panneau ; sur mobile (portrait) il n'y a pas

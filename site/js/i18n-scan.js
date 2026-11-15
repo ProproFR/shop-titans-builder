@@ -3,7 +3,7 @@ import { addMessages } from './i18n.js';
 
 addMessages('fr', {
   'nav.scan': 'Importer & mes héros', 'nav.teams': 'Équipes proposées',
-  'sc.readingName': '(lecture du nom…)', 'sc.nameRead': 'Nom lu sur la capture.', 'sc.nameNotRead': 'Nom non lu : saisissez-le.',
+  'sc.readingName': '(lecture du nom…)', 'sc.spiritKnown': 'esprit reconnu', 'sc.spiritPick': 'Choisissez l\'esprit une fois : il sera reconnu aux prochains imports.', 'sc.nameRead': 'Nom lu sur la capture.', 'sc.nameNotRead': 'Nom non lu : saisissez-le.',
   'sc.willUpdate': 'Ce héros existe déjà : « {name} » sera mis à jour.', 'sc.willCreate': 'Nouveau héros.',
   'sc.needName': 'Indiquez le nom du héros : il sert à le reconnaître lors des prochains imports.',
   'sc.updated': '« {name} » est mis à jour.', 'sc.toTeams': 'Voir les équipes proposées',
@@ -44,7 +44,7 @@ addMessages('fr', {
 
 addMessages('en', {
   'nav.scan': 'Import & my heroes', 'nav.teams': 'Suggested teams',
-  'sc.readingName': '(reading the name…)', 'sc.nameRead': 'Name read from the screenshot.', 'sc.nameNotRead': 'Name not read: please type it.',
+  'sc.readingName': '(reading the name…)', 'sc.spiritKnown': 'spirit recognized', 'sc.spiritPick': 'Pick the spirit once: it will be recognized on later imports.', 'sc.nameRead': 'Name read from the screenshot.', 'sc.nameNotRead': 'Name not read: please type it.',
   'sc.willUpdate': 'This hero already exists: "{name}" will be updated.', 'sc.willCreate': 'New hero.',
   'sc.needName': 'Enter the hero\'s name: it is used to recognize them on later imports.',
   'sc.updated': '"{name}" has been updated.', 'sc.toTeams': 'See suggested teams',
