@@ -387,3 +387,6 @@ input[type=search] { width: 100%; min-height: 42px; padding: 6px 10px; font: inh
 .champ-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 10px; }
 .champ-row { margin: 0; padding: 10px; }
 .champ-row .row .field { flex: 1 1 100px; }
+
+.ench-hint { display: inline-flex; align-items: center; gap: 2px; margin-left: 2px; padding: 0 6px; border-radius: 999px; background: var(--accent-bg, rgba(255,215,0,.15)); font-weight: 700; white-space: nowrap; }
+.ench-hint .ico { width: 18px; height: 18px; }

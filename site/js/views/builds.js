@@ -3,6 +3,7 @@ import { D, classIcon, skillIcon, elemIcon, statIcon } from '../data.js';
 import { t } from '../i18n.js';
 import { advisorPanel } from '../advisor.js';
 import { h, combo, table, elBadge, fmt, pct, icon, statLabel, withIcon, gearTile, originBadge } from '../dom.js';
+import { elementName } from '../i18n-names.js';
 
 export function itemStatsText(it) {
   if (!it) return t('builds.unknownItem');
@@ -42,7 +43,13 @@ export function variantBox(bis, v, vi) {
         originBadge(it),
         h('div', { class: 'gear-aff', 'aria-label': t('builds.affinity') },
           s.affinity.map((a) => elemIcon(a) && a !== 'All' ? elBadge(a) : h('span', { class: 'tag' }, a))),
-        s.enchants.length ? h('div', { class: 'gear-ench small' }, h('span', { class: 'muted' }, `${t('builds.enchants')} : `), s.enchants.join(', ')) : null,
+        // Texte STC tel quel ; le site ajoute seulement, à côté, l'icône et la valeur de l'élément conseillé.
+        s.enchants.length ? h('div', { class: 'gear-ench small' }, h('span', { class: 'muted' }, `${t('builds.enchants')} : `),
+          s.enchants.map((name, k) => {
+            const e = D.enchantByName.get(name);
+            return h('span', { class: 'ench-item' }, k ? ', ' : '', name,
+              e && e.type === 'Element' ? h('span', { class: 'ench-hint', title: t('builds.enchHint') }, ' ', icon(elemIcon(e.element), { size: 18 }), ` ${elementName(e.element)} +${e.value}`) : null);
+          })) : null,
         h('div', { class: 'small' }, itemStatsNode(it)));
     })));
 }
