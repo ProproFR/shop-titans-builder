@@ -76,7 +76,7 @@ export function sanitizeHero(o) {
   }
   if (o.stats && typeof o.stats === 'object') {
     const st = {};
-    for (const [k, hi] of [['atk', 1e7], ['def', 1e7], ['hp', 1e8], ['eva', 100], ['crit', 100]]) {
+    for (const [k, hi] of [['atk', 1e7], ['def', 1e7], ['hp', 1e8], ['eva', 100], ['crit', 100], ['power', 1e10]]) {
       const v = numOrNull(o.stats[k], 0, hi); if (v !== null) st[k] = v;
     }
     if (Object.keys(st).length) hero.stats = st;
@@ -141,6 +141,13 @@ export function deleteTeam(id) { const s = load(); s.teams = s.teams.filter((x) 
 
 export const getPref = (k, d = null) => (k in load().prefs ? load().prefs[k] : d);
 export function setPref(k, v) { load().prefs[k] = v; save(); }
+
+/** Efface toutes les données locales de l'appli (héros, équipes, préférences, langue). */
+export function clearAll() {
+  state = empty();
+  try { localStorage.removeItem(KEY); localStorage.removeItem('stb-lang'); ok = true; return true; }
+  catch (e) { ok = false; lastError = String(e && e.message || e); return false; }
+}
 
 // ---------- Export / import ----------
 export function exportJSON() {

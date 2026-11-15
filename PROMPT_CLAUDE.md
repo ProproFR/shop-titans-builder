@@ -43,14 +43,19 @@ scripts/build_data.py        sheet officiel (.xlsx) -> site/data/{items,classes,
 scripts/scrape_stc_bis.py    STC Hub BiS -> site/data/bis.json
 scripts/scrape_stc_quests.py STC Hub Main/Event Quests -> site/data/{questcaps,tower}.json
 scripts/build_icons.py       Fan Kit (zip local) -> site/img/**.webp + site/data/icons.json (manuel)
+scripts/self_host_fonts.py   Google Fonts -> site/fonts/*.woff2 + site/css/fonts.css (facultatif, une fois)
+scripts/build_iconsig.py     site/img -> site/data/iconsig.json (facultatif : miniatures 12×12 précalculées ; sinon calculées par le navigateur)
+site/js/scan/                lecture de captures : image.js (canvas, image intégrale), layout.js (panneau violet + zones en unités panneau),
+                             ocr.js + digits.js (chiffres par modèles, palier IV), match.js (comparaison de miniatures, qualité par couleur), analyze.js
 site/index.html, css/style.css
 site/js/main.js              routeur par hash, navigation (menu repliable < 800 px), pied de page
 site/js/data.js              chargement des JSON, index, helpers d'icônes (itemIcon, skillIcon, classIcon…)
 site/js/calc.js              formules, parsing des effets de compétences, provenance (originOf, isAllowed)
 site/js/store.js             localStorage « stb.v1 » : héros, équipes, préférences ; export/import JSON ; liens de partage (base64url)
 site/js/hero.js, advisor.js, roles.js, provenance.js, tower-calc.js, guide-calc.js
-site/js/i18n.js (+ i18n-extra.js, i18n-guide.js)   FR/EN
-site/js/views/  builds, roster, optimizer, team, tower, guide, elements, dragon, skills, about
+site/js/i18n.js (+ i18n-extra.js, i18n-guide.js, i18n-legal.js, i18n-scan.js)   FR/EN
+site/js/views/  scan (import par capture), builds, roster, optimizer, team, tower, guide, elements, dragon, skills, about, legal (route masquée du menu, lien en pied de page)
+site/css/fonts.css           polices (import Google Fonts par défaut, ou @font-face locaux après self_host_fonts.py)
 site/data/modifiers.json     30 modificateurs de la Tour (table st-central, telle quelle + tags de calcul)
 .github/workflows/update-data.yml   chaque lundi : build_data + scrape_stc_bis + scrape_stc_quests, commit si changement, déploiement Pages
 ```
@@ -83,6 +88,8 @@ Champs clés :
 9. **Dragons** : classement des objets par puissance de dirigeable, filtres.
 10. **Compétences** : évaluateur heuristique et suggestions de relance.
 11. **Provenance** : badge par objet + préférence « Objets accessibles » (Tout / Sans achat / Craft de base).
+12. **Mentions légales et confidentialité** (`#/legal`) : éditeur anonyme (LCEN 6-III-2), hébergeur GitHub, stockage local, services tiers, bouton « Effacer mes données locales » ; contact facultatif (`CONTACT` dans `views/legal.js`). Le tableau Google Sheets de la page Éléments se charge au clic.
+13. **Import par capture** (`#/scan`, bouton aussi dans « Mes héros ») : capture de l'onglet Infos -> classe (icône + innée, palier IV = promue), 4 compétences, 6 objets (candidats filtrés par emplacement), qualité (couleur du contour), élément (force de l'enchantement estimée), niveau et stats lus ; validation puis enregistrement. Esprits et nom du héros non lus. Calibré sur PC (Steam) et iPhone : même panneau (zones en unités panneau), seule la rangée de compétences change (à gauche sur PC, au-dessus sur mobile).
 
 ## Limites connues
 
@@ -91,6 +98,7 @@ Champs clés :
 - Pas de données par profondeur pour le Tombeau des Titans (saisie manuelle).
 - Objets de collaborations (Avatar, Jumanji, Ghostbusters) sans image dans le Fan Kit : icône du type.
 - Sauvegarde locale au navigateur (pas de synchronisation entre appareils).
+- Import par capture : palier des compétences reconnu seulement pour « IV » ; esprits et nom non lus ; graines et niveau max à venir (écran « bande » des héros).
 
 ## Comment travailler avec moi
 

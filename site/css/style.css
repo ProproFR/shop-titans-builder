@@ -333,3 +333,21 @@ input[type=search] { width: 100%; min-height: 42px; padding: 6px 10px; font: inh
   .lang { margin-left: auto; }
 }
 @media (max-width: 520px) { .sheet-frame { height: 480px; } }
+
+/* Import depuis une capture (#/scan) */
+.drop-zone { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; padding: 18px; margin: 12px 0; border: 3px dashed var(--border-strong); border-radius: 16px; background: var(--surface); }
+.drop-zone.over { border-color: var(--gold-dark); background: var(--accent-bg); }
+.drop-zone input[type=file] { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.drop-zone input[type=file]:focus-visible + p, .drop-zone label:focus-within { outline: 3px solid var(--focus); outline-offset: 2px; }
+.scan-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; }
+.scan-head h2 { margin: 4px 0; }
+.scan-body { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; }
+@media (min-width: 900px) { .scan-body { grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); } .scan-left { position: sticky; top: 8px; align-self: start; } }
+.scan-preview { max-width: 100%; height: auto; border: 3px solid var(--border-strong); border-radius: 12px; display: block; }
+.scan-row { padding: 8px 0; border-bottom: 2px dashed var(--border); }
+.scan-row:last-child { border-bottom: 0; }
+.scan-row-main { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; margin-bottom: 6px; }
+.scan-row-main .field { width: 110px; margin: 0; }
+.scan-row .q-btn.compact span { max-width: 16ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tag-ok { color: var(--q-uncommon); border-color: var(--q-uncommon); }
+.scan-card .tag { white-space: nowrap; }

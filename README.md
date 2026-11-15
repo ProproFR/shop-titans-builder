@@ -27,6 +27,8 @@ scripts/build_data.py      # sheet officiel (.xlsx) -> site/data/*.json
 scripts/scrape_stc_bis.py  # page BiS de STC Hub -> site/data/bis.json
 scripts/scrape_stc_quests.py  # quêtes principales + Tour (STC Hub) -> questcaps.json, tower.json
 scripts/build_icons.py     # images du Fan Kit -> site/img + icons.json (manuel)
+scripts/self_host_fonts.py # polices Google -> site/fonts + css/fonts.css (facultatif, une fois)
+scripts/build_iconsig.py   # miniatures des icônes -> site/data/iconsig.json (import par capture)
 site/                      # site statique (HTML/CSS/JS, aucune étape de build)
 site/data/                 # données générées
 .github/workflows/         # mise à jour hebdomadaire + déploiement GitHub Pages
@@ -54,6 +56,39 @@ python scripts/build_icons.py --fankit "chemin/vers/Fan Kit Assets (Shop Titans)
 ```
 
 Les objets absents du kit (collaborations sous licence : Avatar, Jumanji…) affichent l'icône de leur type.
+
+### Import d'un héros par capture d'écran (`#/scan`)
+
+La page « Importer » lit une capture de la fiche d'un héros (onglet Infos) directement dans le navigateur :
+classe, compétences (+ palier), objets, qualité, élément, niveau et stats. L'utilisateur valide, puis le héros
+est enregistré. Les icônes sont reconnues en comparant des miniatures 12×12. Le navigateur les calcule lui-même à partir de
+`site/img` à la première analyse (quelques centaines d'images), puis les garde en mémoire. Facultatif, pour
+aller plus vite : précalculer toutes les miniatures dans `site/data/iconsig.json` (à refaire après `build_icons.py`) :
+
+```bash
+python scripts/build_iconsig.py
+```
+
+Code : `site/js/scan/` (layout = zones de l'écran, ocr = chiffres, match = icônes, analyze = enchaînement).
+Calibré sur des captures PC (Steam) et iPhone (portrait).
+
+### Polices hébergées dans le site (recommandé)
+
+Par défaut, `site/css/fonts.css` charge Lilita One et Nunito depuis Google Fonts (l'adresse IP des visiteurs
+est alors transmise à Google). Pour supprimer cet appel à un tiers :
+
+```bash
+python scripts/self_host_fonts.py
+```
+
+Puis adapter la ligne « Google Fonts » de la page Mentions légales (`site/js/i18n-legal.js`, clés `lg.t2`).
+
+## Mentions légales
+
+Page `#/legal` (lien en pied de page) : éditeur anonyme (particulier, art. 6-III-2 LCEN), hébergeur GitHub,
+stockage local, services tiers, propriété intellectuelle, accessibilité, bouton « Effacer mes données locales ».
+Pour afficher un moyen de contact, renseigner `CONTACT` en haut de `site/js/views/legal.js`.
+Le tableau Google Sheets de la page Éléments n'est chargé qu'après un clic (Google peut y déposer des cookies).
 
 ## Lancer en local
 

@@ -14,6 +14,17 @@ const SHEET_PAGE = 'https://st-central.net/tldr-heroes/#Roster-Building';
 const REF_MOB = { hp: 80000, atk: 70, aoe: 40, caps: { c50: 3200, c70: 6400, c75: 19200 } };
 const ext = (href, text) => h('a', { href, target: '_blank', rel: 'noopener noreferrer' }, text);
 
+/** Le tableau Google n'est chargé qu'après un clic (Google peut y déposer des cookies : cf. #/legal). */
+function sheetSlot() {
+  const slot = h('div', { class: 'sheet-slot' });
+  const btn = h('button', { type: 'button', class: 'button secondary', onclick: () => {
+    slot.replaceChildren(h('iframe', { class: 'sheet-frame', src: SHEET, title: t('el.rostersTitle'), referrerpolicy: 'no-referrer' }));
+  } }, t('el.loadSheet'));
+  slot.append(h('p', { class: 'small muted' }, t('el.loadSheetNote'), ' ', h('a', { href: '#/legal' }, t('footer.legal')), '.'), btn,
+    ' ', ext(SHEET_PAGE, t('el.openSheet')));
+  return slot;
+}
+
 const byAtk = (a, b) => b.atk * b.critDmg - a.atk * a.critDmg;
 const byDef = (a, b) => b.def + b.hp / 10 - (a.def + a.hp / 10);
 
@@ -120,7 +131,7 @@ export function render(root, ctx) {
     h('div', { class: 'q-group', role: 'group', 'aria-label': t('el.sizeAria') }, sizeBtns), cards,
     h('section', { class: 'card' }, h('h2', {}, t('el.rosters')),
       h('p', { class: 'small' }, t('el.rostersTxt')),
-      h('iframe', { class: 'sheet-frame', src: SHEET, loading: 'lazy', title: t('el.rostersTitle'), referrerpolicy: 'no-referrer' }),
+      sheetSlot(),
       h('p', { class: 'credit', role: 'note' }, t('el.rostersCredit'), ' ', ext(SHEET_PAGE, 'st-central.net/tldr-heroes'), ' · ', ext('https://creativecommons.org/licenses/by-nc-nd/4.0/', 'CC BY-NC-ND 4.0'))));
   draw();
 }

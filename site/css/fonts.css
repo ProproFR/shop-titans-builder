@@ -1,0 +1,4 @@
+/* Polices du site.
+   Par défaut, chargées depuis Google Fonts (l'adresse IP du visiteur est alors transmise à Google, cf. #/legal).
+   Pour les héberger dans le site : python scripts/self_host_fonts.py  (réécrit ce fichier et remplit site/fonts/). */
+@import url("https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@400;700;800&display=swap");

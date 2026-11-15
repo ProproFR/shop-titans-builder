@@ -6,3 +6,8 @@ Thumbs.db
 
 # Config locale de Claude Code
 .claude/
+
+# Installateurs et fichiers lourds à ne jamais publier
+*.exe
+*.msi
+*.zip

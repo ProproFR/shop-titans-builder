@@ -154,7 +154,7 @@ function renderList(root, ctx) {
     const heroes = store.listHeroes();
     const teams = store.listTeams();
     body.append(h('h2', {}, `${t('ro.heroes')} (${heroes.length})`),
-      h('p', { class: 'actions' }, h('a', { class: 'button', href: '#/roster?edit=new' }, t('ro.newHero')), ' ',
+      h('p', { class: 'actions' }, h('a', { class: 'button', href: '#/roster?edit=new' }, t('ro.newHero')), ' ', h('a', { class: 'button secondary', href: '#/scan' }, t('sc.title')), ' ',
         h('span', { class: 'muted small' }, t('ro.heroesHint'))));
     if (!heroes.length) body.append(h('p', { class: 'muted' }, t('ro.noHeroes')));
     else body.append(h('div', { class: 'hero-grid' }, heroes.map((hero) => {
