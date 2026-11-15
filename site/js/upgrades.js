@@ -8,11 +8,12 @@ import { heroClass, lineageOf, estimateStats, effectiveStats, heroSkillObjects }
 import { skillsToMods } from './calc.js';
 import { heroCandidate, championCandidates, combineModifiers, recommend } from './tower-calc.js';
 import { listChampions } from './store.js';
+import { topSkills, heroSkillCtx } from './advisor.js';
 
 export const QUALITY_ORDER = ['Normal', 'Superior', 'Flawless', 'Epic', 'Legendary'];
 // Effort relatif (1 = facile, 5 = très coûteux). Monter en Légendaire coûte bien plus que passer en Supérieur.
 const QUALITY_EFFORT = { Superior: 1, Flawless: 2, Epic: 3, Legendary: 5 };
-const EFFORT = { item: 3, skill: 2, element: 1, spirit: 2 };
+const EFFORT = { item: 3, skill: 2, element: 1, spirit: 2, skillSwap: 4 };
 // Estimations pour ce que les stats ne montrent pas (barrière élémentaire, effets d'esprit).
 const ELEM_GAIN_PER_POINT = 0.001; // +0,1 % de valeur par point d'élément ajouté
 const SPIRIT_GAIN = 0.03;          // +3 % pour un esprit sur un objet qui n'en a pas
@@ -136,6 +137,23 @@ export function heroUpgrades(hero) {
     if (!next) return;
     add({ kind: 'skill', slot: k, item: s.family, from: s.tier, to: next, effort: EFFORT.skill,
       gain: gainOf(hero, role, (h2) => { h2.skills[k].tier = next; }) });
+  });
+
+  // 6) Compétence à remplacer : absente des 4 conseillées pour la classe (même tri que le conseiller).
+  const rec = topSkills(cls, role, 4, heroSkillCtx(hero)); // adaptées à l'équipement porté
+  const owned = new Set(hero.skills.map((s) => s.family));
+  const missing = rec.filter((r) => !owned.has(r.family));
+  const left = missing.slice(); // chaque compétence conseillée ne remplace qu'une seule compétence
+  hero.skills.forEach((s, k) => {
+    if (rec.some((r) => r.family === s.family) || !left.length) return;
+    let best = null;
+    for (const r of left) {
+      const gain = gainOf(hero, role, (h2) => { h2.skills[k] = { family: r.family, tier: r.tier }; });
+      if (!best || gain > best.gain) best = { ...r, gain };
+    }
+    // Effet souvent hors stats (soin, menace…) : au moins +2 % quand la compétence conseillée remplace une non conseillée.
+    left.splice(left.findIndex((r) => r.family === best.family), 1);
+    add({ kind: 'skillSwap', slot: k, item: s.family, to: best.family, toTier: best.tier, effort: EFFORT.skillSwap, gain: Math.max(best.gain, 0.02), estimate: best.gain < 0.02 });
   });
 
   // Esquive au-delà du plafond : rien ne la rend utile, on le signale (sans gain chiffré).

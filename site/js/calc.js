@@ -185,13 +185,18 @@ export const SKILL_ROLES = {
 };
 export const defaultRole = (cls) => cls.group === 'Rogue' ? 'rogue' : cls.group === 'Spellcaster' ? 'caster' : 'tank';
 
-/** Note heuristique d'une compétence. Les bonus "with <Type>" ne comptent que si la classe peut équiper ce type. */
-export function scoreSkill(skill, role, cls) {
+/**
+ * Note heuristique d'une compétence. Les bonus "with <Type>" ne comptent que si la classe peut équiper ce type.
+ * ctx (facultatif, héros précis) : { types: Set des types d'objets équipés, evaFull: esquive déjà au plafond } :
+ * un bonus « with Staff » ne compte alors que si le héros porte un bâton, et l'esquive ne compte plus si elle est plafonnée.
+ */
+export function scoreSkill(skill, role, cls, ctx = null) {
   const w = SKILL_ROLES[role];
   const { self } = parseEffect(skill.effect);
-  const usable = new Set(cls.slots.flat().map((t) => t.toLowerCase()));
+  const usable = ctx && ctx.types && ctx.types.size ? ctx.types : new Set(cls.slots.flat().map((t) => t.toLowerCase()));
+  const eva = ctx && ctx.evaFull ? 0 : w.eva;
   let s = w.atk * self.atk + w.def * self.def + w.hp * self.hp + w.hpFlat * self.hpFlat + w.crit * self.crit
-    + w.critDmg * self.critDmg + w.eva * self.eva + w.equip * self.equip;
+    + w.critDmg * self.critDmg + eva * self.eva + w.equip * self.equip;
   for (const [t, v] of Object.entries(self.atkWith)) if (usable.has(t)) s += w.atkWith * v;
   for (const [t, v] of Object.entries(self.defWith)) if (usable.has(t)) s += w.defWith * v;
   return s;

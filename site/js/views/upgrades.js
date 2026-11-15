@@ -7,18 +7,19 @@ import { rankUpgrades } from '../upgrades.js';
 import { qualityName, enchantLabel, spiritLabel } from '../i18n-names.js';
 import * as store from '../store.js';
 
-const KINDS = ['item', 'quality', 'skill', 'element', 'spirit', 'evaCap'];
+const KINDS = ['item', 'quality', 'skill', 'skillSwap', 'element', 'spirit', 'evaCap'];
 const ROMAN = ['', 'I', 'II', 'III', 'IV'];
-const pctTxt = (g) => `+${fmt(g * 100, g < 0.1 ? 1 : 0)} %`;
+export const pctTxt = (g) => `+${fmt(g * 100, g < 0.1 ? 1 : 0)} %`;
 const enchLbl = (n) => { const e = D.enchantByName.get(n); return e ? enchantLabel(e) : n; };
 
 /** Phrase décrivant l'amélioration. */
-function describe(u) {
+export function describe(u) {
   const slot = t('sc.slot', { n: u.slot + 1 });
   switch (u.kind) {
     case 'quality': return t('up.d.quality', { slot, item: u.item, from: qualityName(u.from), to: qualityName(u.to) });
     case 'item': return t(u.item ? 'up.d.item' : 'up.d.itemEmpty', { slot, item: u.item, to: u.to, tier: u.toTier });
     case 'skill': return t('up.d.skill', { skill: u.item, from: ROMAN[u.from] || u.from, to: ROMAN[u.to] || u.to });
+    case 'skillSwap': return t('up.d.skillSwap', { skill: u.item, to: u.to, tier: ROMAN[u.toTier] || u.toTier });
     case 'element': return t(u.from ? 'up.d.elementUp' : 'up.d.element', { slot, item: u.item, from: enchLbl(u.from), to: enchLbl(u.to) });
     case 'spirit': return t(u.to ? 'up.d.spirit' : 'up.d.spiritAny', { slot, item: u.item, to: spiritLabel(u.to) });
     case 'evaCap': return t('up.d.evaCap', { waste: u.waste });

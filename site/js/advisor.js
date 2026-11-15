@@ -16,17 +16,28 @@ const RARITIES = ['Epic', 'Rare', 'Common'];
 const ext = (href, text) => h('a', { href, target: '_blank', rel: 'noopener noreferrer' }, text);
 
 /** Compétences de héros compatibles (palier max), notées par l'heuristique de l'évaluateur. */
-export function rankedSkills(cls, role) {
+export function rankedSkills(cls, role, ctx = null) {
   return skillFamiliesFor(cls).filter((f) => f.type === 'Hero').map((f) => {
     const tier = Math.max(...f.tiers.keys());
     const skill = f.tiers.get(tier);
-    return { fam: f, skill, tier, score: scoreSkill(skill, role, cls) };
+    return { fam: f, skill, tier, score: scoreSkill(skill, role, cls, ctx) };
   }).filter((c) => c.score > 0)
     .sort((a, b) => (RARITY_RANK[b.skill.rarity] || 0) - (RARITY_RANK[a.skill.rarity] || 0) || b.score - a.score);
 }
 
 /** Les 4 meilleures compétences (même tri que l'évaluateur : rareté puis note). */
-export const topSkills = (cls, role = defaultRole(cls), n = 4) => rankedSkills(cls, role).slice(0, n).map((c) => ({ family: c.fam.family, tier: c.tier }));
+export const topSkills = (cls, role = defaultRole(cls), n = 4, ctx = null) => rankedSkills(cls, role, ctx).slice(0, n).map((c) => ({ family: c.fam.family, tier: c.tier }));
+
+/**
+ * Contexte d'un héros pour adapter les compétences conseillées à son équipement : types d'objets portés
+ * et esquive déjà au plafond (78 %).
+ */
+export function heroSkillCtx(hero) {
+  if (!hero || !hero.gear) return null;
+  const types = new Set(hero.gear.map((g) => D.itemByName.get(g.item)).filter(Boolean).map((it) => it.type.toLowerCase()));
+  const eva = hero.stats && typeof hero.stats.eva === 'number' ? hero.stats.eva : null;
+  return { types, evaFull: eva != null && eva >= 78 };
+}
 
 /** Lien vers l'éditeur pré-rempli : classe + variante STC + meilleures compétences. */
 export function createHeroHref(cls, variantIdx, role) {
@@ -51,9 +62,9 @@ export function advisorPanel(cls, o = {}) {
   let vIdx = bis && bis.variants.length ? 0 : -1;
   const refreshCreate = () => { createBtn.href = createHeroHref(cls, vIdx, role); };
 
-  const drawSkills = () => {
+  let drawSkills = () => {
     skillsBox.replaceChildren();
-    const ranked = rankedSkills(cls, role);
+    const ranked = rankedSkills(cls, role, heroSkillCtx(o.hero));
     const groups = [...RARITIES, null];
     for (const r of groups) {
       const list = ranked.filter((c) => (c.skill.rarity || null) === r).slice(0, 5);
@@ -82,7 +93,36 @@ export function advisorPanel(cls, o = {}) {
   // Compétences
   box.append(h('h4', {}, t('adv.skills')));
   if (cls.group === 'Fighter') box.append(select({ label: t('sk.role'), value: role, options: [{ value: 'tank', label: 'Tank' }, { value: 'dps', label: 'DPS' }], onChange: (v) => { role = v; drawSkills(); } }));
-  box.append(skillsBox, h('p', { class: 'muted small' }, t('sk.heuristic'), ' ', t('sk.bestNote')));
+  // Héros en cours d'édition : comparaison claire « à garder / à remplacer » avant la liste complète.
+  const mineBox = h('div', {});
+  const drawMine = () => {
+    mineBox.replaceChildren();
+    if (!o.hero || !o.hero.skills) return;
+    const rec = topSkills(cls, role, 4, heroSkillCtx(o.hero));
+    const recSet = new Set(rec.map((r) => r.family));
+    const owned = new Set(o.hero.skills.map((s) => s.family));
+    const missing = rec.filter((r) => !owned.has(r.family));
+    let mi = 0;
+    const famIco = (name) => { const f = D.families.find((x) => x.family === name); return f ? skillIcon([...f.tiers.values()][0].name) : null; };
+    mineBox.append(h('h5', {}, t('adv.mine')), h('ul', { class: 'adv-compare' }, o.hero.skills.map((s) => {
+      const ok = recSet.has(s.family);
+      // Même remplacement que la page Améliorations prioritaires (o.swaps), sinon dans l'ordre.
+      const sw = o.swaps && o.swaps.get(s.family);
+      const repl = ok ? null : (sw ? rec.find((r) => r.family === sw) || { family: sw, tier: 4 } : missing.filter((r) => !(o.swaps && [...o.swaps.values()].includes(r.family)))[mi++]);
+      return h('li', { class: ok ? 'ok' : 'change' },
+        icon(famIco(s.family), { size: 32, cls: 'skill-ico' }), h('strong', {}, s.family),
+        h('span', { class: `tag ${ok ? 'tag-ok' : 'tag-est'}` }, ok ? `✓ ${t('adv.keep')}` : `✗ ${t('adv.change')}`),
+        repl ? h('span', {}, ` ${t('adv.by')} `, icon(famIco(repl.family), { size: 24, cls: 'skill-ico' }), h('strong', {}, repl.family), ` T${repl.tier}`) : null);
+    })));
+    const used = new Set(o.swaps ? [...o.swaps.values()] : []);
+    const rest = missing.filter((r) => !used.has(r.family)).slice(mi);
+    if (rest.length || o.hero.skills.length < 4) mineBox.append(h('p', { class: 'small' }, `${t('adv.missing')} : `, rest.map((r) => r.family).join(', ') || '–'));
+  };
+  if (o.hero) {
+    box.append(mineBox, h('details', {}, h('summary', {}, t('adv.allRanked')), skillsBox, h('p', { class: 'muted small' }, t('sk.heuristic'), ' ', t('sk.bestNote'))));
+    const prev = drawSkills;
+    drawSkills = () => { prev(); drawMine(); };
+  } else box.append(skillsBox, h('p', { class: 'muted small' }, t('sk.heuristic'), ' ', t('sk.bestNote')));
   drawSkills();
 
   // Guide STC

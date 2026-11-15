@@ -8,6 +8,8 @@ import { QUALITY } from '../calc.js';
 import * as store from '../store.js';
 import { heroClass, slotTypes, lineageOf, effectiveStats, optimizerLink, emptyGear, memberParam } from '../hero.js';
 import { advisorPanel } from '../advisor.js';
+import { rankUpgrades, heroUpgrades } from '../upgrades.js';
+import { describe as describeUpgrade, pctTxt } from './upgrades.js';
 import { skillFamiliesFor } from './optimizer.js';
 
 const QUALITIES = Object.keys(QUALITY);
@@ -20,6 +22,20 @@ export async function copyText(text, btn, holder) {
 }
 
 /** Bouton « Supprimer » en deux temps (confirmation sans boîte de dialogue). */
+/** Les 5 améliorations les plus prioritaires de ce héros (même calcul que la page Améliorations prioritaires). */
+function priorityCard(hero) {
+  const box = h('section', { class: 'card priority-card' }, h('h2', {}, t('re.title')));
+  if (!hero) { box.append(h('p', { class: 'muted' }, t('re.newHero'))); return box; }
+  const all = rankUpgrades(store.listHeroes().filter((x) => D.classById.has(x.classId)));
+  const mine = all.map((u, i) => ({ u, r: i + 1 })).filter((x) => x.u.hero.id === hero.id && x.u.kind !== 'evaCap').slice(0, 5);
+  if (!mine.length) box.append(h('p', {}, t('re.none')));
+  else box.append(h('ol', { class: 'priority-list' }, mine.map(({ u, r }) => h('li', {},
+    h('strong', {}, describeUpgrade(u)), ' ', h('span', { class: 'tag tag-ok' }, pctTxt(u.gain)), u.estimate ? h('span', { class: 'muted small' }, ` (${t('up.estimate')})`) : null,
+    h('div', { class: 'muted small' }, t('re.rank', { r }))))));
+  box.append(h('p', { class: 'small' }, h('a', { href: `#/upgrades?h=${hero.id}` }, t('re.all'))));
+  return box;
+}
+
 export function deleteButton(label, onConfirm) {
   const wrap = h('span', { class: 'confirm-wrap' });
   const start = () => {
@@ -328,7 +344,7 @@ function renderEditor(root, ctx) {
         location.hash = '#/roster';
       } }, t('ro.save')),
       optLink, h('a', { class: 'button secondary', href: '#/roster' }, t('ro.cancel'))), status);
-    holder.append(form, advisorPanel(cls, { showVariants: true, hideCreate: true }));
+    holder.append(priorityCard(existing), form, advisorPanel(cls, { showVariants: true, hideCreate: true, hero: H, swaps: existing ? new Map(heroUpgrades(existing).filter((u) => u.kind === 'skillSwap').map((u) => [u.item, u.to])) : null }));
   };
 
   root.append(h('h1', {}, existing ? t('ro.editTitle') : t('ro.newTitle')),

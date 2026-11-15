@@ -390,3 +390,10 @@ input[type=search] { width: 100%; min-height: 42px; padding: 6px 10px; font: inh
 
 .ench-hint { display: inline-flex; align-items: center; gap: 2px; margin-left: 2px; padding: 0 6px; border-radius: 999px; background: var(--accent-bg, rgba(255,215,0,.15)); font-weight: 700; white-space: nowrap; }
 .ench-hint .ico { width: 18px; height: 18px; }
+
+/* Éditeur : priorités et comparaison des compétences */
+.priority-card { border-color: var(--gold-dark, #c48a1e); }
+.priority-list { padding-left: 22px; display: grid; gap: 6px; }
+.adv-compare { list-style: none; padding: 0; display: grid; gap: 6px; }
+.adv-compare li { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 6px 8px; border-radius: 10px; border: 2px solid var(--border); }
+.adv-compare li.change { border-color: #d9822b; }
