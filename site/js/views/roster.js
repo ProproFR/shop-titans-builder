@@ -7,8 +7,9 @@ import { h, clear, combo, select, numberField, icon, fmt, pct, gearTile, statLab
 import { QUALITY } from '../calc.js';
 import * as store from '../store.js';
 import { heroClass, slotTypes, lineageOf, effectiveStats, optimizerLink, emptyGear, memberParam } from '../hero.js';
-import { advisorPanel } from '../advisor.js';
+import { advisorPanel, topSkills, heroSkillCtx } from '../advisor.js';
 import { rankUpgrades, heroUpgrades } from '../upgrades.js';
+import { defaultRole } from '../calc.js';
 import { describe as describeUpgrade, pctTxt } from './upgrades.js';
 import { skillFamiliesFor } from './optimizer.js';
 
@@ -261,16 +262,35 @@ function renderEditor(root, ctx) {
     const rows = h('div', { class: 'skill-rows' });
     const drawSkills = () => {
       clear(rows);
+      // Remplacement facile : bouton « Remplacer par … » (suggestion du site) + liste de toutes les compétences possibles.
+      const role = defaultRole(cls);
+      const rec = topSkills(cls, role, 4, heroSkillCtx(H)).map((r) => r.family);
+      const swaps = new Map(heroUpgrades(H).filter((u) => u.kind === 'skillSwap').map((u) => [u.item, u.to]));
+      const replace = (i, name) => {
+        const nf = byName.get(String(name).toLowerCase());
+        if (!nf || H.skills.some((x, k) => k !== i && x.family === nf.family)) return;
+        H.skills[i] = { family: nf.family, tier: Math.max(...nf.tiers.keys()) };
+        drawSkills();
+      };
       H.skills.forEach((s, i) => {
         const f = findFamily(s.family); if (!f) return;
         const tiers = [...f.tiers.keys()].sort((a, b) => a - b);
         const sk = f.tiers.get(s.tier);
-        rows.append(h('div', { class: 'skill-row' },
+        const isRec = rec.includes(f.family);
+        const sugg = swaps.get(f.family);
+        const others = fams.filter((x) => x.type === 'Hero' && !H.skills.some((y) => y.family === x.family))
+          .sort((a, b) => (rec.includes(b.family) - rec.includes(a.family)) || a.family.localeCompare(b.family));
+        rows.append(h('div', { class: `skill-row ${isRec ? 'sk-ok' : 'sk-change'}` },
           icon(skillIcon(sk.name) || skillIcon(f.family), { size: 44, cls: 'skill-ico' }),
-          h('div', { class: 'grow' }, h('strong', {}, f.family), sk.rarity ? [' ', h('span', { class: `rar rar-${sk.rarity.toLowerCase()}` }, sk.rarity)] : null, h('div', { class: 'small' }, sk.effect)),
+          h('div', { class: 'grow' }, h('strong', {}, f.family), sk.rarity ? [' ', h('span', { class: `rar rar-${sk.rarity.toLowerCase()}` }, sk.rarity)] : null,
+            ' ', h('span', { class: `tag ${isRec ? 'tag-ok' : 'tag-est'}` }, isRec ? `✓ ${t('adv.keep')}` : `✗ ${t('adv.change')}`),
+            h('div', { class: 'small' }, sk.effect),
+            sugg ? h('button', { type: 'button', class: 'button small-btn', onclick: () => replace(i, sugg) }, t('ro.replaceBy', { name: sugg })) : null),
           select({ label: t('skills.tier'), value: s.tier, options: tiers.map((x) => ({ value: x, label: `T${x}` })), onChange: (v) => { s.tier = Number(v); drawSkills(); } }),
+          select({ label: t('ro.replaceWith'), value: '', options: [{ value: '', label: '—' }, ...others.map((x) => ({ value: x.family, label: `${rec.includes(x.family) ? '★ ' : ''}${x.family}` }))], onChange: (v) => { if (v) replace(i, v); } }),
           h('button', { type: 'button', class: 'btn-small', 'aria-label': `${t('remove')} ${f.family}`, onclick: () => { H.skills.splice(i, 1); drawSkills(); } }, t('remove'))));
       });
+      if (rec.some((r) => !H.skills.some((x) => x.family === r))) rows.append(h('p', { class: 'small muted' }, t('ro.starHint')));
     };
     drawSkills();
     const add = combo({ label: t('opt.addSkill'), options: fams.map((f) => ({ value: f.family, label: f.type })), placeholder: t('opt.skillPh'),

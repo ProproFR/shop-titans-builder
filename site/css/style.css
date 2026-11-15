@@ -397,3 +397,7 @@ input[type=search] { width: 100%; min-height: 42px; padding: 6px 10px; font: inh
 .adv-compare { list-style: none; padding: 0; display: grid; gap: 6px; }
 .adv-compare li { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 6px 8px; border-radius: 10px; border: 2px solid var(--border); }
 .adv-compare li.change { border-color: #d9822b; }
+
+.skill-row.sk-change { border-left: 4px solid #d9822b; padding-left: 6px; }
+.skill-row.sk-ok { border-left: 4px solid #3a9b48; padding-left: 6px; }
+.small-btn { min-height: 34px; padding: 4px 12px; font-size: .9rem; margin-top: 4px; }
