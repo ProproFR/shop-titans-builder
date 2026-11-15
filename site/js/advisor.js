@@ -86,8 +86,11 @@ export function advisorPanel(cls, o = {}) {
   box.append(h('h4', {}, t('adv.gear')));
   if (!bis) box.append(h('p', { class: 'muted' }, t('builds.noBis')));
   else if (o.showVariants) {
-    bis.variants.forEach((v, vi) => box.append(variantBox(bis, v, vi)));
-    box.append(h('p', { class: 'small muted' }, t('builds.creditBottom', { authors: D.bis.authors, license: D.bis.license }), ' ', ext(D.bis.source, t('builds.creditSource'))));
+    // Dans l'éditeur (o.hero) : replié par défaut, la page reste courte.
+    const holder = o.hero ? h('details', { class: 'card' }, h('summary', {}, t('adv.showBuilds', { n: bis.variants.length }))) : box;
+    bis.variants.forEach((v, vi) => holder.append(variantBox(bis, v, vi)));
+    holder.append(h('p', { class: 'small muted' }, t('builds.creditBottom', { authors: D.bis.authors, license: D.bis.license }), ' ', ext(D.bis.source, t('builds.creditSource'))));
+    if (o.hero) box.append(holder);
   } else box.append(h('p', { class: 'muted small' }, t('adv.gearBelow', { n: bis.variants.length })));
 
   // Compétences
@@ -128,7 +131,7 @@ export function advisorPanel(cls, o = {}) {
   // Guide STC
   const g = cls.group;
   box.append(h('p', {}, ext(GUIDE_URL, t('adv.guide'))),
-    h('figure', { class: 'guide-fig' },
+    o.hero ? null : h('figure', { class: 'guide-fig' },
       h('a', { href: GUIDE_IMG[g], target: '_blank', rel: 'noopener noreferrer', 'aria-label': t('adv.guideImgOpen', { group: g }) },
         h('img', { class: 'guide-img', src: GUIDE_IMG[g], alt: t('adv.guideImgAlt', { group: g }), loading: 'lazy', decoding: 'async',
           onerror: (e) => { e.target.hidden = true; } })),

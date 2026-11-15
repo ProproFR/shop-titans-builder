@@ -93,6 +93,13 @@ export function championCandidates(owned, heroes, filter = () => true) {
   return list.map((c) => (byName.size ? ownedChampionCandidate(c, byName.get(c.name), heroes) : championCandidate(c, 4)));
 }
 
+/** Part d'utilité d'un membre contre une barrière : champion de l'élément = 1,15 ; héros selon ses objets de l'élément. */
+export function elemShare(m, el) {
+  if (m.kind === 'champion') return m.classElement === el ? 1.15 : 0.45;
+  const n = (m.gearElements || []).filter((e) => e === el).length;
+  return 0.45 + 0.7 * Math.min(1, n / 6);
+}
+
 /** Évalue un groupe de candidats contre un monstre. */
 export function evaluateParty(members, mob, fx, opts = {}) {
   // Bonus de leader (champion)
@@ -119,6 +126,9 @@ export function evaluateParty(members, mob, fx, opts = {}) {
       if (m.classElement === opts.barrier) elemBonus += ASSUME.classElem;
       elemBonus += ASSUME.gearElem * m.gearElements.filter((e) => e === opts.barrier).length;
       atk *= 1 + elemBonus;
+      // Groupe d'élément : la barrière ne tombe qu'avec des points de cet élément. Un héros sans cet
+      // élément sur son équipement y contribue peu (dégâts ×0,45 ; ×1,15 avec ses 6 objets de l'élément).
+      if (opts.elemFocus) atk *= elemShare(m, opts.barrier);
     }
     const crit = fx.critDown ? 0 : Math.min(1, m.crit + party.crit / 100);
     const critDmg = fx.critDmgDown ? 1 + (m.critDmg - 1) * 0.5 : m.critDmg + party.critDmg / 100;
@@ -154,7 +164,8 @@ function* combos(arr, k, start = 0, cur = []) {
 export function recommend(candidates, size, mob, fx, opts = {}, top = 3) {
   const heroes = candidates.filter((c) => c.kind === 'hero');
   const champs = candidates.filter((c) => c.kind === 'champion');
-  const pool = heroes.sort((a, b) => (b.atk + b.def + b.hp / 10) - (a.atk + a.def + a.hp / 10)).slice(0, 18);
+  const k = (m) => (m.atk + m.def + m.hp / 10) * (opts.elemFocus && opts.barrier ? elemShare(m, opts.barrier) : 1);
+  const pool = heroes.sort((a, b) => k(b) - k(a)).slice(0, 18);
   const n = Math.min(size, pool.length + (champs.length ? 1 : 0));
   if (n < 1) return [];
   const out = [];

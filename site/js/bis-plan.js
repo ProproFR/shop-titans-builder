@@ -62,3 +62,30 @@ export function spiritPlan(v) {
   if (rest) slots.forEach((s, i) => { if (!s) slots[i] = { ...rest }; else if (s.cond === 'promoted') s.alt = [rest.spirit]; });
   return { slots, useIf, evaTarget };
 }
+
+/** Variante STC la plus proche de l'équipement d'un héros (le plus d'objets identiques), ou null. */
+export function closestVariant(bis, hero) {
+  if (!bis || !bis.variants.length) return null;
+  let best = null;
+  for (const v of bis.variants) {
+    const same = v.slots.filter((x, i) => x && hero.gear[i] && x.name === hero.gear[i].item).length;
+    if (!best || same > best.same) best = { v, same };
+  }
+  return best.v;
+}
+
+/**
+ * Ce que STC conseille de poser sur chaque emplacement d'un héros : { spirit, element } (noms d'enchantement).
+ * Titan seulement si la classe est promue ; sinon l'esprit des autres objets.
+ */
+export function recommendedEnchants(bis, hero, cls) {
+  const v = closestVariant(bis, hero);
+  if (!v) return [];
+  const plan = spiritPlan(v);
+  return v.slots.map((x, i) => {
+    const sp = plan.slots[i];
+    const spirit = sp ? (sp.cond === 'promoted' && !cls.promotionOf ? (sp.alt[0] || null) : sp.spirit) : null;
+    const element = (x.enchants || []).find((n) => (D.enchantByName.get(n) || {}).type === 'Element') || null;
+    return { spirit, element };
+  });
+}

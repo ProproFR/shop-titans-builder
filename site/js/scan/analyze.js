@@ -163,7 +163,7 @@ export async function analyze(img, { onProgress } = {}) {
     const inner = { x: s.tile.x + s.tile.w * 0.1, y: s.tile.y + s.tile.h * 0.1, w: s.tile.w * 0.8, h: s.tile.h * 0.8 };
     const list = rank(I, inner, k === 0 ? ref.innate : ref.hero, { scales: [0.85, 1, 1.12], shift: 0.06 }).slice(0, TOP);
     const roman = readRoman(img, s.tier);
-    return { box: s.tile, list, conf: confidence(list), tier: roman.tier, tierScore: roman.score };
+    return { box: s.tile, list, conf: confidence(list), tier: roman.tier, tierScore: roman.score, tierSure: roman.tier != null };
   });
 
   const clsRank = rank(I, R.classIcon, ref.classes, { scales: [0.9, 1, 1.15], shift: 0.1 });

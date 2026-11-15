@@ -9,6 +9,7 @@ import * as store from '../store.js';
 import { heroClass, slotTypes, lineageOf, effectiveStats, optimizerLink, emptyGear, memberParam } from '../hero.js';
 import { advisorPanel, topSkills, heroSkillCtx } from '../advisor.js';
 import { rankUpgrades, heroUpgrades } from '../upgrades.js';
+import { recommendedEnchants } from '../bis-plan.js';
 import { defaultRole } from '../calc.js';
 import { describe as describeUpgrade, pctTxt } from './upgrades.js';
 import { skillFamiliesFor } from './optimizer.js';
@@ -329,6 +330,20 @@ function renderEditor(root, ctx) {
             select({ label: t('ro.spirit'), value: g.spirit || '', options: [{ value: '', label: '—' }, ...spirits.map((e) => ({ value: e.name, label: spiritLabel(e.name) }))], onChange: (v) => { if (v) g.spirit = v; else delete g.spirit; } })))));
       drawTile();
     });
+    // Le site choisit : esprits et éléments conseillés par STC posés sur les cases encore vides.
+    const fillMsg = h('span', { class: 'small', role: 'status' });
+    gearBox.prepend(h('div', { class: 'actions' }, h('button', { type: 'button', class: 'button small-btn', onclick: () => {
+      const rec = recommendedEnchants(D.bisByClassId.get(lineageOf(cls).id), H, cls);
+      let n = 0;
+      H.gear.forEach((g, i) => {
+        const it = D.itemByName.get(g.item); if (!it || !rec[i]) return;
+        if (!g.spirit && !it.builtInSpirit && rec[i].spirit) { g.spirit = rec[i].spirit; n++; }
+        if (!g.element && !it.builtInElement && rec[i].element) { g.element = rec[i].element; n++; }
+      });
+      draw();
+      setTimeout(() => { const el = document.getElementById('fill-msg'); if (el) el.textContent = t('ro.filled', { n }); }, 0);
+    } }, t('ro.fillRec')), h('span', { id: 'fill-msg', class: 'small', role: 'status' }), fillMsg),
+    h('p', { class: 'small muted' }, t('ro.fillHint')));
     form.append(gearBox);
 
     // Appliquer un build STC

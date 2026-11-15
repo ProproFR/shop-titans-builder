@@ -9,6 +9,7 @@ import { skillsToMods } from './calc.js';
 import { heroCandidate, championCandidates, combineModifiers, recommend } from './tower-calc.js';
 import { listChampions } from './store.js';
 import { topSkills, heroSkillCtx } from './advisor.js';
+import { recommendedEnchants } from './bis-plan.js';
 
 export const QUALITY_ORDER = ['Normal', 'Superior', 'Flawless', 'Epic', 'Legendary'];
 // Effort relatif (1 = facile, 5 = très coûteux). Monter en Légendaire coûte bien plus que passer en Supérieur.
@@ -82,6 +83,7 @@ export function heroUpgrades(hero) {
   const bis = closestBis(cls, hero);
   const prof = PROFILES[role === 'tank' ? 'tank' : 'dps'];
 
+  const recEnch = recommendedEnchants(D.bisByClassId.get(lineageOf(cls).id), hero, cls);
   hero.gear.forEach((g, i) => {
     const it = D.itemByName.get(g.item);
     // 1) Qualité : étape suivante seulement.
@@ -123,7 +125,7 @@ export function heroUpgrades(hero) {
     }
     // 4) Esprit : objet sans esprit.
     if (it && !g.spirit && !it.builtInSpirit) {
-      const sugg = (bisSlot && (bisSlot.enchants || []).find((e) => / Spirit$/.test(e))) || (it.spiritAff || [])[0] || '';
+      const sugg = (recEnch[i] && recEnch[i].spirit) || '';
       add({ kind: 'spirit', slot: i, item: it.name, to: sugg, effort: EFFORT.spirit, gain: SPIRIT_GAIN, estimate: true });
     }
   });
@@ -173,7 +175,7 @@ export function heroWeights(heroes, size = 4) {
   mark(recommend(cands.slice(), size, REF_MOB, fx, {}, 1)[0], 1.6);
   for (const el of ['Fire', 'Water', 'Air', 'Earth', 'Light', 'Dark']) {
     const champs = championCandidates(listChampions(), heroes, (c) => c.element === el);
-    mark(recommend([...cands, ...champs], size, REF_MOB, fx, { barrier: el }, 1)[0], 1.3);
+    mark(recommend([...cands, ...champs], size, REF_MOB, fx, { barrier: el, elemFocus: true }, 1)[0], 1.3);
   }
   return w;
 }

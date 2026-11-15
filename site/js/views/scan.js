@@ -3,7 +3,7 @@ import { D, itemIcon, skillIcon, classIcon, champIcon, findFamily, applyBuiltIns
 import { t } from '../i18n.js';
 import { h, clear, icon, combo, select, numberField, gearTile } from '../dom.js';
 import { classMatches, QUALITY } from '../calc.js';
-import { emptyGear, slotTypes } from '../hero.js';
+import { emptyGear, slotTypes, estimateStats } from '../hero.js';
 import * as store from '../store.js';
 import { loadImage } from '../scan/image.js';
 import { analyze, rerankGear } from '../scan/analyze.js';
@@ -47,6 +47,10 @@ function mergeFromSaved(d, saved) {
   d.skills = d.skills.map((sk, k) => {
     const old = saved.skills && saved.skills[k];
     if (!sk && old) { const f = findFamily(old.family); return f ? { family: f.family, key: f.key, tier: old.tier } : sk; }
+    // La lecture du palier n'est pas fiable (II et III sont souvent pris pour IV) : pour une compétence
+    // déjà enregistrée, on garde le palier de la sauvegarde (corrigé à la main si besoin).
+    const same = sk && (saved.skills || []).find((x) => x.family === sk.family);
+    if (same) return { ...sk, tier: same.tier };
     return sk;
   });
 }
@@ -128,7 +132,7 @@ function fillSkills(d, res, cls) {
     const f = skillOptions(e, cls).find((x) => !used.has(x.key));
     if (!f) return null;
     used.add(f.key);
-    return { family: f.family, key: f.key, tier: tierFor(f, e.tier) };
+    return { family: f.family, key: f.key, tier: tierFor(f, e.tier), tierRead: e.tier != null };
   });
 }
 
@@ -266,6 +270,7 @@ function renderCard(card, img, res, fileName, onSaved) {
         h('div', { class: 'scan-row-main' },
           curFam ? icon(skillIcon(firstTier(curFam).name), { size: 40 }) : h('span', { class: 'gear-empty' }, '?'),
           h('strong', {}, curFam ? skillLabel(curFam.family, cur.tier) : t('sc.unknown')), ' ', confTag(e.conf),
+          !d.existing ? h('span', { class: 'tag tag-est' }, t('sc.tierCheck')) : null,
           curFam ? select({ label: t('sc.tier'), id: `${d.id}-t${k}`, value: cur.tier, options: [...curFam.tiers.keys()].map((x) => ({ value: x, label: ['', 'I', 'II', 'III', 'IV'][x] || x })),
             onChange: (v) => { cur.tier = Number(v); } }) : null),
         opts.length > 1 ? h('div', { class: 'q-group', role: 'group', 'aria-label': t('sc.alts') }, opts.map((f) => choice(f.family, skillIcon(firstTier(f).name), curFam === f,
@@ -308,7 +313,8 @@ function renderCard(card, img, res, fileName, onSaved) {
       right.append(h('fieldset', {}, h('legend', {}, t('sc.stats')), h('p', { class: 'muted small' }, t('sc.statsHint')),
         h('div', { class: 'row' },
           numberField({ label: t('sc.power'), id: `${d.id}-pw`, value: d.power, min: 0, step: 1, onChange: (v) => { d.power = v; } }),
-          ...[['hp', 'HP'], ['atk', 'ATK'], ['def', 'DEF'], ['eva', t('sc.evaReal')], ['crit', t('sc.critManual')]].map(([k, lbl]) => numberField({ label: lbl, id: `${d.id}-${k}`, value: d.stats[k], min: 0, step: 1, onChange: (v) => { if (v == null) delete d.stats[k]; else d.stats[k] = v; } })))),
+          ...[['hp', 'HP'], ['atk', 'ATK'], ['def', 'DEF'], ['eva', t('sc.evaReal')], ['crit', 'CRIT %']].map(([k, lbl]) => numberField({ label: lbl, id: `${d.id}-${k}`, value: d.stats[k], min: 0, step: 1, onChange: (v) => { if (v == null) delete d.stats[k]; else d.stats[k] = v; } })))),
+        h('p', { class: 'small muted' }, t('sc.critHint', { v: (() => { try { return Math.round(estimateStats({ classId: cls.id, level: d.level, gear: d.gear, skills: d.skills.filter(Boolean) }).crit * 100); } catch { return '?'; } })() })),
         res.stats.evaShown != null && res.stats.eva != null && res.stats.evaShown > res.stats.eva
           ? h('p', { class: 'note small' }, t('sc.evaCapped', { shown: res.stats.evaShown, real: res.stats.eva, lost: res.stats.evaShown - res.stats.eva })) : null);
     }

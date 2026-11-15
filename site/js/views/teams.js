@@ -65,7 +65,7 @@ export function render(root, ctx) {
     const grid = h('div', { class: 'elem-grid' });
     for (const el of ELEMS) {
       const champs = championCandidates(store.listChampions(), heroes, (c) => c.element === el);
-      const res = recommend([...heroCands, ...champs], size, REF_MOB, combineModifiers([]), { barrier: el }, 1)[0];
+      const res = recommend([...heroCands, ...champs], size, REF_MOB, combineModifiers([]), { barrier: el, elemFocus: true }, 1)[0];
       grid.append(teamCard(t('tm.elemTitle', { el: elName(el) }), elemIcon(el), res, size, el));
     }
     body.append(grid);
