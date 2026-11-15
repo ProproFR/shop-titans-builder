@@ -183,7 +183,8 @@ export async function analyze(img, { onProgress } = {}) {
     if (!nums) return base;
     // Pastilles : en haut l'élément, en dessous l'esprit. Sans élément, l'esprit remonte en haut ;
     // sans rien, aucune pastille (ex. Amran : cases 2 et 3 vides, case 5 = esprit de Mundra seul).
-    const top = badgePresent(img, t.element), low = badgePresent(img, t.spirit);
+    // Une pastille d'élément reconnaissable à sa couleur compte aussi (losange Ténèbres, petit et sombre).
+    const top = badgePresent(img, t.element) || !!elementByColor(I, t.element), low = badgePresent(img, t.spirit);
     if (!top) return { ...base, noBadge: true };
     let spiritBox = low ? t.spirit : null, elemBox = t.element;
     const byColor = elementByColor(I, t.element);
