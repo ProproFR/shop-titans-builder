@@ -59,7 +59,28 @@ function enchantFor(element, perItem) {
   const list = D.enchantments.filter((e) => e.type === 'Element' && e.element === element);
   if (!list.length) return '';
   if (!perItem) return list[list.length - 1].name;
-  return list.reduce((a, b) => (Math.abs(b.value - perItem) < Math.abs(a.value - perItem) ? b : a)).name;
+  // Le total affiché dépasse souvent la somme des enchantements (bonus d'affinité, compétences…) :
+  // on prend l'enchantement le plus fort qui ne dépasse pas la moyenne par objet (+1 de marge).
+  const fit = list.filter((e) => e.value <= perItem + 1);
+  return (fit.length ? fit[fit.length - 1] : list[0]).name;
+}
+
+/**
+ * Élément du héros d'après l'icône de la ligne « Élément » des stats (colorée et nette, contrairement
+ * aux petites pastilles des objets, grisées pour Ténèbres et Air). Cherchée le long de la ligne.
+ */
+function heroElement(I, P, ref) {
+  const best = new Map();
+  for (let x = 4; x <= 44; x += 2) {
+    const box = { x: P.x + x * P.u, y: P.y + 322 * P.u, w: 26 * P.u, h: 26 * P.u };
+    for (const r of rank(I, box, ref.elements.filter((e) => e.key !== 'Gold'), { scales: [0.8, 0.9, 1], shift: 0.1 })) {
+      if (!best.has(r.key) || r.d < best.get(r.key)) best.set(r.key, r.d);
+    }
+  }
+  const list = [...best.entries()].sort((a, b) => a[1] - b[1]);
+  if (list.length < 2) return null;
+  // Sur nos captures : bon élément ≈ 12-20, suivant ≥ 60.
+  return list[0][1] <= 35 && list[1][1] - list[0][1] >= 25 ? list[0][0] : null;
 }
 
 /** Objets possibles pour l'emplacement i (types autorisés par la classe, sinon tous). */
@@ -132,6 +153,10 @@ export async function analyze(img, { onProgress } = {}) {
   gear.forEach((g) => { if (g.element) votes[g.element] = (votes[g.element] || 0) + 1; });
   const [maj, nMaj] = Object.entries(votes).sort((a, b) => b[1] - a[1])[0] || [];
   if (maj && nMaj >= 3) gear.forEach((g) => { if (!g.element && g.elemList[0] && g.elemList[0].key === maj) g.element = maj; });
+  // Pastilles non reconnues à la couleur (Ténèbres, Air en losange…) : si l'élément du héros est sûr
+  // et qu'il a des points d'élément, on l'attribue aux cases restées vides.
+  const heroEl = nums ? heroElement(I, panel, ref) : null;
+  if (heroEl && elemTotal > 0) gear.forEach((g) => { if (!g.element) { g.element = heroEl; g.fromHero = true; } });
   const nEl = gear.filter((g) => g.element).length;
   for (const g of gear) g.enchant = g.element ? enchantFor(g.element, elemTotal && nEl ? elemTotal / nEl : 0) : '';
 
@@ -139,7 +164,7 @@ export async function analyze(img, { onProgress } = {}) {
   if (onProgress) onProgress(null, null, 'name');
   const nm = await readName(img, R.name);
   return {
-    name: nm ? nm.name : '', nameConfidence: nm ? nm.confidence : 0,
+    name: nm ? nm.name : '', nameConfidence: nm ? nm.confidence : 0, heroElement: heroEl,
     tab: R.tab, panel, regions: R, _I: I, _ref: ref,
     classes, cls,
     level: lv.value && lv.value <= D.maxLevel ? lv.value : null,
