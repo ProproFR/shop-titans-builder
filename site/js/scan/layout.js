@@ -60,7 +60,7 @@ const Z = {
   capsTab: [254, 64, 230, 28],
   classIcon: [11, 104, 22, 22],
   power: [42, 132, 130, 40],
-  stats: { hp: [92, 189, 85, 19], atk: [92, 223, 85, 19], def: [92, 257, 85, 19], eva: [92, 291, 85, 19], elem: [92, 326, 85, 19] },
+  stats: { hp: [92, 189, 85, 19], atk: [92, 223, 85, 19], def: [92, 257, 85, 19], eva: [62, 289, 115, 23], elem: [92, 326, 85, 19] },
   tiles: { x: [190, 292, 394], y: [131, 244], w: 93, h: 100 },
   // Compétences sous le personnage (onglet Infos) : 5 cases de 54, pas de 62.
   skillsInfos: { x: -394.3, y: 387, size: 54, step: 62 },

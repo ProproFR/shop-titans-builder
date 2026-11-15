@@ -178,7 +178,9 @@ function renderCard(card, img, res, fileName, onSaved) {
       right.append(h('fieldset', {}, h('legend', {}, t('sc.stats')), h('p', { class: 'muted small' }, t('sc.statsHint')),
         h('div', { class: 'row' },
           numberField({ label: t('sc.power'), id: `${d.id}-pw`, value: d.power, min: 0, step: 1, onChange: (v) => { d.power = v; } }),
-          ...[['atk', 'ATK'], ['def', 'DEF'], ['hp', 'HP'], ['eva', 'EVA %']].map(([k, lbl]) => numberField({ label: lbl, id: `${d.id}-${k}`, value: d.stats[k], min: 0, step: 1, onChange: (v) => { if (v == null) delete d.stats[k]; else d.stats[k] = v; } })))));
+          ...[['atk', 'ATK'], ['def', 'DEF'], ['hp', 'HP'], ['eva', t('sc.evaReal')]].map(([k, lbl]) => numberField({ label: lbl, id: `${d.id}-${k}`, value: d.stats[k], min: 0, step: 1, onChange: (v) => { if (v == null) delete d.stats[k]; else d.stats[k] = v; } })))),
+        res.stats.evaShown != null && res.stats.eva != null && res.stats.evaShown > res.stats.eva
+          ? h('p', { class: 'note small' }, t('sc.evaCapped', { shown: res.stats.evaShown, real: res.stats.eva, lost: res.stats.evaShown - res.stats.eva })) : null);
     }
 
     right.append(h('div', { class: 'actions' }, h('button', { type: 'button', class: 'button', onclick: save }, t('sc.save'))), msg);

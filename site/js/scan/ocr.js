@@ -98,14 +98,32 @@ function classify(c) {
  */
 export function readNumber(img, b, pred = isLight) {
   const { glyphs, hMax } = mainLine(components(img, b, pred));
-  let text = '', worst = 0, pct = false;
+  if (!glyphs.length || !hMax) return { value: null, text: '', confidence: 0 };
+  // Hauteur typique d'un chiffre : les parenthèses dépassent en haut et en bas, et sont étroites.
+  const hs = glyphs.map((c) => c.bh).sort((a, c) => a - c);
+  const hDigit = hs[Math.floor(hs.length / 3)];
+  const isParen = (c) => c.bh >= hDigit * 1.12 && c.bw / c.bh < 0.34;
+  // Découpe en groupes : « 100% (78%) » → valeur affichée 100 %, valeur réelle 78 % entre parenthèses.
+  const groups = [{ text: '', worst: 0, pct: false }];
+  let inParen = false;
   for (const c of glyphs) {
+    if (isParen(c)) {
+      if (!inParen) { inParen = true; groups.push({ text: '', worst: 0, pct: false, paren: true }); }
+      else inParen = false;
+      continue;
+    }
     const r = classify(c);
-    if (r.d === '%') { pct = true; continue; }
-    text += r.d; worst = Math.max(worst, r.dist);
+    const g = groups[groups.length - 1];
+    if (r.d === '%') { g.pct = true; continue; }
+    g.text += r.d; g.worst = Math.max(g.worst, r.dist);
   }
-  if (!text || !hMax) return { value: null, text: '', confidence: 0 };
-  return { value: Number(text), text: text + (pct ? '%' : ''), confidence: Math.max(0, 1 - worst / 12) };
+  const main = groups[0], par = groups.find((g) => g.paren && g.text);
+  const pick = par || main;
+  if (!pick.text) return { value: null, text: '', confidence: 0 };
+  const res = { value: Number(pick.text), text: pick.text + (pick.pct ? '%' : ''), confidence: Math.max(0, 1 - pick.worst / 12) };
+  // Valeur avant plafond (ex. esquive 100 % plafonnée à 78 %) : utile pour repérer le surplus.
+  if (par && main.text) { res.shown = Number(main.text); res.text = `${main.text}${main.pct ? '%' : ''} (${res.text})`; }
+  return res;
 }
 
 /** Vecteur de luminance normalisé (moyenne 0, écart-type 1) d'une zone, grille 10×8. */

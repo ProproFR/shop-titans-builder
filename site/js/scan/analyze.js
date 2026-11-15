@@ -115,6 +115,7 @@ export async function analyze(img, { onProgress } = {}) {
   if (nums) await ensureItems(sigs, ref, cls, onProgress);
   const num = (b) => (nums ? readNumber(img, b) : { value: null, confidence: 0 });
   const elemTotal = nums ? readNumber(img, R.stats.elem).value : null;
+  const evaRead = nums ? readNumber(img, R.stats.eva) : null; // « 100% (78%) » : 78 = valeur réelle (plafond)
 
   const gear = R.tiles.map((t, i) => {
     const list = nums ? rankSlot(I, ref, t, cls, i) : [];
@@ -142,7 +143,7 @@ export async function analyze(img, { onProgress } = {}) {
     tab: R.tab, panel, regions: R, _I: I, _ref: ref,
     classes, cls,
     level: lv.value && lv.value <= D.maxLevel ? lv.value : null,
-    stats: nums ? { power: num(R.power).value, hp: num(R.stats.hp).value, atk: num(R.stats.atk).value, def: num(R.stats.def).value, eva: num(R.stats.eva).value, elem: elemTotal } : null,
+    stats: nums ? { power: num(R.power).value, hp: num(R.stats.hp).value, atk: num(R.stats.atk).value, def: num(R.stats.def).value, eva: evaRead.value, evaShown: evaRead.shown ?? null, elem: elemTotal } : null,
     skills, gear,
   };
 }
