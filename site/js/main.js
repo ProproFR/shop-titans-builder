@@ -19,12 +19,14 @@ import * as about from './views/about.js';
 import * as legal from './views/legal.js';
 import * as scan from './views/scan.js';
 import * as teams from './views/teams.js';
+import * as upgrades from './views/upgrades.js';
 
 // Menu simplifié : deux pages. Les autres outils restent accessibles par lien direct (#/builds, #/tower…)
 // mais n'apparaissent plus dans le menu.
 const ROUTES = {
   scan: { mod: scan, label: 'nav.scan', ico: 'quest' },
   teams: { mod: teams, label: 'nav.teams', ico: 'champion' },
+  upgrades: { mod: upgrades, label: 'nav.upgrades', ico: 'craft' },
   roster: { mod: roster, label: 'nav.roster', ico: 'champion', hidden: true }, // éditeur d'un héros (#/roster?edit=…)
   builds: { mod: builds, label: 'nav.builds', ico: 'heroes', hidden: true },
   optimizer: { mod: optimizer, label: 'nav.optimizer', ico: 'craft', hidden: true },

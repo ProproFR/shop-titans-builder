@@ -360,3 +360,18 @@ input[type=search] { width: 100%; min-height: 42px; padding: 6px 10px; font: inh
 .my-heroes { margin-top: 24px; }
 
 .diff-list { margin: 4px 0 0; padding-left: 18px; }
+
+/* Améliorations prioritaires (#/upgrades) */
+.upgrade-list { list-style: none; padding: 0; margin: 8px 0; display: grid; gap: 10px; }
+.upgrade { padding: 10px 12px; }
+.upgrade-head { display: flex; gap: 10px; align-items: flex-start; }
+.upgrade-rank { font-weight: 700; font-size: 1.2rem; min-width: 1.8em; text-align: center; }
+.upgrade-desc { margin: 4px 0 0; }
+.upgrade-meta { display: flex; flex-wrap: wrap; gap: 6px 16px; align-items: center; margin-top: 6px; }
+.effort { letter-spacing: 1px; color: var(--accent, #c48a1e); }
+.prio-bar { flex: 1 1 120px; min-width: 100px; height: 8px; border-radius: 4px; background: var(--border); overflow: hidden; }
+.prio-bar > span { display: block; height: 100%; background: var(--accent, #c48a1e); }
+.first-heroes { padding-left: 20px; display: grid; gap: 6px; }
+.kinds { display: flex; flex-wrap: wrap; gap: 4px 12px; border: 0; padding: 0; }
+.kinds legend { width: 100%; }
+.check { display: inline-flex; align-items: center; gap: 4px; }

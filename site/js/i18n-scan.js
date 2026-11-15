@@ -2,6 +2,19 @@
 import { addMessages } from './i18n.js';
 
 addMessages('fr', {
+  'nav.upgrades': 'Améliorations prioritaires',
+  'up.title': 'Améliorations prioritaires', 'up.intro': 'Toutes les améliorations possibles de vos héros, de la plus rentable à la moins rentable : le site estime ce que chacune apporte, tient compte de l\'importance du héros dans vos équipes et de l\'effort demandé.',
+  'up.firstHeroes': 'Héros à améliorer en premier', 'up.how': 'Priorité = gain estimé × importance du héros (×1,6 s\'il est dans le meilleur groupe général, ×1,3 dans un groupe d\'élément) ÷ effort. Une grosse avancée sur un héros clé passe donc avant une petite montée de qualité.',
+  'up.filterHero': 'Héros', 'up.allHeroes': 'Tous les héros', 'up.filterKind': 'Types d\'amélioration',
+  'up.k.item': 'Objet', 'up.k.quality': 'Qualité', 'up.k.skill': 'Compétence', 'up.k.element': 'Élément', 'up.k.spirit': 'Esprit', 'up.k.evaCap': 'Esquive perdue',
+  'up.inGeneral': 'groupe général', 'up.inElem': 'groupe d\'élément',
+  'up.gain': 'Gain :', 'up.estimate': 'estimation', 'up.effort': 'Effort :', 'up.effortAria': 'Effort {n} sur 5', 'up.prioAria': 'Priorité {p}', 'up.edit': 'Modifier ce héros',
+  'up.more': 'Afficher plus ({n} restantes)', 'up.none': 'Aucune amélioration pour ce filtre.',
+  'up.disclaimer': 'Calcul indicatif. Gain = hausse de la « valeur de combat » du héros (attaque avec critiques × survie : PV, DEF, esquive plafonnée à 78 %, pondérées selon son rôle). Éléments et esprits : estimation forfaitaire (leurs effets ne se voient pas dans les stats). Objets proposés : objet BiS de St. Central pour cet emplacement, sinon le meilleur objet accessible au palier du héros.',
+  'up.d.quality': '{slot} · {item} : qualité {from} → {to}', 'up.d.item': '{slot} : remplacer {item} par {to} (T{tier})', 'up.d.itemEmpty': '{slot} : équiper {to} (T{tier})',
+  'up.d.skill': 'Compétence {skill} : palier {from} → {to}', 'up.d.element': '{slot} · {item} : ajouter l\'enchantement {to}', 'up.d.elementUp': '{slot} · {item} : {from} → {to}',
+  'up.d.spirit': '{slot} · {item} : ajouter un esprit ({to})', 'up.d.spiritAny': '{slot} · {item} : ajouter un esprit',
+  'up.d.evaCap': 'Esquive au-delà du plafond de 78 % : environ {waste} points perdus', 'up.evaCapHint': 'Remplacer un objet à esquive par un objet à attaque ou défense rendrait ces points utiles.',
   'nav.scan': 'Importer & mes héros', 'nav.teams': 'Équipes proposées',
   'sc.readingName': '(lecture du nom…)', 'sc.update': 'Mettre à jour « {name} »', 'sc.saveAsNew': 'Non, enregistrer comme un autre héros',
   'sc.alreadySaved': '« {name} » est déjà enregistré.', 'sc.savedOn': '(sauvegarde du {date})', 'sc.changes': 'Cette capture change {n} élément(s) :',
@@ -46,6 +59,19 @@ addMessages('fr', {
 });
 
 addMessages('en', {
+  'nav.upgrades': 'Priority upgrades',
+  'up.title': 'Priority upgrades', 'up.intro': 'Every possible upgrade for your heroes, from most to least worthwhile: the site estimates what each brings, weighs how important the hero is in your teams and the effort required.',
+  'up.firstHeroes': 'Heroes to upgrade first', 'up.how': 'Priority = estimated gain × hero importance (×1.6 in the best general group, ×1.3 in an element group) ÷ effort. A big step on a key hero comes before a small quality bump.',
+  'up.filterHero': 'Hero', 'up.allHeroes': 'All heroes', 'up.filterKind': 'Upgrade types',
+  'up.k.item': 'Item', 'up.k.quality': 'Quality', 'up.k.skill': 'Skill', 'up.k.element': 'Element', 'up.k.spirit': 'Spirit', 'up.k.evaCap': 'Wasted evasion',
+  'up.inGeneral': 'general group', 'up.inElem': 'element group',
+  'up.gain': 'Gain:', 'up.estimate': 'estimate', 'up.effort': 'Effort:', 'up.effortAria': 'Effort {n} out of 5', 'up.prioAria': 'Priority {p}', 'up.edit': 'Edit this hero',
+  'up.more': 'Show more ({n} left)', 'up.none': 'No upgrade for this filter.',
+  'up.disclaimer': 'Indicative calculation. Gain = increase of the hero\'s "combat value" (attack with crits × survival: HP, DEF, evasion capped at 78%, weighted by role). Elements and spirits: flat estimate (their effects do not show in stats). Suggested items: St. Central BiS item for that slot, otherwise the best item available at the hero\'s tier.',
+  'up.d.quality': '{slot} · {item}: quality {from} → {to}', 'up.d.item': '{slot}: replace {item} with {to} (T{tier})', 'up.d.itemEmpty': '{slot}: equip {to} (T{tier})',
+  'up.d.skill': 'Skill {skill}: tier {from} → {to}', 'up.d.element': '{slot} · {item}: add {to}', 'up.d.elementUp': '{slot} · {item}: {from} → {to}',
+  'up.d.spirit': '{slot} · {item}: add a spirit ({to})', 'up.d.spiritAny': '{slot} · {item}: add a spirit',
+  'up.d.evaCap': 'Evasion above the 78% cap: about {waste} points wasted', 'up.evaCapHint': 'Swapping an evasion item for an attack or defense item would make these points useful.',
   'nav.scan': 'Import & my heroes', 'nav.teams': 'Suggested teams',
   'sc.readingName': '(reading the name…)', 'sc.update': 'Update "{name}"', 'sc.saveAsNew': 'No, save as another hero',
   'sc.alreadySaved': '"{name}" is already saved.', 'sc.savedOn': '(saved on {date})', 'sc.changes': 'This screenshot changes {n} item(s):',
