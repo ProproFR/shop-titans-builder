@@ -33,7 +33,7 @@ function refs(sigs) {
     hero: famRefs('Hero'),
     classes: D.classes.map((c) => ({ key: c.id, path: classIcon(c.name) })).filter((c) => c.path),
     elements: ['Fire', 'Water', 'Air', 'Earth', 'Light', 'Dark', 'Gold'].map((e) => ({ key: e, path: elemIcon(e) })).filter((e) => e.path),
-    items: D.items.map((it) => ({ key: it.name, path: itemIcon(it), type: it.type })).filter((x) => x.path && x.path.includes('/items/')),
+    items: D.items.map((it) => ({ key: it.name, path: itemIcon(it), type: it.type, tier: it.tier })).filter((x) => x.path && x.path.includes('/items/')),
   };
   return REFS;
 }
@@ -84,25 +84,32 @@ function heroElement(I, P, ref) {
 }
 
 /** Objets possibles pour l'emplacement i (types autorisés par la classe, sinon tous). */
-function slotCands(ref, cls, i) {
+function slotCands(ref, cls, i, tier) {
   const types = cls ? new Set(slotTypes(cls, i)) : null;
-  return types ? ref.items.filter((x) => types.has(x.type)) : ref.items;
+  const list = types ? ref.items.filter((x) => types.has(x.type)) : ref.items;
+  // Palier lu sur la case (rond orange) : écarte les objets d'un autre palier, sources de confusions
+  // (ex. Scepter of Ever-Wisdom T13 pris pour Natural Toxifier T5). Lecture incertaine : ±1.
+  if (!tier || !tier.value) return list;
+  const tol = tier.confidence >= 0.3 ? 0 : 1;
+  const byTier = list.filter((x) => Math.abs(x.tier - tier.value) <= tol);
+  return byTier.length ? byTier : list;
 }
-const rankSlot = (I, ref, t, cls, i) => rank(I, t.art, slotCands(ref, cls, i)).slice(0, TOP);
+const rankSlot = (I, ref, t, cls, i, tier) => rank(I, t.art, slotCands(ref, cls, i, tier)).slice(0, TOP);
 
 /** Prépare les miniatures des objets compatibles avec une classe (calculées au besoin). */
-async function ensureItems(sigs, ref, cls, onProgress) {
+async function ensureItems(sigs, ref, cls, onProgress, tiers = []) {
   const paths = [];
-  for (let i = 0; i < 6; i++) for (const x of slotCands(ref, cls, i)) paths.push(x.path);
+  for (let i = 0; i < 6; i++) for (const x of slotCands(ref, cls, i, tiers[i])) paths.push(x.path);
   await sigs.ensure(paths, onProgress);
 }
 
 /** Recalcule les objets proposés après un changement de classe (les emplacements changent). */
 export async function rerankGear(res, cls) {
   if (res.tab !== 'infos') return;
-  await ensureItems(await loadSignatures(), res._ref, cls);
+  const tiers = res.gear.map((g) => g.tier);
+  await ensureItems(await loadSignatures(), res._ref, cls, undefined, tiers);
   res.regions.tiles.forEach((t, i) => {
-    const list = rankSlot(res._I, res._ref, t, cls, i);
+    const list = rankSlot(res._I, res._ref, t, cls, i, tiers[i]);
     Object.assign(res.gear[i], { list, conf: confidence(list) });
   });
 }
@@ -133,18 +140,19 @@ export async function analyze(img, { onProgress } = {}) {
   const cls = classes[0] || null;
 
   const nums = R.tab === 'infos';
-  if (nums) await ensureItems(sigs, ref, cls, onProgress);
+  const tiers = R.tiles.map((t) => (nums ? readNumber(img, t.tier) : null));
+  if (nums) await ensureItems(sigs, ref, cls, onProgress, tiers);
   const num = (b) => (nums ? readNumber(img, b) : { value: null, confidence: 0 });
   const elemTotal = nums ? readNumber(img, R.stats.elem).value : null;
   const evaRead = nums ? readNumber(img, R.stats.eva) : null; // « 100% (78%) » : 78 = valeur réelle (plafond)
 
   const gear = R.tiles.map((t, i) => {
-    const list = nums ? rankSlot(I, ref, t, cls, i) : [];
+    const list = nums ? rankSlot(I, ref, t, cls, i, tiers[i]) : [];
     const el = nums ? rank(I, t.element, ref.elements, { scales: [0.7, 0.85, 1], shift: 0.1 }) : [];
     // Pastille reconnue si nettement plus proche d'un élément que des autres (sinon : vide, ou à choisir).
     const hasEl = el.length > 1 && el[1].d - el[0].d >= 15;
     const sp = nums ? recognizeSpirit(I, t.spirit) : null;
-    return { box: t.tile, list, conf: confidence(list), quality: nums ? guessQuality(img, t.tile) : 'Normal', element: hasEl ? el[0].key : '', elemList: el.slice(0, 3),
+    return { box: t.tile, tier: tiers[i], list, conf: confidence(list), quality: nums ? guessQuality(img, t.tile) : 'Normal', element: hasEl ? el[0].key : '', elemList: el.slice(0, 3),
       spirit: sp ? sp.name : '', spiritScore: sp ? sp.score : 0, spiritSig: sp ? sp.sig : null };
   });
   // Les 6 pastilles portent souvent le même élément : si la majorité est sûre, on l'applique aux cases

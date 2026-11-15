@@ -155,7 +155,8 @@ function renderCard(card, img, res, fileName, onSaved) {
         const it = D.itemByName.get(g.item);
         const allowed = new Set(slotTypes(cls, i));
         const alts = e.list.filter((x) => allowed.has(x.type)).slice(0, 4);
-        const allItems = D.items.filter((x) => allowed.has(x.type));
+        const tr = e.tier && e.tier.value; // palier lu : ces objets d'abord dans la liste
+        const allItems = D.items.filter((x) => allowed.has(x.type)).sort((a, b) => (tr ? Math.abs(a.tier - tr) - Math.abs(b.tier - tr) : 0) || b.tier - a.tier);
         gr.append(h('div', { class: 'scan-row' },
           h('div', { class: 'scan-row-main' },
             it ? gearTile(it, { tier: it.tier, quality: g.quality, size: 48 }) : h('span', { class: 'gear-empty' }, '?'),
