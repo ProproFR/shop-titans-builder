@@ -375,3 +375,15 @@ input[type=search] { width: 100%; min-height: 42px; padding: 6px 10px; font: inh
 .kinds { display: flex; flex-wrap: wrap; gap: 4px 12px; border: 0; padding: 0; }
 .kinds legend { width: 100%; }
 .check { display: inline-flex; align-items: center; gap: 4px; }
+
+/* Onglets toujours visibles (4 entrées) */
+.nav-toggle { display: none !important; }
+@media (max-width: 800px) {
+  nav ul { display: flex !important; flex-direction: row; flex-wrap: wrap; }
+  nav a { font-size: .85rem; padding: 4px 8px 4px 4px; }
+  nav a .ico { width: 22px; height: 22px; }
+}
+/* Mes champions */
+.champ-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 10px; }
+.champ-row { margin: 0; padding: 10px; }
+.champ-row .row .field { flex: 1 1 100px; }

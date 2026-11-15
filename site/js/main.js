@@ -20,13 +20,15 @@ import * as legal from './views/legal.js';
 import * as scan from './views/scan.js';
 import * as teams from './views/teams.js';
 import * as upgrades from './views/upgrades.js';
+import * as champions from './views/champions.js';
 
 // Menu simplifié : deux pages. Les autres outils restent accessibles par lien direct (#/builds, #/tower…)
 // mais n'apparaissent plus dans le menu.
 const ROUTES = {
   scan: { mod: scan, label: 'nav.scan', ico: 'quest' },
-  teams: { mod: teams, label: 'nav.teams', ico: 'champion' },
+  teams: { mod: teams, label: 'nav.teams', ico: 'heroes' },
   upgrades: { mod: upgrades, label: 'nav.upgrades', ico: 'craft' },
+  champions: { mod: champions, label: 'nav.champions', ico: 'champion' },
   roster: { mod: roster, label: 'nav.roster', ico: 'champion', hidden: true }, // éditeur d'un héros (#/roster?edit=…)
   builds: { mod: builds, label: 'nav.builds', ico: 'heroes', hidden: true },
   optimizer: { mod: optimizer, label: 'nav.optimizer', ico: 'craft', hidden: true },
@@ -74,7 +76,8 @@ function renderNav() {
   const btn = h('button', { type: 'button', class: 'nav-toggle', 'aria-expanded': 'false', 'aria-controls': 'nav-list',
     onclick: () => { const open = !ul.classList.contains('open'); ul.classList.toggle('open', open); btn.setAttribute('aria-expanded', String(open)); } },
   icon(uiIcon(ROUTES[current].ico), { size: 24 }), h('span', {}, `${t('nav.menu')} · ${t(ROUTES[current].label)}`));
-  nav.append(btn, ul);
+  nav.append(ul); // 4 onglets : toujours visibles, y compris sur téléphone (plus de menu replié)
+  void btn;
 }
 
 function renderFooter() {

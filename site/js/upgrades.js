@@ -6,7 +6,8 @@ import { D, findFamily } from './data.js';
 import { QUALITY, PROFILES, scoreItem, newMods, defaultRole } from './calc.js';
 import { heroClass, lineageOf, estimateStats, effectiveStats, heroSkillObjects } from './hero.js';
 import { skillsToMods } from './calc.js';
-import { heroCandidate, championCandidate, combineModifiers, recommend } from './tower-calc.js';
+import { heroCandidate, championCandidates, combineModifiers, recommend } from './tower-calc.js';
+import { listChampions } from './store.js';
 
 export const QUALITY_ORDER = ['Normal', 'Superior', 'Flawless', 'Epic', 'Legendary'];
 // Effort relatif (1 = facile, 5 = très coûteux). Monter en Légendaire coûte bien plus que passer en Supérieur.
@@ -153,7 +154,7 @@ export function heroWeights(heroes, size = 4) {
   const mark = (res, k) => { if (res) for (const m of res.members) if (m.hero) w.set(m.hero.id, Math.max(w.get(m.hero.id), k)); };
   mark(recommend(cands.slice(), size, REF_MOB, fx, {}, 1)[0], 1.6);
   for (const el of ['Fire', 'Water', 'Air', 'Earth', 'Light', 'Dark']) {
-    const champs = D.champions.filter((c) => c.element === el).map((c) => championCandidate(c, 4));
+    const champs = championCandidates(listChampions(), heroes, (c) => c.element === el);
     mark(recommend([...cands, ...champs], size, REF_MOB, fx, { barrier: el }, 1)[0], 1.3);
   }
   return w;

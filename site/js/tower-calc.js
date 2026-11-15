@@ -59,6 +59,35 @@ export function championCandidate(champ, tier = 4) {
     atk: champ.atk, def: champ.def, hp: champ.hp, eva: champ.eva, crit: champ.crit, critDmg: 2, entered: [], estimated: false, classElement: champ.element, gearElements: [] };
 }
 
+const median = (a) => { const b = a.filter((x) => Number.isFinite(x)).sort((x, y) => x - y); return b.length ? b[Math.floor(b.length / 2)] : null; };
+
+/**
+ * Champion possédé : stats estimées à partir de sa puissance (lue sur sa carte) et du rapport
+ * stats / puissance de vos héros du même groupe (Fighter, Rogue, Spellcaster), puis nuancées par le
+ * profil du champion (plus d'ATK pour Lilu, plus de DEF pour Argon…). Estimation, signalée comme telle.
+ */
+export function ownedChampionCandidate(champ, owned, heroes, tier = 4) {
+  const c = championCandidate(champ, tier);
+  if (!owned || !owned.power) return c;
+  const withPw = heroes.filter((x) => x.stats && x.stats.power > 0 && x.stats.atk > 0);
+  const same = withPw.filter((x) => (D.classById.get(x.classId) || {}).group === champ.group);
+  const pool = same.length >= 2 ? same : withPw;
+  if (!pool.length) return c;
+  const r = (k) => median(pool.map((x) => (x.stats[k] || 0) / x.stats.power));
+  const grp = D.champions.filter((x) => x.group === champ.group);
+  const avg = (k) => grp.reduce((a, x) => a + x[k], 0) / grp.length || 1;
+  const tilt = (k) => Math.sqrt(champ[k] / avg(k) || 1);
+  return { ...c, owned: true, level: owned.level, power: owned.power,
+    atk: owned.power * r('atk') * tilt('atk'), def: owned.power * r('def') * tilt('def'), hp: owned.power * r('hp') * tilt('hp'), estimated: true };
+}
+
+/** Candidats champions : vos champions possédés s'ils sont renseignés, sinon tous (suggestion). */
+export function championCandidates(owned, heroes, filter = () => true) {
+  const byName = new Map((owned || []).map((o) => [o.name, o]));
+  const list = D.champions.filter(filter).filter((c) => !byName.size || byName.has(c.name));
+  return list.map((c) => (byName.size ? ownedChampionCandidate(c, byName.get(c.name), heroes) : championCandidate(c, 4)));
+}
+
 /** Évalue un groupe de candidats contre un monstre. */
 export function evaluateParty(members, mob, fx, opts = {}) {
   // Bonus de leader (champion)

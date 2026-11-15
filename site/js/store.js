@@ -14,7 +14,7 @@ let state = null;
 let ok = true;
 let lastError = '';
 
-const empty = () => ({ v: 1, heroes: [], teams: [], prefs: {} });
+const empty = () => ({ v: 1, heroes: [], teams: [], champions: [], prefs: {} });
 
 function load() {
   if (state) return state;
@@ -26,6 +26,7 @@ function load() {
       if (o && o.v === 1) {
         state.heroes = (Array.isArray(o.heroes) ? o.heroes : []).map(sanitizeHero).filter(Boolean);
         state.teams = (Array.isArray(o.teams) ? o.teams : []).map(sanitizeTeam).filter(Boolean);
+        state.champions = (Array.isArray(o.champions) ? o.champions : []).map(sanitizeChampion).filter(Boolean);
         state.prefs = o.prefs && typeof o.prefs === 'object' && !Array.isArray(o.prefs) ? o.prefs : {};
       }
     }
@@ -126,6 +127,16 @@ export function duplicateHero(id, suffix = ' (copie)') {
   return saveHero({ ...JSON.parse(JSON.stringify(src)), id: newId('h'), name: (src.name + suffix).slice(0, MAX_NAME) });
 }
 
+/** Champion possédé : nom connu, niveau 1-50, puissance (étoile sur la carte du jeu). */
+export function sanitizeChampion(o) {
+  if (!o || typeof o !== 'object' || !D.champions.some((c) => c.name === o.name)) return null;
+  const lvl = Math.round(Number(o.level)), pw = Math.round(Number(o.power));
+  return { name: o.name, level: lvl >= 1 && lvl <= 99 ? lvl : null, power: pw > 0 && pw < 1e9 ? pw : null, updatedAt: Number(o.updatedAt) || Date.now() };
+}
+export const listChampions = () => load().champions.slice();
+/** Remplace la liste des champions possédés. */
+export function saveChampions(list) { load().champions = list.map(sanitizeChampion).filter(Boolean); return save(); }
+
 export const listTeams = () => load().teams.slice().sort((a, b) => b.updatedAt - a.updatedAt);
 export const getTeam = (id) => load().teams.find((x) => x.id === id) || null;
 export function saveTeam(team) {
@@ -152,7 +163,7 @@ export function clearAll() {
 // ---------- Export / import ----------
 export function exportJSON() {
   const s = load();
-  const data = JSON.stringify({ app: 'shop-titans-builder', v: 1, exportedAt: new Date().toISOString(), heroes: s.heroes, teams: s.teams }, null, 2);
+  const data = JSON.stringify({ app: 'shop-titans-builder', v: 1, exportedAt: new Date().toISOString(), heroes: s.heroes, teams: s.teams, champions: s.champions }, null, 2);
   const url = URL.createObjectURL(new Blob([data], { type: 'application/json' }));
   const a = document.createElement('a');
   a.href = url; a.download = `shop-titans-builder-${new Date().toISOString().slice(0, 10)}.json`;
@@ -204,6 +215,14 @@ export async function importJSON(file) {
   if (!o || typeof o !== 'object' || o.app !== 'shop-titans-builder' || !Array.isArray(o.heroes || []) || !Array.isArray(o.teams || [])) throw new Error('shape');
   const heroes = (o.heroes || []).slice(0, 500).map(sanitizeHero).filter(Boolean);
   const teams = (o.teams || []).slice(0, 500).map(sanitizeTeam).filter(Boolean);
+  // Champions : ajoutés s'ils manquent, mis à jour si l'import est plus récent.
+  if (Array.isArray(o.champions)) {
+    const cur = load().champions;
+    for (const c of o.champions.slice(0, 50).map(sanitizeChampion).filter(Boolean)) {
+      const i = cur.findIndex((x) => x.name === c.name);
+      if (i < 0) cur.push(c); else if (c.updatedAt > cur[i].updatedAt) cur[i] = c;
+    }
+  }
   return mergeData(heroes, teams);
 }
 

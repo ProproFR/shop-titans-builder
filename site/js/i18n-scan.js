@@ -2,6 +2,11 @@
 import { addMessages } from './i18n.js';
 
 addMessages('fr', {
+  'nav.champions': 'Mes champions', 'tm.champOwned': '(votre champion · niv. {lvl} · puissance {pw})', 'tm.champsOwned': 'Champions : vos {n} champions enregistrés.', 'tm.champsNone': 'Champions : suggestions parmi tous les champions.', 'tm.champsGo': 'Indiquer mes champions',
+  'ch.title': 'Mes champions', 'ch.intro': 'Cochez les champions que vous possédez et indiquez leur niveau et leur puissance (l\'étoile sur leur carte dans le jeu). Les équipes proposées n\'utiliseront plus que ceux-là.',
+  'ch.preset': '{n} champions pré-remplis depuis le lien : vérifiez puis cliquez sur « Enregistrer ».', 'ch.level': 'Niveau', 'ch.power': 'Puissance', 'ch.save': 'Enregistrer mes champions',
+  'ch.saved': '{n} champions enregistrés.', 'ch.saveFail': 'Enregistrement impossible (stockage du navigateur indisponible).',
+  'ch.how': 'Les stats d\'un champion sont estimées d\'après sa puissance et celles de vos héros du même type (combattant, voleur, lanceur de sorts) : c\'est une approximation, suffisante pour comparer des groupes.',
   'nav.upgrades': 'Améliorations prioritaires',
   'up.title': 'Améliorations prioritaires', 'up.intro': 'Toutes les améliorations possibles de vos héros, de la plus rentable à la moins rentable : le site estime ce que chacune apporte, tient compte de l\'importance du héros dans vos équipes et de l\'effort demandé.',
   'up.firstHeroes': 'Héros à améliorer en premier', 'up.how': 'Priorité = gain estimé × importance du héros (×1,6 s\'il est dans le meilleur groupe général, ×1,3 dans un groupe d\'élément) ÷ effort. Une grosse avancée sur un héros clé passe donc avant une petite montée de qualité.',
@@ -59,6 +64,11 @@ addMessages('fr', {
 });
 
 addMessages('en', {
+  'nav.champions': 'My champions', 'tm.champOwned': '(your champion · lvl {lvl} · power {pw})', 'tm.champsOwned': 'Champions: your {n} saved champions.', 'tm.champsNone': 'Champions: suggestions among all champions.', 'tm.champsGo': 'Enter my champions',
+  'ch.title': 'My champions', 'ch.intro': 'Tick the champions you own and enter their level and power (the star on their card in the game). Suggested teams will then only use those.',
+  'ch.preset': '{n} champions pre-filled from the link: check them, then click "Save".', 'ch.level': 'Level', 'ch.power': 'Power', 'ch.save': 'Save my champions',
+  'ch.saved': '{n} champions saved.', 'ch.saveFail': 'Could not save (browser storage unavailable).',
+  'ch.how': 'A champion\'s stats are estimated from its power and from your heroes of the same type (fighter, rogue, spellcaster): an approximation, good enough to compare groups.',
   'nav.upgrades': 'Priority upgrades',
   'up.title': 'Priority upgrades', 'up.intro': 'Every possible upgrade for your heroes, from most to least worthwhile: the site estimates what each brings, weighs how important the hero is in your teams and the effort required.',
   'up.firstHeroes': 'Heroes to upgrade first', 'up.how': 'Priority = estimated gain × hero importance (×1.6 in the best general group, ×1.3 in an element group) ÷ effort. A big step on a key hero comes before a small quality bump.',

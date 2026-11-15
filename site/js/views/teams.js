@@ -3,7 +3,7 @@
 import { D, champIcon, classIcon, elemIcon } from '../data.js';
 import { t } from '../i18n.js';
 import { h, clear, icon, fmt, pct } from '../dom.js';
-import { combineModifiers, heroCandidate, championCandidate, recommend, explain } from '../tower-calc.js';
+import { combineModifiers, heroCandidate, championCandidates, recommend, explain } from '../tower-calc.js';
 import { gearRow } from './roster.js';
 import * as store from '../store.js';
 
@@ -18,7 +18,7 @@ const fmtV = (v) => (typeof v === 'number' ? fmt(v, Number.isInteger(v) ? 0 : 1)
 function memberLine(m, el) {
   if (m.kind === 'champion') {
     return h('li', { class: 'team-member' }, h('span', { class: 'with-ico' }, icon(champIcon(m.label), { size: 40, cls: 'portrait' }),
-      h('span', {}, h('strong', {}, m.label), ' ', h('span', { class: 'muted small' }, t('tm.champSuggested')))));
+      h('span', {}, h('strong', {}, m.label), ' ', h('span', { class: 'muted small' }, m.owned ? t('tm.champOwned', { lvl: m.level ?? '?', pw: fmt(m.power) }) : t('tm.champSuggested')))));
   }
   const hero = m.hero;
   const elOk = el && (m.classElement === el || (m.gearElements || []).includes(el));
@@ -55,7 +55,9 @@ export function render(root, ctx) {
     root.append(h('p', {}, t('tm.noHeroes')), h('p', { class: 'actions' }, h('a', { class: 'button', href: '#/scan' }, t('tm.goImport'))));
     return;
   }
-  root.append(sizeBtns, h('p', { class: 'small muted' }, t('tm.basedOn', { n: heroes.length })), body);
+  const owned = store.listChampions();
+  root.append(sizeBtns, h('p', { class: 'small muted' }, t('tm.basedOn', { n: heroes.length }), ' ',
+    owned.length ? t('tm.champsOwned', { n: owned.length }) : h('span', {}, t('tm.champsNone'), ' ', h('a', { href: '#/champions' }, t('tm.champsGo')))), body);
 
   const heroCands = heroes.map(heroCandidate);
   const draw = () => {
@@ -64,7 +66,7 @@ export function render(root, ctx) {
     body.append(teamCard(t('tm.general'), null, general, size, null));
     const grid = h('div', { class: 'elem-grid' });
     for (const el of ELEMS) {
-      const champs = D.champions.filter((c) => c.element === el).map((c) => championCandidate(c, 4));
+      const champs = championCandidates(store.listChampions(), heroes, (c) => c.element === el);
       const res = recommend([...heroCands, ...champs], size, REF_MOB, combineModifiers([]), { barrier: el }, 1)[0];
       grid.append(teamCard(t('tm.elemTitle', { el: elName(el) }), elemIcon(el), res, size, el));
     }
