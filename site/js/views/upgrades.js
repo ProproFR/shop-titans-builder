@@ -27,6 +27,19 @@ export function describe(u) {
   }
 }
 
+/** Carte « À faire maintenant » : la meilleure amélioration, choisie par le site. */
+export function nextActionCard(heroes, all = null) {
+  const list = (all || rankUpgrades(heroes)).filter((u) => u.kind !== 'evaCap');
+  if (!list.length) return null;
+  const u = list[0];
+  return h('section', { class: 'card next-action', 'aria-label': t('na.title') },
+    h('div', { class: 'next-kicker' }, t('na.title')),
+    h('div', { class: 'with-ico' }, icon(classIcon(u.cls.name), { size: 48, cls: 'portrait' }),
+      h('div', {}, h('strong', { class: 'next-hero' }, u.hero.name), h('p', { class: 'next-what' }, describe(u)),
+        h('p', { class: 'small' }, t('na.why', { gain: pctTxt(u.gain) }), u.weight > 1 ? ` ${t('na.key')}` : ''))),
+    h('div', { class: 'actions' }, h('a', { class: 'button', href: `#/roster?edit=${u.hero.id}` }, t('na.do')), h('a', { class: 'btn-small', href: '#/upgrades' }, t('na.more'))));
+}
+
 const dots = (n) => h('span', { class: 'effort', 'aria-label': t('up.effortAria', { n }) }, '●'.repeat(n) + '○'.repeat(Math.max(0, 5 - n)));
 
 function row(u, rank, maxP) {
@@ -64,7 +77,7 @@ export function render(root, ctx) {
   for (const u of all) { if (u.kind === 'evaCap') continue; const l = byHero.get(u.hero.id) || []; if (l.length < 3) l.push(u); byHero.set(u.hero.id, l); }
   const topHeroes = [...byHero.entries()].map(([id, l]) => ({ hero: l[0].hero, cls: l[0].cls, score: l.reduce((a, u) => a + u.priority, 0), best: l[0] }))
     .sort((a, b) => b.score - a.score).slice(0, 5);
-  root.append(h('section', { class: 'card' }, h('h2', {}, t('up.firstHeroes')),
+  root.append(nextActionCard(heroes, all) || '', h('section', { class: 'card' }, h('h2', {}, t('up.firstHeroes')),
     h('ol', { class: 'first-heroes' }, topHeroes.map((x) => h('li', { class: 'with-ico' }, icon(classIcon(x.cls.name), { size: 32, cls: 'portrait' }),
       h('span', {}, h('strong', {}, x.hero.name), ' — ', describe(x.best), ' ', h('span', { class: 'muted' }, `(${pctTxt(x.best.gain)})`))))),
     h('p', { class: 'small muted' }, t('up.how'))));

@@ -410,3 +410,34 @@ input[type=search] { width: 100%; min-height: 42px; padding: 6px 10px; font: inh
 .plan-ico { display: inline-flex; width: 22px; justify-content: center; font-size: 1.1rem; }
 .plan-useif { margin: 4px 0 8px; }
 .stc-notes { margin-top: 8px; }
+
+/* Cases / liste (héros et champions) */
+.list-tools { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: flex-end; margin: 8px 0; }
+.list-tools .field { flex: 0 1 180px; margin: 0; }
+.unit-grid { list-style: none; padding: 0; margin: 8px 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 290px), 1fr)); gap: 10px; }
+.unit-card { margin: 0; padding: 10px; display: flex; flex-direction: column; gap: 6px; }
+.unit-head { display: flex; gap: 8px; align-items: center; }
+.unit-head h3 { margin: 0; font-size: 1.1rem; } .unit-head p { margin: 0; }
+.unit-power { font-weight: 800; white-space: nowrap; color: var(--gold-dark, #a66a00); }
+.unit-extra { display: flex; flex-direction: column; gap: 4px; }
+.skill-icons { display: flex; gap: 4px; flex-wrap: wrap; }
+.unit-card .actions { margin-top: auto; }
+.unit-list { list-style: none; padding: 0; margin: 8px 0; display: grid; gap: 4px; }
+.unit-row { display: grid; grid-template-columns: 36px minmax(110px, 1.2fr) 90px minmax(0, 2.4fr) auto; gap: 8px; align-items: center; padding: 6px 8px; background: var(--surface); border: 2px solid var(--border); border-radius: 10px; }
+.unit-row .unit-actions { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+@media (max-width: 700px) {
+  .unit-row { grid-template-columns: 36px minmax(0, 1fr) auto; }
+  .unit-row .stat-line { grid-column: 1 / -1; }
+  .unit-row .unit-actions { grid-column: 1 / -1; justify-content: flex-start; }
+}
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip-add { display: inline-flex; align-items: center; gap: 6px; min-height: 40px; padding: 2px 12px 2px 4px; border: 2px dashed var(--border-strong); border-radius: 999px; background: var(--surface); font: inherit; font-weight: 700; color: var(--text); cursor: pointer; }
+/* À faire maintenant */
+.next-action { border: 3px solid var(--gold-dark, #c48a1e); background: var(--accent-bg, #fff3cf); }
+.next-kicker { font-family: var(--font-title); text-transform: uppercase; letter-spacing: .05em; font-size: .85rem; }
+.next-hero { font-size: 1.15rem; } .next-what { margin: 2px 0; font-weight: 700; }
+/* Onglets sur téléphone : grille 2 × 2 compacte */
+@media (max-width: 800px) {
+  nav ul { display: grid !important; grid-template-columns: 1fr 1fr; gap: 4px; }
+  nav a { display: flex; align-items: center; gap: 4px; line-height: 1.15; min-height: 40px; }
+}

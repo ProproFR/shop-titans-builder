@@ -10,7 +10,9 @@ import { analyze, rerankGear } from '../scan/analyze.js';
 import { normName } from '../scan/name.js';
 import { learn as learnSpirit } from '../scan/spirit.js';
 import { typeName, enchantLabel, spiritLabel, sortSpirits, itemLabel, qualityName } from '../i18n-names.js';
-import { heroCard, deleteButton } from './roster.js';
+import { deleteButton, gearRow } from './roster.js';
+import { viewToggle, heroUnit, unitList } from './cards.js';
+import { nextActionCard } from './upgrades.js';
 
 /** Héros déjà enregistré portant ce nom (comparaison sans accents ni symboles), ou null. */
 const sameName = (name) => { const n = normName(name); return n ? store.listHeroes().find((x) => normName(x.name) === n) || null : null; };
@@ -404,10 +406,24 @@ export function render(root) {
     heroesBox.append(h('h2', { id: 'my-heroes-h' }, `${t('sc.myHeroes')} (${heroes.length})`));
     if (!heroes.length) { heroesBox.append(h('p', { class: 'muted' }, t('sc.noHeroes'))); }
     else {
-      heroesBox.append(h('p', { class: 'actions' }, h('a', { class: 'button', href: '#/teams' }, t('sc.seeTeams'))),
-        h('div', { class: 'hero-grid' }, heroes.map((hero) => heroCard(hero, h('div', { class: 'actions' },
+      const listBox = h('div', {});
+      const sortSel = select({ label: t('vw.sort'), id: 'hero-sort', value: store.getPref('heroSort', 'power'), options: ['power', 'name', 'class', 'recent'].map((v) => ({ value: v, label: t(`vw.sort.${v}`) })),
+        onChange: (v) => { store.setPref('heroSort', v); drawList(); } });
+      const toggle = viewToggle(() => drawList());
+      const drawList = () => {
+        const by = store.getPref('heroSort', 'power');
+        const cn = (x) => D.classById.get(x.classId).name;
+        const sorted = [...heroes].sort((a, b) => (by === 'name' ? a.name.localeCompare(b.name) : by === 'class' ? cn(a).localeCompare(cn(b)) || a.name.localeCompare(b.name)
+          : by === 'recent' ? b.updatedAt - a.updatedAt : ((b.stats || {}).power || 0) - ((a.stats || {}).power || 0)));
+        const view = toggle.value();
+        listBox.replaceChildren(unitList(view, sorted.map((hero) => heroUnit(view, hero, [
           h('a', { class: 'btn-small', href: `#/roster?edit=${hero.id}` }, t('ro.edit')),
-          deleteButton(`${t('ro.delete')} ${hero.name}`, () => { store.deleteHero(hero.id); drawHeroes(); }))))));
+          deleteButton(`${t('ro.delete')} ${hero.name}`, () => { store.deleteHero(hero.id); drawHeroes(); })], gearRow))));
+      };
+      const tip = h('div', {});
+      heroesBox.append(tip, h('div', { class: 'list-tools' }, sortSel, toggle, h('a', { class: 'button', href: '#/teams' }, t('sc.seeTeams'))), listBox);
+      drawList();
+      setTimeout(() => { if (tip.isConnected) tip.replaceChildren(nextActionCard(heroes) || ''); }, 30); // calcul après l'affichage
     }
     const file = h('input', { type: 'file', id: 'imp-json', accept: 'application/json,.json', onchange: async () => {
       const f = file.files[0]; if (!f) return;

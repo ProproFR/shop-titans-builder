@@ -1,57 +1,66 @@
-// Vue « Mes champions » (#/champions) : champions possédés, avec niveau et puissance (lus sur leurs cartes
-// dans le jeu). Les équipes proposées n'utilisent alors que ces champions, avec des stats estimées
-// d'après leur puissance. Lien de pré-remplissage : #/champions?set=Lilu~50~53343,Yami~50~57667
-import { D, champIcon, elemIcon } from '../data.js';
+// Vue « Mes champions » (#/champions) : même présentation que « Mes héros » (cases ou liste).
+// Chaque champion possédé a sa carte (niveau, puissance, stats) ; « Modifier » ouvre les champs.
+// Lien de pré-remplissage : #/champions?set=Lilu~50~53343,Yami~50~57667
+import { D, champIcon } from '../data.js';
 import { t } from '../i18n.js';
 import { h, icon, numberField } from '../dom.js';
-import { elementName } from '../i18n-names.js';
+import { viewToggle, championUnit, unitList } from './cards.js';
 import * as store from '../store.js';
 
-/** Lit le paramètre « set » : liste « Nom~niveau~puissance » séparée par des virgules. */
 function parseSet(v) {
-  const out = new Map();
+  const out = [];
   for (const part of String(v || '').split(',')) {
     const [name, lvl, pw] = part.split('~').map((x) => decodeURIComponent(x || '').trim());
     const c = D.champions.find((x) => x.name.toLowerCase() === name.toLowerCase());
-    if (c) out.set(c.name, { name: c.name, level: Number(lvl) || null, power: Number(pw) || null });
+    if (c) out.push({ name: c.name, level: Number(lvl) || null, power: Number(pw) || null });
   }
   return out;
 }
 
 export function render(root, ctx) {
-  const saved = new Map(store.listChampions().map((c) => [c.name, c]));
-  const preset = ctx.params.has('set') ? parseSet(ctx.params.get('set')) : null;
-  // Brouillon : la pré-saisie du lien remplace l'affichage, rien n'est enregistré avant de cliquer.
-  const rows = D.champions.map((c) => {
-    const p = preset ? preset.get(c.name) : saved.get(c.name);
-    return { name: c.name, owned: !!p, level: p ? p.level : null, power: p ? p.power : null };
-  });
   const msg = h('p', { role: 'status', 'aria-live': 'polite' });
+  const body = h('div', {});
+  let editing = null;
+  root.append(h('h1', {}, t('ch.title')), h('p', { class: 'lead' }, t('ch.intro2')));
 
-  root.append(h('h1', {}, t('ch.title')), h('p', { class: 'lead' }, t('ch.intro')), h('p', { class: 'small' }, t('ch.tipScan'), ' ', h('a', { href: '#/scan' }, t('nav.scan'))));
-  if (preset) root.append(h('p', { class: 'note' }, t('ch.preset', { n: preset.size })));
+  // Lien de pré-remplissage : un bouton pour tout enregistrer d'un coup.
+  if (ctx.params.has('set')) {
+    const preset = parseSet(ctx.params.get('set'));
+    const box = h('div', { class: 'note' }, h('p', {}, t('ch.preset2', { n: preset.length, names: preset.map((x) => x.name).join(', ') })),
+      h('button', { type: 'button', class: 'button', onclick: () => { preset.forEach((c) => store.saveChampion({ ...(store.listChampions().find((x) => x.name === c.name) || {}), ...c })); history.replaceState(null, '', '#/champions'); box.remove(); draw(); } }, t('ch.presetSave')));
+    root.append(box);
+  }
+  const toggle = viewToggle(() => draw());
+  root.append(h('div', { class: 'list-tools' }, toggle, h('a', { class: 'button', href: '#/teams' }, t('sc.seeTeams'))), msg, body);
 
-  const list = h('div', { class: 'champ-list' });
-  rows.forEach((r) => {
-    const c = D.champions.find((x) => x.name === r.name);
-    const box = h('input', { type: 'checkbox', id: `own-${r.name}`, checked: r.owned, onchange: (e) => { r.owned = e.target.checked; } });
-    list.append(h('div', { class: 'card champ-row' },
-      h('div', { class: 'with-ico' }, icon(champIcon(c.name), { size: 48, cls: 'portrait' }),
-        h('div', {}, h('label', { for: `own-${r.name}`, class: 'check' }, box, ' ', h('strong', {}, c.name)),
-          h('div', { class: 'muted small with-ico' }, icon(elemIcon(c.element), { size: 18 }), `${elementName(c.element)} · ${c.group}`),
-          saved.get(r.name) && saved.get(r.name).atk ? h('div', { class: 'small' }, `HP ${saved.get(r.name).hp} · ATK ${saved.get(r.name).atk} · DEF ${saved.get(r.name).def} · EVA ${saved.get(r.name).eva ?? 0} %`, ' ', h('span', { class: 'tag tag-ok' }, t('ch.fromSheet'))) : null)),
-      h('div', { class: 'row' },
-        numberField({ label: t('ch.level'), id: `lvl-${r.name}`, value: r.level, min: 1, max: 99, step: 1, onChange: (v) => { r.level = v; if (v) { r.owned = true; box.checked = true; } } }),
-        numberField({ label: t('ch.power'), id: `pw-${r.name}`, value: r.power, min: 0, step: 1, onChange: (v) => { r.power = v; if (v) { r.owned = true; box.checked = true; } } }))));
-  });
+  function editor(champ, cur) {
+    const c = { name: champ.name, level: null, power: null, ...(cur || {}) };
+    const f = (k, lbl, max) => numberField({ label: lbl, id: `ch-${champ.name}-${k}`, value: c[k], min: 0, max, step: 1, onChange: (v) => { if (v == null) delete c[k]; else c[k] = v; } });
+    return h('li', { class: 'card unit-card unit-edit' },
+      h('div', { class: 'unit-head' }, icon(champIcon(champ.name), { size: 52, cls: 'portrait' }), h('h3', {}, champ.name)),
+      h('div', { class: 'row' }, f('level', t('ch.level'), 99), f('power', t('ch.power')), f('hp', 'HP'), f('atk', 'ATK'), f('def', 'DEF'), f('eva', 'EVA %', 100)),
+      h('p', { class: 'small muted' }, t('ch.editHint')),
+      h('div', { class: 'actions' },
+        h('button', { type: 'button', class: 'button', onclick: () => { const ok = store.saveChampion(c); editing = null; msg.className = ok ? 'note' : 'error'; msg.textContent = ok ? t('sc.champSaved', { name: champ.name }) : t('ch.saveFail'); draw(); } }, t('ro.save')),
+        h('button', { type: 'button', class: 'btn-small', onclick: () => { editing = null; draw(); } }, t('ro.cancel'))));
+  }
 
-  const saveBtn = h('button', { type: 'button', class: 'button', onclick: () => {
-    // On garde les stats déjà lues sur les fiches (import de capture).
-    const okSave = store.saveChampions(rows.filter((r) => r.owned).map((r) => ({ ...(saved.get(r.name) || {}), name: r.name, level: r.level, power: r.power, updatedAt: Date.now() })));
-    msg.className = okSave ? 'note' : 'error';
-    msg.replaceChildren(okSave ? t('ch.saved', { n: rows.filter((r) => r.owned).length }) : t('ch.saveFail'), ' ', okSave ? h('a', { href: '#/teams' }, t('sc.toTeams')) : '');
-    if (preset) history.replaceState(null, '', '#/champions');
-  } }, t('ch.save'));
-
-  root.append(list, h('div', { class: 'actions' }, saveBtn), msg, h('p', { class: 'small muted' }, t('ch.how')));
+  function draw() {
+    const owned = new Map(store.listChampions().map((c) => [c.name, c]));
+    const view = toggle.value();
+    const mine = D.champions.filter((c) => owned.has(c.name)).sort((a, b) => (owned.get(b.name).power || 0) - (owned.get(a.name).power || 0));
+    const others = D.champions.filter((c) => !owned.has(c.name));
+    body.replaceChildren(h('h2', {}, `${t('ch.mine')} (${mine.length})`));
+    if (!mine.length) body.append(h('p', { class: 'muted' }, t('ch.none')));
+    else body.append(unitList(view, mine.map((c) => (editing === c.name ? editor(c, owned.get(c.name)) : championUnit(view, c, owned.get(c.name), [
+      h('button', { type: 'button', class: 'btn-small', onclick: () => { editing = c.name; draw(); } }, t('ro.edit')),
+      h('button', { type: 'button', class: 'btn-small', 'aria-label': `${t('ch.remove')} ${c.name}`, onclick: () => { store.saveChampions(store.listChampions().filter((x) => x.name !== c.name)); draw(); } }, t('ch.remove'))])))));
+    if (others.length) {
+      body.append(h('h2', {}, t('ch.others')), h('p', { class: 'small muted' }, t('ch.othersHint')),
+        editing && others.some((c) => c.name === editing) ? h('ul', { class: 'unit-grid' }, editor(others.find((c) => c.name === editing), null)) : null,
+        h('div', { class: 'chips' }, others.map((c) => h('button', { type: 'button', class: 'chip-add', onclick: () => { editing = c.name; draw(); } }, icon(champIcon(c.name), { size: 28, cls: 'portrait' }), `+ ${c.name}`))));
+    }
+    body.append(h('p', { class: 'small' }, t('ch.tipScan'), ' ', h('a', { href: '#/scan' }, t('nav.scan'))));
+  }
+  draw();
 }
