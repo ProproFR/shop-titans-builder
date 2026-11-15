@@ -1,5 +1,5 @@
 // Vue « Importer une capture » (#/scan) : lecture automatique de la fiche d'un héros, validation, enregistrement.
-import { D, itemIcon, skillIcon, classIcon, findFamily } from '../data.js';
+import { D, itemIcon, skillIcon, classIcon, findFamily, applyBuiltIns } from '../data.js';
 import { t } from '../i18n.js';
 import { h, clear, icon, combo, select, numberField, gearTile } from '../dom.js';
 import { classMatches, QUALITY } from '../calc.js';
@@ -135,7 +135,7 @@ function fillGear(d, res, cls) {
     const g = res.gear[i] || {};
     const allowed = cls ? new Set(slotTypes(cls, i)) : null;
     const first = (g.list || []).find((x) => !allowed || allowed.has(x.type));
-    return { item: first ? first.key : '', quality: g.quality || 'Normal', element: g.enchant || '', spirit: g.spirit || '' };
+    return applyBuiltIns({ item: first ? first.key : '', quality: g.quality || 'Normal', element: g.enchant || '', spirit: g.spirit || '' });
   });
 }
 
@@ -259,10 +259,10 @@ function renderCard(card, img, res, fileName, onSaved) {
             it ? gearTile(it, { tier: it.tier, quality: g.quality, size: 48 }) : h('span', { class: 'gear-empty' }, '?'),
             h('div', {}, h('strong', {}, it ? it.name : t('sc.unknown')), ' ', confTag(e.conf), h('div', { class: 'muted small' }, `${t('sc.slot', { n: i + 1 })} · ${types.map(typeName).join(' / ')}${it ? ` · ${itemLabel(it)}` : ''}`))),
           alts.length > 1 ? h('div', { class: 'q-group', role: 'group', 'aria-label': t('sc.alts') }, alts.map((x) => choice(x.key, itemIcon(D.itemByName.get(x.key)), g.item === x.key,
-            () => { g.item = x.key; draw(); }))) : null,
+            () => { g.item = x.key; applyBuiltIns(g); draw(); }))) : null,
           h('div', { class: 'row' },
             combo({ label: t('sc.alts'), id: `${d.id}-it${i}`, options: allItems.map((x) => ({ value: x.name, label: itemLabel(x) })), value: '', placeholder: '…',
-              onPick: (n) => { if (D.itemByName.has(n)) { g.item = n; draw(); } } }),
+              onPick: (n) => { if (D.itemByName.has(n)) { g.item = n; applyBuiltIns(g); draw(); } } }),
             select({ label: t('sc.quality'), id: `${d.id}-q${i}`, value: g.quality, options: Object.keys(QUALITY).map((q) => ({ value: q, label: qualityName(q) })), onChange: (v) => { g.quality = v; draw(); } }),
             select({ label: t('sc.element'), id: `${d.id}-e${i}`, value: g.element, options: [{ value: '', label: t('sc.none') }, ...ELEMENT_ENCHANTS().map((x) => ({ value: x.name, label: enchantLabel(x) }))], onChange: (v) => { g.element = v; } }),
             select({ label: t('sc.spirit'), id: `${d.id}-s${i}`, value: g.spirit, options: [{ value: '', label: t('sc.none') }, ...SPIRITS().map((x) => ({ value: x.name, label: spiritLabel(x.name) }))], onChange: (v) => { setSpirit(i, v); } }),

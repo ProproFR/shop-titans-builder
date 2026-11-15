@@ -37,7 +37,7 @@ const SPIRITS = {
   Mammoth: 'Mammouth', Dinosaur: 'Dinosaure', Tiger: 'Tigre', Quetzalcoatl: 'Quetzalcóatl', Phoenix: 'Phénix',
   Hydra: 'Hydre', Tarrasque: 'Tarasque', Carbuncle: 'Escarboucle', Chimera: 'Chimère', Kraken: 'Kraken',
   Christmas: 'Noël', Krampus: 'Krampus', Kirin: 'Kirin', Behemoth: 'Béhémoth', Ouroboros: 'Ouroboros',
-  Bahamut: 'Bahamut', Leviathan: 'Léviathan', Griffin: 'Griffon', Titan: 'Titan', Ancestor: 'Ancêtre',
+  Bahamut: 'Bahamut', Leviathan: 'Léviathan', Griffin: 'Griffon', Titan: 'Titan', Ancestor: 'Ancêtre', "Mundra's": 'Mundra',
 };
 
 /** Type d'objet dans la langue de l'interface (« Baguette »). */

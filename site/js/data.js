@@ -22,6 +22,11 @@ function buildIndex() {
   D.itemByName = new Map(D.items.map((i) => [i.name, i]));
   D.championByName = new Map(D.champions.map((c) => [c.name, c]));
   D.bisByClassId = new Map(D.bis.heroes.map((b) => [b.id, b]));
+  // Esprits intégrés à certains objets (ex. « Mundra's Spirit » des objets de Mundra) : absents de la
+  // liste des enchantements du sheet, on les ajoute pour pouvoir les choisir et les afficher.
+  for (const it of D.items) {
+    if (it.builtInSpirit && !D.enchantments.some((e) => e.name === it.builtInSpirit)) D.enchantments.push({ name: it.builtInSpirit, type: 'Spirit', builtIn: true });
+  }
   D.enchantByName = new Map(D.enchantments.map((e) => [e.name, e]));
   D.maxTierByLevel = new Map(D.heroLevels.map((l) => [l.level, l.maxTier]));
   D.maxLevel = Math.max(...D.heroLevels.map((l) => l.level));
@@ -62,3 +67,12 @@ export const statIcon = (key) => ic('stats', key);
 export const qualityIcon = (q) => ic('quality', UI_NAME[q] || String(q).toLowerCase());
 export const questIcon = (name) => ic('quests', name);
 export const uiIcon = (key) => ic('ui', key);
+
+/** Applique à une case d'équipement l'esprit / l'élément intégrés à l'objet (non modifiables en jeu). */
+export function applyBuiltIns(g) {
+  const it = g && D.itemByName.get(g.item);
+  if (!it) return g;
+  if (it.builtInSpirit) g.spirit = it.builtInSpirit;
+  if (it.builtInElement) g.element = it.builtInElement;
+  return g;
+}

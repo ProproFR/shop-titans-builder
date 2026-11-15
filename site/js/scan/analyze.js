@@ -2,10 +2,10 @@
 // Tout se passe dans le navigateur : l'image n'est envoyée nulle part.
 import { D, itemIcon, skillIcon, classIcon, elemIcon } from '../data.js';
 import { slotTypes } from '../hero.js';
-import { integral } from './image.js';
+import { integral, px, hsv } from './image.js';
 import { detectPanel, regions } from './layout.js';
 import { readNumber, readRoman } from './ocr.js';
-import { loadSignatures, rank, confidence, guessQuality } from './match.js';
+import { loadSignatures, rank, confidence, guessQuality, meanColor } from './match.js';
 import { readName } from './name.js';
 import { recognize as recognizeSpirit } from './spirit.js';
 
@@ -83,6 +83,37 @@ function heroElement(I, P, ref) {
   return list[0][1] <= 35 && list[1][1] - list[0][1] >= 25 ? list[0][0] : null;
 }
 
+/**
+ * Une pastille est-elle affichée à cet endroit ? (cadre clair/gris, ou pastille colorée comme Terre).
+ * Sans pastille on ne voit que le fond de la case.
+ */
+function badgePresent(img, b) {
+  let k = 0, light = 0, sat = 0;
+  for (let y = b.y; y < b.y + b.h; y++) for (let x = b.x; x < b.x + b.w; x++) {
+    const [, s, v] = hsv(...px(img, x, y)); k++;
+    if (v > 0.55 && s < 0.35) light++;
+    if (s > 0.45 && v > 0.5) sat++;
+  }
+  return light / k >= 0.08 || sat / k >= 0.3;
+}
+
+/**
+ * Élément d'une pastille d'après la couleur moyenne de son centre. Valeurs relevées sur de vraies
+ * captures : Ténèbres = violet-gris terne (teinte ≈ 300-315, sat ≈ 0,3, sombre), Air = cyan pâle
+ * (≈ 190, sat < 0,2, clair), Terre = vert vif (≈ 93). Feu / Eau / Lumière : estimés (pas encore vus).
+ */
+function elementByColor(I, b) {
+  const [r, g, bl] = meanColor(I, { x: b.x + b.w * 0.3, y: b.y + b.h * 0.3, w: b.w * 0.4, h: b.h * 0.4 });
+  const [hh, sat, v] = hsv(r, g, bl);
+  if (hh >= 280 && hh <= 335 && sat >= 0.15 && sat <= 0.42 && v >= 0.2 && v <= 0.55) return 'Dark';
+  if (hh >= 170 && hh <= 215 && sat < 0.3 && v > 0.55) return 'Air';
+  if (hh >= 70 && hh <= 145 && sat > 0.4) return 'Earth';
+  if ((hh < 25 || hh > 345) && sat > 0.45 && v > 0.45) return 'Fire';
+  if (hh > 205 && hh <= 255 && sat > 0.4) return 'Water';
+  if (hh >= 38 && hh < 70 && sat > 0.4 && v > 0.6) return 'Light';
+  return '';
+}
+
 /** Objets possibles pour l'emplacement i (types autorisés par la classe, sinon tous). */
 function slotCands(ref, cls, i, tier) {
   const types = cls ? new Set(slotTypes(cls, i)) : null;
@@ -148,11 +179,24 @@ export async function analyze(img, { onProgress } = {}) {
 
   const gear = R.tiles.map((t, i) => {
     const list = nums ? rankSlot(I, ref, t, cls, i, tiers[i]) : [];
-    const el = nums ? rank(I, t.element, ref.elements, { scales: [0.7, 0.85, 1], shift: 0.1 }) : [];
-    // Pastille reconnue si nettement plus proche d'un élément que des autres (sinon : vide, ou à choisir).
+    const base = { box: t.tile, tier: tiers[i], list, conf: confidence(list), quality: nums ? guessQuality(img, t.tile) : 'Normal', element: '', elemList: [], spirit: '', spiritScore: 0, spiritSig: null };
+    if (!nums) return base;
+    // Pastilles : en haut l'élément, en dessous l'esprit. Sans élément, l'esprit remonte en haut ;
+    // sans rien, aucune pastille (ex. Amran : cases 2 et 3 vides, case 5 = esprit de Mundra seul).
+    const top = badgePresent(img, t.element), low = badgePresent(img, t.spirit);
+    if (!top) return { ...base, noBadge: true };
+    let spiritBox = low ? t.spirit : null, elemBox = t.element;
+    const byColor = elementByColor(I, t.element);
+    // Pastille du haut sans couleur d'élément : c'est l'esprit remonté en haut (objet sans élément),
+    // ex. esprit de Mundra intégré à Mundra's Decree.
+    const item = list[0] && D.itemByName.get(list[0].key);
+    if (!byColor && (!low || (item && item.builtInSpirit) || recognizeSpirit(I, t.element).name)) { spiritBox = t.element; elemBox = null; }
+    const el = elemBox ? rank(I, elemBox, ref.elements, { scales: [0.7, 0.85, 1], shift: 0.1 }) : [];
+    // Couleur d'abord ; à défaut, ressemblance avec les icônes si nettement meilleure que les autres.
     const hasEl = el.length > 1 && el[1].d - el[0].d >= 15;
-    const sp = nums ? recognizeSpirit(I, t.spirit) : null;
-    return { box: t.tile, tier: tiers[i], list, conf: confidence(list), quality: nums ? guessQuality(img, t.tile) : 'Normal', element: hasEl ? el[0].key : '', elemList: el.slice(0, 3),
+    const elKey = elemBox ? (byColor || (hasEl ? el[0].key : '')) : '';
+    const sp = spiritBox ? recognizeSpirit(I, spiritBox) : null;
+    return { ...base, hasElemBadge: !!elemBox, element: elKey, elemList: el.slice(0, 3),
       spirit: sp ? sp.name : '', spiritScore: sp ? sp.score : 0, spiritSig: sp ? sp.sig : null };
   });
   // Les 6 pastilles portent souvent le même élément : si la majorité est sûre, on l'applique aux cases
@@ -164,9 +208,20 @@ export async function analyze(img, { onProgress } = {}) {
   // Pastilles non reconnues à la couleur (Ténèbres, Air en losange…) : si l'élément du héros est sûr
   // et qu'il a des points d'élément, on l'attribue aux cases restées vides.
   const heroEl = nums ? heroElement(I, panel, ref) : null;
-  if (heroEl && elemTotal > 0) gear.forEach((g) => { if (!g.element) { g.element = heroEl; g.fromHero = true; } });
-  const nEl = gear.filter((g) => g.element).length;
-  for (const g of gear) g.enchant = g.element ? enchantFor(g.element, elemTotal && nEl ? elemTotal / nEl : 0) : '';
+  if (heroEl && elemTotal > 0) gear.forEach((g) => { if (!g.element && g.hasElemBadge) { g.element = heroEl; g.fromHero = true; } });
+  // Éléments intégrés à l'objet (pastille en losange, ex. Fleetfoot Travelers = Tornado) : connus d'avance.
+  for (const g of gear) {
+    const it = g.list[0] && D.itemByName.get(g.list[0].key);
+    const en = it && it.builtInElement && D.enchantByName.get(it.builtInElement);
+    if (en && g.hasElemBadge !== false) { g.element = en.element; g.enchant = en.name; g.builtIn = en.value; }
+  }
+  // Le total « Élément » ne compte que l'élément du héros : on retire les éléments intégrés connus,
+  // puis on répartit le reste sur les autres cases de cet élément.
+  const isHero = (g) => g.element && (!heroEl || g.element === heroEl);
+  const known = gear.filter((g) => isHero(g) && g.builtIn).reduce((a, g) => a + g.builtIn, 0);
+  const nEl = gear.filter((g) => isHero(g) && !g.builtIn).length;
+  const perItem = elemTotal && nEl ? Math.max(0, elemTotal - known) / nEl : 0;
+  for (const g of gear) if (!g.builtIn) g.enchant = g.element ? enchantFor(g.element, heroEl && g.element !== heroEl ? 0 : perItem) : '';
 
   const lv = readNumber(img, R.level);
   if (onProgress) onProgress(null, null, 'name');

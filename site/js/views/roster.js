@@ -1,5 +1,6 @@
 // Vue « Mes héros » : héros et équipes sauvegardés (localStorage), éditeur, export/import, partage par lien.
 import { typeName, enchantLabel, spiritLabel, sortSpirits, itemLabel } from '../i18n-names.js';
+import { applyBuiltIns } from '../data.js';
 import { D, classIcon, champIcon, qualityIcon, skillIcon, uiIcon, findFamily } from '../data.js';
 import { t, getLang } from '../i18n.js';
 import { h, clear, combo, select, numberField, icon, fmt, pct, gearTile, statLabel } from '../dom.js';
@@ -282,7 +283,7 @@ function renderEditor(root, ctx) {
       const qBtns = QUALITIES.map((q) => h('button', { type: 'button', class: 'q-btn compact', 'data-q': q.toLowerCase(), 'aria-pressed': String(g.quality === q), title: q, 'aria-label': `${t('opt.quality')} ${q}`,
         onclick: () => { g.quality = q; qBtns.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.q === q.toLowerCase()))); drawTile(); } }, icon(qualityIcon(q), { size: 26 })));
       const itemField = combo({ label: `${t('builds.slot')} ${i + 1} — ${types.map(typeName).join(' / ')}`, options: opts, value: g.item, placeholder: t('ro.itemPh'), id: `gear-${i}`,
-        onPick: (n) => { g.item = n; drawTile(); } });
+        onPick: (n) => { g.item = n; const it = D.itemByName.get(n); applyBuiltIns(g); drawTile(); if (it && (it.builtInSpirit || it.builtInElement)) draw(); } });
       itemField.input.addEventListener('input', () => { if (itemField.input.value.trim() === '') { g.item = ''; drawTile(); } });
       gearBox.append(h('div', { class: 'gear-edit' }, tileHolder,
         h('div', { class: 'grow' }, itemField,
@@ -351,7 +352,7 @@ function applyVariant(H, v) {
     const s = v.slots[i];
     if (!s) return g;
     const it = D.itemByName.get(s.name);
-    if (it && slotTypes(cls, i).includes(it.type)) g.item = it.name;
+    if (it && slotTypes(cls, i).includes(it.type)) { g.item = it.name; applyBuiltIns(g); }
     for (const e of s.enchants || []) {
       const en = D.enchantByName.get(e);
       if (en && en.type === 'Element') g.element = en.name;
