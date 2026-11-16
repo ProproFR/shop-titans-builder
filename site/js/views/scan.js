@@ -197,6 +197,46 @@ function renderChampionCard(card, img, res, champ, fileName) {
       } }, old ? t('sc.update', { name: champ.name }) : t('sc.champSave'))), msg)));
 }
 
+/** Lien de transfert : toutes les données dans l'adresse (partie « # », jamais envoyée au serveur). */
+function linkBox() {
+  const out = h('div', { 'aria-live': 'polite' });
+  const make = async () => {
+    out.replaceChildren(h('p', { class: 'small muted' }, '…'));
+    try {
+      const url = `${location.origin}${location.pathname}#/scan?sync=${await store.exportCode()}`;
+      const input = h('input', { type: 'text', readonly: true, value: url, 'aria-label': t('sy.link'), onfocus: (e) => e.target.select() });
+      const copied = h('span', { class: 'small', role: 'status' });
+      out.replaceChildren(h('div', { class: 'field' }, input),
+        h('div', { class: 'actions' },
+          navigator.share ? h('button', { type: 'button', class: 'button', onclick: () => navigator.share({ title: 'Shop Titans Builder', url }).catch(() => {}) }, t('sy.share')) : null,
+          h('button', { type: 'button', class: 'button secondary', onclick: async () => { try { await navigator.clipboard.writeText(url); copied.textContent = t('sy.copied'); } catch { input.select(); copied.textContent = t('sy.copyManual'); } } }, t('sy.copy')),
+          copied),
+        h('p', { class: 'small muted' }, t('sy.linkHint', { kb: Math.ceil(url.length / 1024) })));
+    } catch { out.replaceChildren(h('p', { class: 'error' }, t('sy.fail'))); }
+  };
+  return h('div', {}, h('h3', {}, t('sy.linkTitle')), h('p', { class: 'small' }, t('sy.linkTxt')),
+    h('div', { class: 'actions' }, h('button', { type: 'button', class: 'button', onclick: make }, t('sy.make'))), out);
+}
+
+/** Ouverture d'un lien de transfert : aperçu puis import (fusion, les fiches les plus récentes gagnent). */
+function syncPrompt(code, onDone) {
+  const box = h('section', { class: 'card next-action', 'aria-live': 'polite' }, h('p', {}, t('sy.reading')));
+  store.readCode(code).then((o) => {
+    const nh = (o.heroes || []).length, nc = (o.champions || []).length;
+    const when = o.exportedAt ? new Date(o.exportedAt).toLocaleString('fr-FR') : '?';
+    box.replaceChildren(h('div', { class: 'next-kicker' }, t('sy.title')),
+      h('p', {}, t('sy.content', { h: nh, c: nc, when })),
+      h('p', { class: 'small' }, t('sy.how')),
+      h('div', { class: 'actions' },
+        h('button', { type: 'button', class: 'button', onclick: () => {
+          try { const r = store.importObject(o); history.replaceState(null, '', '#/scan'); box.replaceChildren(h('p', { class: 'note' }, t('sy.done', { n: r.heroes }))); onDone(); }
+          catch { box.replaceChildren(h('p', { class: 'error' }, t('sy.fail'))); }
+        } }, t('sy.import')),
+        h('button', { type: 'button', class: 'btn-small', onclick: () => { history.replaceState(null, '', '#/scan'); box.remove(); } }, t('ro.cancel'))));
+  }).catch(() => box.replaceChildren(h('p', { class: 'error' }, t('sy.bad'))));
+  return box;
+}
+
 function renderCard(card, img, res, fileName, onSaved) {
   const d = draftFrom(res);
   const msg = h('div', { role: 'status', 'aria-live': 'polite' });
@@ -367,7 +407,7 @@ function renderCard(card, img, res, fileName, onSaved) {
   draw();
 }
 
-export function render(root) {
+export function render(root, ctx) {
   const list = h('div', { class: 'scan-list' });
   const handle = async (file) => {
     if (!file || !/^image\//.test(file.type)) return;
@@ -438,12 +478,15 @@ export function render(root) {
     } });
     heroesBox.append(h('details', { class: 'card' }, h('summary', {}, t('sc.transfer')),
       h('p', { class: 'small' }, t('sc.transferTxt')),
+      linkBox(),
+      h('h3', {}, t('sy.fileTitle')),
       h('div', { class: 'actions' },
         h('button', { type: 'button', class: 'button secondary', onclick: () => store.exportJSON() }, t('ro.export')),
         h('div', { class: 'field' }, h('label', { for: 'imp-json' }, t('ro.import')), file)),
       backupMsg));
   }
 
+  if (ctx && ctx.params && ctx.params.get('sync')) root.append(syncPrompt(ctx.params.get('sync'), () => drawHeroes()));
   root.append(h('h1', {}, t('sc.title')), h('p', { class: 'lead' }, t('sc.intro')),
     h('p', { class: 'small' }, t('sc.private'), ' ', t('sc.tips')),
     h('p', { class: 'note' }, t('sc.estimate')),

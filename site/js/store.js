@@ -225,6 +225,42 @@ export async function importJSON(file) {
   if (!file || file.size > 5e6) throw new Error('file');
   let o;
   try { o = JSON.parse(await file.text()); } catch { throw new Error('json'); }
+  return importObject(o);
+}
+
+/** Données exportables (même contenu que le fichier JSON). */
+export function exportObject() {
+  const s = load();
+  return { app: 'shop-titans-builder', v: 1, exportedAt: new Date().toISOString(), heroes: s.heroes, teams: s.teams, champions: s.champions };
+}
+
+// --- Lien de transfert : les données compressées dans la partie « # » de l'adresse.
+// Cette partie n'est jamais envoyée au serveur : rien n'est stocké en ligne.
+const b64u = (bytes) => { let s = ''; for (let i = 0; i < bytes.length; i += 0x8000) s += String.fromCharCode(...bytes.subarray(i, i + 0x8000)); return btoa(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); };
+const unb64u = (str) => Uint8Array.from(atob(str.replace(/-/g, '+').replace(/_/g, '/')), (c) => c.charCodeAt(0));
+async function pipe(bytes, stream) { return new Uint8Array(await new Response(new Blob([bytes]).stream().pipeThrough(stream)).arrayBuffer()); }
+
+/** Code compact de toutes les données (compressé si le navigateur le permet). */
+export async function exportCode() {
+  const raw = new TextEncoder().encode(JSON.stringify(exportObject()));
+  if (typeof CompressionStream === 'function') return `z${b64u(await pipe(raw, new CompressionStream('deflate-raw')))}`;
+  return `j${b64u(raw)}`;
+}
+
+/** Lit un code de transfert (sans l'importer). */
+export async function readCode(code) {
+  const c = String(code || '').trim();
+  if (c.length < 2 || c.length > 4e6) throw new Error('code');
+  let bytes = unb64u(c.slice(1));
+  if (c[0] === 'z') bytes = await pipe(bytes, new DecompressionStream('deflate-raw'));
+  else if (c[0] !== 'j') throw new Error('code');
+  const o = JSON.parse(new TextDecoder().decode(bytes));
+  if (!o || o.app !== 'shop-titans-builder') throw new Error('shape');
+  return o;
+}
+
+/** Importe des données déjà lues (fichier JSON, lien de transfert…). */
+export function importObject(o) {
   if (!o || typeof o !== 'object' || o.app !== 'shop-titans-builder' || !Array.isArray(o.heroes || []) || !Array.isArray(o.teams || [])) throw new Error('shape');
   const heroes = (o.heroes || []).slice(0, 500).map(sanitizeHero).filter(Boolean);
   const teams = (o.teams || []).slice(0, 500).map(sanitizeTeam).filter(Boolean);
