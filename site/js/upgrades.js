@@ -191,3 +191,40 @@ export function rankUpgrades(heroes) {
   }
   return all.sort((a, b) => b.priority - a.priority || b.gain - a.gain);
 }
+
+// --- Graines : répartir le stock là où il rapporte le plus ---
+const SEED_GAIN = { atk: 4, def: 4, hp: 1 }; // Puissance +4 ATK, Résistance +4 DEF, Vitalité +1 PV (par graine)
+
+/**
+ * Plan de graines : distribue le stock (par paquets de 10) au héros pour qui le paquet augmente le plus la
+ * valeur de combat (× importance dans vos équipes), sans dépasser son maximum. Seuls les héros dont les
+ * graines consommées sont renseignées sont pris en compte.
+ * @returns {{alloc: Map<heroId, {hero, atk, def, hp, gain}>, unknown: hero[], left: {atk, def, hp}}}
+ */
+export function seedPlan(heroes, stock, weights = new Map()) {
+  const known = heroes.filter((x) => x.seeds && ['atk', 'def', 'hp'].some((k) => x.seeds[k] != null));
+  const unknown = heroes.filter((x) => !known.includes(x));
+  const st = new Map(known.map((x) => [x.id, { ...effectiveStats(x) }]));
+  const room = new Map(known.map((x) => [x.id, Object.fromEntries(['atk', 'def', 'hp'].map((k) => [k, Math.max(0, (x.seeds[`${k}Max`] || 80) - (x.seeds[k] || 0))]))]));
+  const alloc = new Map();
+  const left = { ...stock };
+  for (let guard = 0; guard < 400; guard++) {
+    let best = null;
+    for (const k of ['atk', 'def', 'hp']) {
+      if (left[k] <= 0) continue;
+      for (const x of known) {
+        const n = Math.min(10, left[k], room.get(x.id)[k]); if (n <= 0) continue;
+        const cls = heroClass(x); if (!cls) continue;
+        const role = defaultRole(cls);
+        const a = st.get(x.id); const b = { ...a, [k]: (a[k] || 0) + n * SEED_GAIN[k] };
+        const g = (combatValue(b, role) / combatValue(a, role) - 1) * (weights.get(x.id) || 1) / n;
+        if (!best || g > best.g) best = { x, k, n, g, b, raw: combatValue(b, role) / combatValue(a, role) - 1 };
+      }
+    }
+    if (!best) break;
+    st.set(best.x.id, best.b); room.get(best.x.id)[best.k] -= best.n; left[best.k] -= best.n;
+    const e = alloc.get(best.x.id) || { hero: best.x, atk: 0, def: 0, hp: 0, gain: 0 };
+    e[best.k] += best.n; e.gain = (1 + e.gain) * (1 + best.raw) - 1; alloc.set(best.x.id, e);
+  }
+  return { alloc, unknown, left };
+}

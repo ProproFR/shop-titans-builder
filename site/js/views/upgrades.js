@@ -2,8 +2,8 @@
 // classées par priorité (gain estimé × importance du héros ÷ effort).
 import { D, classIcon, itemIcon, skillGameName, skillLabel } from '../data.js';
 import { t } from '../i18n.js';
-import { h, clear, icon, fmt, select } from '../dom.js';
-import { rankUpgrades } from '../upgrades.js';
+import { h, clear, icon, fmt, select, numberField } from '../dom.js';
+import { rankUpgrades, seedPlan, heroWeights } from '../upgrades.js';
 import { qualityName, enchantLabel, spiritLabel } from '../i18n-names.js';
 import * as store from '../store.js';
 
@@ -62,14 +62,8 @@ function row(u, rank, maxP) {
     h('p', { class: 'small' }, h('a', { href: `#/roster?edit=${hero.id}` }, t('up.edit'))));
 }
 
-export function render(root, ctx) {
-  const heroes = store.listHeroes().filter((x) => D.classById.has(x.classId));
-  root.append(h('h1', {}, t('up.title')), h('p', { class: 'lead' }, t('up.intro')));
-  if (!heroes.length) {
-    root.append(h('p', {}, t('tm.noHeroes')), h('p', { class: 'actions' }, h('a', { class: 'button', href: '#/scan' }, t('tm.goImport'))));
-    return;
-  }
-  const all = rankUpgrades(heroes);
+/** Liste complète (version d'origine, gardée telle quelle comme « sauvegarde »). */
+function renderList(root, ctx, heroes, all) {
   const S = { hero: ctx.params.get('h') || '', kinds: new Set(KINDS), limit: 25 };
 
   // Héros à améliorer en premier : somme des 3 meilleures priorités de chacun.
@@ -99,4 +93,69 @@ export function render(root, ctx) {
     if (shown.length > S.limit) list.append(h('p', { class: 'actions' }, h('button', { type: 'button', class: 'btn-small', onclick: () => { S.limit += 25; draw(); } }, t('up.more', { n: shown.length - S.limit }))));
   }
   draw();
+}
+
+// ---------- Plan de la semaine : les améliorations regroupées par type d'action ----------
+const take = (all, kinds, n) => all.filter((u) => kinds.includes(u.kind)).slice(0, n);
+
+function planSection(title, hint, items, more) {
+  if (!items.length) return null;
+  return h('section', { class: 'card plan-sec' }, h('h2', {}, title), hint ? h('p', { class: 'small muted' }, hint) : null,
+    h('ol', { class: 'plan-list' }, items), more || null);
+}
+const planItem = (u) => h('li', {}, h('a', { href: `#/roster?edit=${u.hero.id}` }, h('strong', {}, u.hero.name)), ` — ${describe(u)} `,
+  h('span', { class: 'tag tag-ok' }, pctTxt(u.gain)), u.weight > 1 ? h('span', { class: 'muted small' }, ` · ${t(u.weight > 1.5 ? 'up.inGeneral' : 'up.inElem')}`) : null);
+
+function seedBlock(heroes) {
+  const stock = store.getSeedStock();
+  const box = h('section', { class: 'card plan-sec' }, h('h2', {}, t('sd.planTitle')));
+  const inputs = h('div', { class: 'row' }, ['atk', 'def', 'hp'].map((k) => numberField({ label: t(`sd.stock.${k}`), value: stock[k] || '', min: 0, step: 1,
+    onChange: (v) => { stock[k] = v || 0; store.setSeedStock(stock); drawPlan(); } })));
+  const out = h('div', { 'aria-live': 'polite' });
+  const drawPlan = () => {
+    clear(out);
+    if (!stock.atk && !stock.def && !stock.hp) { out.append(h('p', { class: 'small muted' }, t('sd.noStock'))); return; }
+    let w = new Map(); try { w = heroWeights(heroes); } catch { /* sans pondération */ }
+    const p = seedPlan(heroes, stock, w);
+    if (p.alloc.size) {
+      out.append(h('ol', { class: 'plan-list' }, [...p.alloc.values()].sort((a, b) => b.gain - a.gain).map((e) => h('li', {},
+        h('a', { href: `#/roster?edit=${e.hero.id}` }, h('strong', {}, e.hero.name)), ' — ',
+        ['atk', 'def', 'hp'].filter((k) => e[k]).map((k) => t(`sd.give.${k}`, { n: e[k] })).join(', '), ' ', h('span', { class: 'tag tag-ok' }, pctTxt(e.gain))))));
+      const rest = ['atk', 'def', 'hp'].filter((k) => p.left[k] > 0).map((k) => t(`sd.give.${k}`, { n: p.left[k] }));
+      if (rest.length) out.append(h('p', { class: 'small muted' }, t('sd.left', { list: rest.join(', ') })));
+    }
+    if (p.unknown.length) out.append(h('p', { class: 'small' }, t('sd.unknown', { n: p.unknown.length })));
+  };
+  box.append(h('p', { class: 'small muted' }, t('sd.planHint')), inputs, out);
+  drawPlan();
+  return box;
+}
+
+export function render(root, ctx) {
+  const heroes = store.listHeroes().filter((x) => D.classById.has(x.classId));
+  root.append(h('h1', {}, t('up.title')));
+  if (!heroes.length) {
+    root.append(h('p', {}, t('tm.noHeroes')), h('p', { class: 'actions' }, h('a', { class: 'button', href: '#/scan' }, t('tm.goImport'))));
+    return;
+  }
+  const all = rankUpgrades(heroes);
+  const mode = ctx.params.get('h') ? 'list' : (ctx.params.get('v') || store.getPref('upView', 'plan'));
+  root.append(h('div', { class: 'q-group', role: 'group', 'aria-label': t('pl.viewAria') }, ['plan', 'list'].map((m) => h('button', { type: 'button', class: 'q-btn', 'aria-pressed': String(mode === m),
+    onclick: () => { store.setPref('upView', m); location.hash = `#/upgrades?v=${m}`; } }, t(`pl.view.${m}`)))));
+  if (mode === 'list') { root.append(h('p', { class: 'lead' }, t('up.intro'))); renderList(root, ctx, heroes, all); return; }
+
+  root.append(h('p', { class: 'lead' }, t('pl.intro')), nextActionCard(heroes, all) || '');
+  // Enchantements regroupés par héros (éléments + esprits) : un passage dans l'éditeur règle tout.
+  const ench = new Map();
+  for (const u of all) if (u.kind === 'element' || u.kind === 'spirit') { const e = ench.get(u.hero.id) || { hero: u.hero, el: 0, sp: 0, gain: 0, weight: u.weight }; e[u.kind === 'element' ? 'el' : 'sp']++; e.gain += u.gain; ench.set(u.hero.id, e); }
+  const enchTop = [...ench.values()].sort((a, b) => b.gain * b.weight - a.gain * a.weight).slice(0, 5);
+  root.append(
+    planSection(t('pl.items'), t('pl.itemsHint'), take(all, ['item'], 5).map(planItem)),
+    planSection(t('pl.quality'), t('pl.qualityHint'), take(all, ['quality'], 4).map(planItem)),
+    planSection(t('pl.skills'), t('pl.skillsHint'), take(all, ['skillSwap', 'skill'], 4).map(planItem)),
+    planSection(t('pl.ench'), t('pl.enchHint'), enchTop.map((e) => h('li', {}, h('a', { href: `#/roster?edit=${e.hero.id}` }, h('strong', {}, e.hero.name)), ' — ',
+      [e.el ? t('pl.enchEl', { n: e.el }) : '', e.sp ? t('pl.enchSp', { n: e.sp }) : ''].filter(Boolean).join(', '), ' ', h('span', { class: 'tag tag-ok' }, pctTxt(e.gain))))),
+    seedBlock(heroes),
+    h('section', { class: 'card plan-sec' }, h('h2', {}, t('pl.champs')), h('p', {}, t('pl.champsTxt'), ' ', h('a', { href: '#/champions' }, t('nav.champions')))),
+    h('p', { class: 'note small' }, t('up.disclaimer')));
 }

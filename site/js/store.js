@@ -82,6 +82,15 @@ export function sanitizeHero(o) {
     }
     if (Object.keys(st).length) hero.stats = st;
   }
+  // Graines consommées (Puissance = ATK +4, Résistance = DEF +4, Vitalité = PV +1) et maximum par type (80, +5 par Fleur).
+  if (o.seeds && typeof o.seeds === 'object') {
+    const sd = {};
+    for (const k of ['atk', 'def', 'hp']) {
+      const v = numOrNull(o.seeds[k], 0, 500); if (v !== null) sd[k] = Math.round(v);
+      const m = numOrNull(o.seeds[`${k}Max`], 80, 500); if (m !== null) sd[`${k}Max`] = Math.round(m);
+    }
+    if (Object.keys(sd).length) hero.seeds = sd;
+  }
   return hero;
 }
 
@@ -141,6 +150,10 @@ export function sanitizeChampion(o) {
   }
   return out;
 }
+/** Stock de graines de l'inventaire (préférence locale). */
+export const getSeedStock = () => { const v = getPref('seedStock', null); return v && typeof v === 'object' ? { atk: +v.atk || 0, def: +v.def || 0, hp: +v.hp || 0 } : { atk: 0, def: 0, hp: 0 }; };
+export const setSeedStock = (v) => setPref('seedStock', { atk: Math.max(0, Math.round(+v.atk || 0)), def: Math.max(0, Math.round(+v.def || 0)), hp: Math.max(0, Math.round(+v.hp || 0)) });
+
 export const listChampions = () => load().champions.slice();
 /** Ajoute ou met à jour un champion possédé (par son nom). */
 export function saveChampion(c) {

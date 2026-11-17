@@ -365,6 +365,15 @@ function renderEditor(root, ctx) {
       h('div', { class: 'row' }, sf('hp', 'HP'), sf('atk', 'ATK'), sf('def', 'DEF'), sf('eva', 'EVA %'), sf('crit', 'CRIT %')), est));
     drawEst();
 
+    // Graines : combien ce héros en a déjà mangé (écran Graines du jeu). Sert au plan de la semaine.
+    H.seeds = H.seeds || {};
+    const seedF = (k, lbl) => numberField({ label: lbl, value: H.seeds[k] ?? '', min: 0, max: H.seeds[`${k}Max`] || 80, step: 1, onChange: (v) => { if (v === null) delete H.seeds[k]; else H.seeds[k] = v; } });
+    const maxF = (k, lbl) => numberField({ label: lbl, value: H.seeds[`${k}Max`] ?? 80, min: 80, max: 500, step: 5, onChange: (v) => { H.seeds[`${k}Max`] = v || 80; } });
+    form.append(h('details', { class: 'statbox seedbox', open: Object.keys(H.seeds).length > 0 }, h('summary', {}, t('sd.title')),
+      h('p', { class: 'muted small' }, t('sd.hint')),
+      h('div', { class: 'row' }, seedF('atk', t('sd.atk')), seedF('def', t('sd.def')), seedF('hp', t('sd.hp'))),
+      h('div', { class: 'row' }, maxF('atk', t('sd.atkMax')), maxF('def', t('sd.defMax')), maxF('hp', t('sd.hpMax')))));
+
     form.append(h('div', { class: 'field' }, h('label', { for: 'hero-notes' }, t('ro.notes')),
       h('textarea', { id: 'hero-notes', rows: 3, maxlength: 2000, oninput: (e) => { H.notes = e.target.value; } }, H.notes)));
 
