@@ -156,5 +156,5 @@ export function readRoman(img, b) {
 }
 
 // Exposé pour le script de génération des modèles (outil de développement).
-export const _dev = { components, glyphVector, mainLine };
+export const _dev = { components, glyphVector, mainLine, classify };
 export { px };

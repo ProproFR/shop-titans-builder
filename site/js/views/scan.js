@@ -9,6 +9,7 @@ import { loadImage } from '../scan/image.js';
 import { analyze, rerankGear } from '../scan/analyze.js';
 import { normName } from '../scan/name.js';
 import { learn as learnSpirit } from '../scan/spirit.js';
+import { readChampionSheet } from '../scan/champion.js';
 import { typeName, enchantLabel, spiritLabel, sortSpirits, itemLabel, qualityName } from '../i18n-names.js';
 import { deleteButton, gearRow } from './roster.js';
 import { viewToggle, heroUnit, unitList } from './cards.js';
@@ -184,12 +185,27 @@ function renderChampionCard(card, img, res, champ, fileName) {
   card.append(h('div', { class: 'scan-head' },
     h('h2', { class: 'with-ico-h' }, icon(champIcon(champ.name), { size: 40, cls: 'portrait' }), champ.name, ' ', h('span', { class: 'tag' }, t('sc.champion')), ' ', h('span', { class: 'muted small' }, fileName)),
     h('button', { type: 'button', class: 'btn-small danger', onclick: () => card.remove() }, t('sc.remove'))));
-  const fields = [['level', t('ch.level')], ['power', t('ch.power')], ['hp', 'HP'], ['atk', 'ATK'], ['def', 'DEF'], ['eva', 'EVA %'], ['elem', t('sc.elemPts')]];
+  const fields = [['level', t('ch.level')], ['rank', t('ch.rank')], ['power', t('ch.power')], ['hp', 'HP'], ['atk', 'ATK'], ['def', 'DEF'], ['eva', 'EVA %'], ['elem', t('sc.elemPts')], ['nextAtk', t('ch.nextAtk')], ['nextDef', t('ch.nextDef')]];
+  // Rang, gains du prochain Power Up et équipement : lus à part (zones propres à la fiche de champion).
+  const extra = h('div', {}, h('p', { class: 'small muted' }, t('ch.readingExtra')));
+  const gearSel = (k, type, found) => select({ label: t(`ch.${k}`), id: `ch-${champ.name}-${k}`, value: c[k] || '', options: [{ value: '', label: '—' },
+    ...D.items.filter((x) => x.type === type).sort((a, b) => b.tier - a.tier).map((x) => ({ value: x.name, label: `${found && found.list.includes(x.name) ? '★ ' : ''}${x.name} (T${x.tier})` }))], onChange: (v) => { c[k] = v || undefined; } });
+  readChampionSheet(img, res.panel).then((x) => {
+    if (x.rank) c.rank = x.rank;
+    if (x.gains.atk != null) c.nextAtk = x.gains.atk;
+    if (x.gains.def != null) c.nextDef = x.gains.def;
+    if (x.familiar) c.familiar = x.familiar.name;
+    if (x.aura) c.aura = x.aura.name;
+    for (const k of ['rank', 'nextAtk', 'nextDef']) { const el = document.getElementById(`ch-${champ.name}-${k}`); if (el && c[k] != null) el.value = c[k]; }
+    extra.replaceChildren(h('div', { class: 'row' }, gearSel('familiar', 'Familiar', x.familiar), gearSel('aura', 'Aurasong', x.aura)),
+      h('p', { class: 'small muted' }, t('ch.gearHint')));
+  }).catch(() => extra.replaceChildren(h('div', { class: 'row' }, gearSel('familiar', 'Familiar', null), gearSel('aura', 'Aurasong', null))));
   card.append(h('div', { class: 'scan-body' }, h('div', { class: 'scan-left' }, preview(img, res)),
     h('div', { class: 'scan-right' },
       h('p', { class: 'note' }, old ? t('sc.champUpdate', { name: champ.name }) : t('sc.champNew', { name: champ.name })),
       h('fieldset', {}, h('legend', {}, t('sc.stats')), h('div', { class: 'row' },
         fields.map(([k, lbl]) => numberField({ label: lbl, id: `ch-${champ.name}-${k}`, value: c[k], min: 0, step: 1, onChange: (v) => { c[k] = v; } })))),
+      h('fieldset', {}, h('legend', {}, t('ch.gear')), extra),
       h('div', { class: 'actions' }, h('button', { type: 'button', class: 'button', onclick: () => {
         const saved = store.saveChampion(c);
         msg.replaceChildren(h('p', { class: saved ? 'note' : 'error' }, saved ? t('sc.champSaved', { name: champ.name }) : t('ch.saveFail'), ' ',

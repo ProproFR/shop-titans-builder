@@ -171,7 +171,8 @@ export function heroWeights(heroes, size = 4) {
   if (!heroes.length) return w;
   const cands = heroes.map(heroCandidate);
   const fx = combineModifiers([]);
-  const mark = (res, k) => { if (res) for (const m of res.members) if (m.hero) w.set(m.hero.id, Math.max(w.get(m.hero.id), k)); };
+  w.champions = new Set();
+  const mark = (res, k) => { if (res) for (const m of res.members) { if (m.hero) w.set(m.hero.id, Math.max(w.get(m.hero.id), k)); else if (m.kind === 'champion') w.champions.add(m.name || m.label); } };
   mark(recommend(cands.slice(), size, REF_MOB, fx, {}, 1)[0], 1.6);
   for (const el of ['Fire', 'Water', 'Air', 'Earth', 'Light', 'Dark']) {
     const champs = championCandidates(listChampions(), heroes, (c) => c.element === el);

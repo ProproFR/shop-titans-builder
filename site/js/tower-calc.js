@@ -97,7 +97,9 @@ export function championCandidates(owned, heroes, filter = () => true) {
 export function elemShare(m, el) {
   if (m.kind === 'champion') return m.classElement === el ? 1.15 : 0.45;
   const n = (m.gearElements || []).filter((e) => e === el).length;
-  return 0.45 + 0.7 * Math.min(1, n / 6);
+  const share = 0.45 + 0.7 * Math.min(1, n / 6);
+  // Spellknight (Omniproficient) : ses éléments ne comptent qu'à 50 % contre les barrières.
+  return m.cls && m.cls.name === 'Spellknight' ? 0.45 + (share - 0.45) * 0.5 : share;
 }
 
 /** Évalue un groupe de candidats contre un monstre. */

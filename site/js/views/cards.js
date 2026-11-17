@@ -1,5 +1,5 @@
 // Cartes et lignes communes aux héros et aux champions : même présentation, au choix en cases ou en liste.
-import { D, classIcon, champIcon, elemIcon, skillIcon, findFamily, skillLabel } from '../data.js';
+import { D, classIcon, champIcon, elemIcon, skillIcon, itemIcon, findFamily, skillLabel } from '../data.js';
 import { t } from '../i18n.js';
 import { h, icon, fmt, pct, statLabel } from '../dom.js';
 import { heroClass, effectiveStats } from '../hero.js';
@@ -62,10 +62,14 @@ export function heroUnit(view, hero, actions, gearRow) {
 export function championUnit(view, champ, owned, actions) {
   const has = owned && owned.atk > 0;
   const st = has ? { hp: owned.hp, atk: owned.atk, def: owned.def, eva: (owned.eva || 0) / 100 } : null;
+  const gear = owned ? [owned.familiar, owned.aura].map((n) => n && D.itemByName.get(n)).filter(Boolean) : [];
+  const extra = owned && (gear.length || owned.nextAtk != null) ? h('div', { class: 'unit-extra small' },
+    gear.length ? h('div', { class: 'gear-row' }, gear.map((it) => h('span', { class: 'with-ico', title: `${it.name} (T${it.tier})` }, icon(itemIcon(it), { size: 30 }), `T${it.tier}`))) : null,
+    owned.nextAtk != null ? h('div', {}, t('ch.nextLine', { atk: fmt(owned.nextAtk), def: fmt(owned.nextDef ?? 0) })) : null) : null;
   return unit(view, {
     portrait: (sz) => icon(champIcon(champ.name), { size: sz, cls: 'portrait' }), name: champ.name,
-    sub: `${champ.group}${owned && owned.level ? ` · ${t('ro.level')} ${owned.level}` : ''}`, el: champ.element, power: owned && owned.power,
-    stats: st ? statsNode(st, false) : h('div', { class: 'small muted' }, t('ch.noStats')), actions });
+    sub: `${champ.group}${owned && owned.level ? ` · ${t('ro.level')} ${owned.level}` : ''}${owned && owned.rank ? ` · ${t('ch.rank')} ${owned.rank}` : ''}`, el: champ.element, power: owned && owned.power,
+    stats: st ? statsNode(st, false) : h('div', { class: 'small muted' }, t('ch.noStats')), extra, actions });
 }
 
 export const unitList = (view, items) => h('ul', { class: view === 'list' ? 'unit-list' : 'unit-grid' }, items);

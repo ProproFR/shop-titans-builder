@@ -133,8 +133,11 @@ export function sanitizeChampion(o) {
   const lvl = Math.round(Number(o.level)), pw = Math.round(Number(o.power));
   const out = { name: o.name, level: lvl >= 1 && lvl <= 99 ? lvl : null, power: pw > 0 && pw < 1e9 ? pw : null, updatedAt: Number(o.updatedAt) || Date.now() };
   // Stats lues sur la fiche du champion (import d'une capture), facultatives.
-  for (const [k, hi] of [['hp', 1e8], ['atk', 1e8], ['def', 1e8], ['eva', 100], ['elem', 1e5]]) {
+  for (const [k, hi] of [['hp', 1e8], ['atk', 1e8], ['def', 1e8], ['eva', 100], ['elem', 1e5], ['rank', 50], ['nextAtk', 1e5], ['nextDef', 1e5], ['nextHp', 1e5]]) {
     const v = Number(o[k]); if (o[k] != null && Number.isFinite(v) && v >= 0 && v <= hi) out[k] = v;
+  }
+  for (const [k, type] of [['familiar', 'Familiar'], ['aura', 'Aurasong']]) {
+    const it = o[k] && D.itemByName.get(o[k]); if (it && it.type === type) out[k] = it.name;
   }
   return out;
 }
