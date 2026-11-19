@@ -73,6 +73,8 @@ export function sanitizeHero(o) {
     const ge = { item: ok2 ? it.name : '', quality: QUALITY[e.quality] ? e.quality : 'Normal' };
     const en = D.enchantByName.get(e.element); if (en && en.type === 'Element') ge.element = en.name;
     const sp = D.enchantByName.get(e.spirit); if (sp && sp.type === 'Spirit') ge.spirit = sp.name;
+    // Date du dernier investissement sur cet emplacement (objet changé ou qualité montée), pour ne pas le reproposer aussitôt.
+    const since = numOrNull(e.since, 0, 8.64e15); if (since && ge.item) ge.since = since;
     hero.gear.push(ge);
   }
   if (o.stats && typeof o.stats === 'object') {
@@ -120,11 +122,24 @@ export function sanitizeTeam(o) {
 // ---------- CRUD ----------
 export const listHeroes = () => load().heroes.slice().sort((a, b) => b.updatedAt - a.updatedAt);
 export const getHero = (id) => load().heroes.find((x) => x.id === id) || null;
+const QUALITY_RANK = ['Normal', 'Superior', 'Flawless', 'Epic', 'Legendary'];
+/** Marque les emplacements où l'on vient d'investir : nouvel objet, ou même objet en meilleure qualité. */
+function stampChanges(clean, prev) {
+  const now = Date.now();
+  clean.gear.forEach((g, k) => {
+    if (!g.item) { delete g.since; return; }
+    const p = prev && prev.gear[k];
+    if (!prev) return; // nouveau héros : on ne sait pas quand ses objets ont été posés
+    if (!p || p.item !== g.item || QUALITY_RANK.indexOf(g.quality) > QUALITY_RANK.indexOf(p.quality)) g.since = now;
+    else if (p.since && !g.since) g.since = p.since;
+  });
+}
 export function saveHero(hero) {
   const clean = sanitizeHero({ ...hero, updatedAt: Date.now() });
   if (!clean) return null;
   const s = load();
   const i = s.heroes.findIndex((x) => x.id === clean.id);
+  stampChanges(clean, i >= 0 ? s.heroes[i] : null);
   if (i >= 0) s.heroes[i] = clean; else s.heroes.push(clean);
   save();
   return clean;
@@ -208,7 +223,7 @@ function keepMissing(x, old) {
   const gear = (x.gear || []).map((g, i) => {
     const o = (old.gear || [])[i];
     if (!g || !o || g.item !== o.item) return g;
-    return { ...g, spirit: g.spirit || o.spirit, element: g.element || o.element };
+    return { ...g, spirit: g.spirit || o.spirit, element: g.element || o.element, since: g.since || o.since };
   });
   const skills = (x.skills && x.skills.length) ? x.skills : old.skills;
   return { ...old, ...x, id: old.id, gear, skills, notes: x.notes || old.notes, stats: { ...(old.stats || {}), ...(x.stats || {}) } };

@@ -3,16 +3,16 @@
 import { D, champIcon, classIcon, elemIcon } from '../data.js';
 import { t } from '../i18n.js';
 import { h, clear, icon, fmt, pct } from '../dom.js';
-import { combineModifiers, heroCandidate, championCandidates, recommend, explain } from '../tower-calc.js';
+import { combineModifiers, heroCandidate, explain } from '../tower-calc.js';
+import { teamTarget, runTeam } from '../roster-plan.js';
 import * as store from '../store.js';
 import { rankUpgrades } from '../upgrades.js';
 import { describe as describeUp, pctTxt } from './upgrades.js';
 
 const ELEMS = ['Fire', 'Water', 'Air', 'Earth', 'Light', 'Dark'];
 const elName = (el) => t('tm.el.' + el);
-// Monstre de référence fictif (ordre de grandeur du Tombeau), le même que l'ancienne page Éléments : sert à comparer
-// des groupes entre eux, pas à prédire un combat précis.
-const REF_MOB = { hp: 80000, atk: 70, aoe: 40, caps: { c50: 3200, c70: 6400, c75: 19200 } };
+// Les groupes sont comparés face à un vrai boss de quête adapté à vos héros (roster-plan.js : teamTarget) :
+// ça sert à comparer des groupes entre eux, pas à prédire un combat précis.
 
 const fmtV = (v) => (typeof v === 'number' ? fmt(v, Number.isInteger(v) ? 0 : 1) : v);
 
@@ -76,15 +76,14 @@ export function render(root, ctx) {
         h('input', { type: 'checkbox', checked: busy.has(x.id), onchange: (e) => { if (e.target.checked) busy.add(x.id); else busy.delete(x.id); store.setPref('busyHeroes', [...busy]); questSel.querySelector('summary').textContent = t('tm.busyTitle', { n: busy.size }); draw(); } }), x.name)))));
   root.insertBefore(questSel, body);
 
+  const target = teamTarget(heroes, size);
+  if (target.name) root.insertBefore(h('p', { class: 'small muted' }, t('tm.target', { boss: target.name, diff: target.difficulty })), body);
   let ups = null; // classement des améliorations (calculé une fois)
   const draw = () => {
     clear(body);
     const avail = heroes.filter((x) => !busy.has(x.id));
     const cands = avail.map(heroCandidate).map((c) => (Q.extreme ? { ...c, eva: Math.max(0, (c.eva || 0) - 0.2) } : c));
-    const run = (el) => {
-      const champs = el ? championCandidates(store.listChampions(), heroes, (c) => c.element === el) : [];
-      return recommend([...cands, ...champs], size, REF_MOB, combineModifiers([]), el ? { barrier: el, elemFocus: true } : {}, 1)[0];
-    };
+    const run = (el) => runTeam(cands, heroes, size, el, target.mob);
     if (Q.el) { body.append(teamCard(t('tm.questFor', { el: elName(Q.el) }), elemIcon(Q.el), run(Q.el), size, Q.el)); return; }
     body.append(teamCard(t('tm.general'), null, run(''), size, null));
     // Groupes d'élément, puis repérage des 2 plus faibles (marge de survie la plus basse).
@@ -102,6 +101,7 @@ export function render(root, ctx) {
       grid.append(teamCard(t('tm.elemTitle', { el: elName(g.el) }), elemIcon(g.el), g.res, size, g.el, { weak: weak.has(g.el), fix }));
     }
     body.append(grid);
+    body.append(h('p', { class: 'actions' }, h('a', { class: 'button', href: '#/replace' + (size === 5 ? '?n=5' : '') }, t('rp.linkTeams'))));
   };
   draw();
 }

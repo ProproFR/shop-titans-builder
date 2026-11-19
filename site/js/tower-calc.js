@@ -167,7 +167,7 @@ export function recommend(candidates, size, mob, fx, opts = {}, top = 3) {
   const heroes = candidates.filter((c) => c.kind === 'hero');
   const champs = candidates.filter((c) => c.kind === 'champion');
   const k = (m) => (m.atk + m.def + m.hp / 10) * (opts.elemFocus && opts.barrier ? elemShare(m, opts.barrier) : 1);
-  const pool = heroes.sort((a, b) => k(b) - k(a)).slice(0, 18);
+  const pool = heroes.sort((a, b) => k(b) - k(a)).slice(0, opts.pool || 18);
   const n = Math.min(size, pool.length + (champs.length ? 1 : 0));
   if (n < 1) return [];
   const out = [];
@@ -180,8 +180,9 @@ export function recommend(candidates, size, mob, fx, opts = {}, top = 3) {
   if (champs.length && pool.length >= n - 1) {
     for (const ch of champs) for (const c of combos(pool, n - 1)) consider([...c, ch]);
   }
-  // Au-delà d'une marge de survie ×3, on départage par les dégâts.
-  const cap = (r) => Math.min(r.ev.ratio, 3);
+  // Au-delà d'une marge de survie suffisante (×3 par défaut, opts.safe sinon), on départage par les dégâts.
+  const safe = opts.safe || 3;
+  const cap = (r) => Math.min(r.ev.ratio, safe);
   out.sort((a, b) => cap(b) - cap(a) || b.ev.dps - a.ev.dps);
   return out.slice(0, top);
 }

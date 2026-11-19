@@ -4,6 +4,7 @@ import './i18n-extra.js';
 import './i18n-guide.js';
 import './i18n-legal.js';
 import './i18n-scan.js';
+import './i18n-replace.js';
 import { t, getLang, setLang, onLangChange } from './i18n.js';
 import { h, clear, icon, creditImages } from './dom.js';
 import * as builds from './views/builds.js';
@@ -21,12 +22,14 @@ import * as scan from './views/scan.js';
 import * as teams from './views/teams.js';
 import * as upgrades from './views/upgrades.js';
 import * as champions from './views/champions.js';
+import * as replace from './views/replace.js';
 
 // Menu simplifié : deux pages. Les autres outils restent accessibles par lien direct (#/builds, #/tower…)
 // mais n'apparaissent plus dans le menu.
 const ROUTES = {
   scan: { mod: scan, label: 'nav.scan', ico: 'quest' },
   teams: { mod: teams, label: 'nav.teams', ico: 'heroes' },
+  replace: { mod: replace, label: 'nav.replace', ico: 'tier' },
   upgrades: { mod: upgrades, label: 'nav.upgrades', ico: 'craft' },
   champions: { mod: champions, label: 'nav.champions', ico: 'champion' },
   roster: { mod: roster, label: 'nav.roster', ico: 'champion', hidden: true }, // éditeur d'un héros (#/roster?edit=…)
@@ -76,7 +79,7 @@ function renderNav() {
   const btn = h('button', { type: 'button', class: 'nav-toggle', 'aria-expanded': 'false', 'aria-controls': 'nav-list',
     onclick: () => { const open = !ul.classList.contains('open'); ul.classList.toggle('open', open); btn.setAttribute('aria-expanded', String(open)); } },
   icon(uiIcon(ROUTES[current].ico), { size: 24 }), h('span', {}, `${t('nav.menu')} · ${t(ROUTES[current].label)}`));
-  nav.append(ul); // 4 onglets : toujours visibles, y compris sur téléphone (plus de menu replié)
+  nav.append(ul); // 5 onglets : toujours visibles, y compris sur téléphone (plus de menu replié)
   void btn;
 }
 

@@ -3,7 +3,7 @@
 import { D, classIcon, itemIcon, skillGameName, skillLabel } from '../data.js';
 import { t } from '../i18n.js';
 import { h, clear, icon, fmt, select, numberField } from '../dom.js';
-import { rankUpgrades, seedPlan, heroWeights } from '../upgrades.js';
+import { rankUpgrades, seedPlan, planWeights } from '../upgrades.js';
 import { qualityName, enchantLabel, spiritLabel } from '../i18n-names.js';
 import * as store from '../store.js';
 
@@ -31,7 +31,8 @@ export function describe(u) {
 export function nextActionCard(heroes, all = null) {
   const list = (all || rankUpgrades(heroes)).filter((u) => u.kind !== 'evaCap');
   if (!list.length) return null;
-  const u = list[0];
+  // On investit d'abord dans un héros qui joue dans un groupe (les autres sont des candidats au remplacement).
+  const u = list.find((x) => x.weight >= 1 && x.recent == null) || list[0];
   return h('section', { class: 'card next-action', 'aria-label': t('na.title') },
     h('div', { class: 'next-kicker' }, t('na.title')),
     h('div', { class: 'with-ico' }, icon(classIcon(u.cls.name), { size: 48, cls: 'portrait' }),
@@ -51,7 +52,8 @@ function row(u, rank, maxP) {
       icon(classIcon(u.cls.name), { size: 36, cls: 'portrait' }),
       h('div', { class: 'grow' },
         h('strong', {}, hero.name), ' ', h('span', { class: 'tag' }, t(`up.k.${u.kind}`)),
-        u.weight > 1.5 ? h('span', { class: 'tag tag-ok' }, t('up.inGeneral')) : u.weight > 1 ? h('span', { class: 'tag tag-ok' }, t('up.inElem')) : null,
+        u.weight > 1.5 ? h('span', { class: 'tag tag-ok' }, t('up.inGeneral')) : u.weight > 1 ? h('span', { class: 'tag tag-ok' }, t('up.inElem')) : u.recent != null ? h('span', { class: 'tag tag-est' }, t('up.recentTag', { d: u.recent })) : null,
+        u.replace ? h('a', { class: 'tag tag-est', href: '#/replace' }, t('up.toReplace')) : u.weight < 1 ? h('a', { class: 'tag tag-est', href: '#/replace' }, t('up.idle')) : null,
         h('p', { class: 'upgrade-desc' }, describe(u))),
       it ? icon(itemIcon(it), { size: 44 }) : null),
     u.kind === 'evaCap' ? h('p', { class: 'small muted' }, t('up.evaCapHint')) :
@@ -68,7 +70,7 @@ function renderList(root, ctx, heroes, all) {
 
   // Héros à améliorer en premier : somme des 3 meilleures priorités de chacun.
   const byHero = new Map();
-  for (const u of all) { if (u.kind === 'evaCap') continue; const l = byHero.get(u.hero.id) || []; if (l.length < 3) l.push(u); byHero.set(u.hero.id, l); }
+  for (const u of all) { if (u.kind === 'evaCap' || u.replace) continue; const l = byHero.get(u.hero.id) || []; if (l.length < 3) l.push(u); byHero.set(u.hero.id, l); }
   const topHeroes = [...byHero.entries()].map(([id, l]) => ({ hero: l[0].hero, cls: l[0].cls, score: l.reduce((a, u) => a + u.priority, 0), best: l[0] }))
     .sort((a, b) => b.score - a.score).slice(0, 5);
   root.append(nextActionCard(heroes, all) || '', h('section', { class: 'card' }, h('h2', {}, t('up.firstHeroes')),
@@ -89,14 +91,21 @@ function renderList(root, ctx, heroes, all) {
     const shown = all.filter((u) => (!S.hero || u.hero.id === S.hero) && S.kinds.has(u.kind));
     if (!shown.length) { list.append(h('p', { class: 'muted' }, t('up.none'))); return; }
     const maxP = Math.max(...shown.map((u) => u.priority), 0.001);
-    list.append(h('ol', { class: 'upgrade-list' }, shown.slice(0, S.limit).map((u, i) => row(u, i + 1, maxP))));
+    // Les héros à remplacer arrivent en fin de liste, après un intertitre.
+    const items = [];
+    shown.slice(0, S.limit).forEach((u, i, arr) => {
+      if (u.replace && (i === 0 || !arr[i - 1].replace)) items.push(h('li', { class: 'upgrade-sep' }, h('h3', {}, t('up.replaceSep')), h('p', { class: 'small muted' }, t('up.replaceSepHint'), ' ', h('a', { href: '#/replace' }, t('nav.replace')))));
+      items.push(row(u, i + 1, maxP));
+    });
+    list.append(h('ol', { class: 'upgrade-list' }, items));
     if (shown.length > S.limit) list.append(h('p', { class: 'actions' }, h('button', { type: 'button', class: 'btn-small', onclick: () => { S.limit += 25; draw(); } }, t('up.more', { n: shown.length - S.limit }))));
   }
   draw();
 }
 
 // ---------- Plan de la semaine : les améliorations regroupées par type d'action ----------
-const take = (all, kinds, n) => all.filter((u) => kinds.includes(u.kind)).slice(0, n);
+// Le plan ne propose jamais d'investir dans un héros à remplacer, ni de changer un objet posé il y a moins de 30 jours.
+const take = (all, kinds, n) => all.filter((u) => kinds.includes(u.kind) && !u.replace && u.recent == null).slice(0, n);
 
 function planSection(title, hint, items, more) {
   if (!items.length) return null;
@@ -115,7 +124,7 @@ function seedBlock(heroes) {
   const drawPlan = () => {
     clear(out);
     if (!stock.atk && !stock.def && !stock.hp) { out.append(h('p', { class: 'small muted' }, t('sd.noStock'))); return; }
-    let w = new Map(); try { w = heroWeights(heroes); } catch { /* sans pondération */ }
+    let w = new Map(); try { w = planWeights(heroes); } catch { /* sans pondération */ }
     const p = seedPlan(heroes, stock, w);
     if (p.alloc.size) {
       out.append(h('ol', { class: 'plan-list' }, [...p.alloc.values()].sort((a, b) => b.gain - a.gain).map((e) => h('li', {},
@@ -147,7 +156,7 @@ export function render(root, ctx) {
   root.append(h('p', { class: 'lead' }, t('pl.intro')), nextActionCard(heroes, all) || '');
   // Enchantements regroupés par héros (éléments + esprits) : un passage dans l'éditeur règle tout.
   const ench = new Map();
-  for (const u of all) if (u.kind === 'element' || u.kind === 'spirit') { const e = ench.get(u.hero.id) || { hero: u.hero, el: 0, sp: 0, gain: 0, weight: u.weight }; e[u.kind === 'element' ? 'el' : 'sp']++; e.gain += u.gain; ench.set(u.hero.id, e); }
+  for (const u of all) if ((u.kind === 'element' || u.kind === 'spirit') && !u.replace) { const e = ench.get(u.hero.id) || { hero: u.hero, el: 0, sp: 0, gain: 0, weight: u.weight }; e[u.kind === 'element' ? 'el' : 'sp']++; e.gain += u.gain; ench.set(u.hero.id, e); }
   const enchTop = [...ench.values()].sort((a, b) => b.gain * b.weight - a.gain * a.weight).slice(0, 5);
   root.append(
     planSection(t('pl.items'), t('pl.itemsHint'), take(all, ['item'], 5).map(planItem)),

@@ -450,3 +450,29 @@ input[type=search] { width: 100%; min-height: 42px; padding: 6px 10px; font: inh
 
 .plan-sec h2 { font-size: 1.15rem; margin: 0 0 4px; }
 .plan-list { padding-left: 22px; display: grid; gap: 6px; margin: 6px 0; }
+
+/* Page « Héros à remplacer » */
+.swap-list { list-style: none; padding: 0; margin: 8px 0; display: grid; gap: 10px; }
+.swap { background: var(--surface); border: 2px solid var(--border); border-radius: 10px; padding: 8px 10px; }
+.swap-kicker { display: flex; align-items: center; gap: 6px; font-family: var(--font-title); margin-bottom: 4px; }
+.swap-head { display: grid; grid-template-columns: auto auto minmax(0, 1fr); align-items: center; gap: 8px; }
+.swap-arrow { font-size: 1.6rem; font-weight: 700; color: var(--gold-dark, #c48a1e); text-align: center; }
+@media (max-width: 560px) {
+  .swap-head { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+  .swap-arrow { transform: rotate(90deg); width: 40px; line-height: 1; }
+}
+.swap-what { margin: 6px 0 2px; font-weight: 700; }
+.swap .actions { margin-top: 6px; }
+.rp-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+.rp-row { grid-template-columns: 36px minmax(110px, 1fr) auto minmax(0, 2fr); }
+@media (max-width: 640px) {
+  .rp-row { grid-template-columns: 36px minmax(0, 1fr); }
+  .rp-row .rp-tags { grid-column: 2; }
+  .rp-row .rp-lines { grid-column: 1 / -1; }
+}
+/* 5 onglets sur téléphone : le dernier prend toute la largeur */
+@media (max-width: 800px) {
+  nav ul li:last-child:nth-child(odd) { grid-column: 1 / -1; }
+}
+.upgrade-sep { list-style: none; margin: 14px 0 4px; padding: 8px 10px; border-left: 4px solid var(--warn); background: var(--surface); border-radius: 6px; }
+.upgrade-sep h3 { margin: 0 0 2px; }

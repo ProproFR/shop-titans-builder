@@ -6,8 +6,8 @@ import { D, findFamily } from './data.js';
 import { QUALITY, PROFILES, scoreItem, newMods, defaultRole } from './calc.js';
 import { heroClass, lineageOf, estimateStats, effectiveStats, heroSkillObjects } from './hero.js';
 import { skillsToMods } from './calc.js';
-import { heroCandidate, championCandidates, combineModifiers, recommend } from './tower-calc.js';
-import { listChampions } from './store.js';
+import { heroCandidate } from './tower-calc.js';
+import { teamTarget, runTeam, weakFlags } from './roster-plan.js';
 import { topSkills, heroSkillCtx } from './advisor.js';
 import { recommendedEnchants } from './bis-plan.js';
 
@@ -19,8 +19,12 @@ const EFFORT = { item: 3, skill: 2, element: 1, spirit: 2, skillSwap: 4 };
 const ELEM_GAIN_PER_POINT = 0.001; // +0,1 % de valeur par point d'élément ajouté
 const SPIRIT_GAIN = 0.03;          // +3 % pour un esprit sur un objet qui n'en a pas
 const EVA_CAP = 0.78;
+// Emplacement où l'on vient d'investir (objet ou qualité, moins de 30 jours) : le remplacer aussitôt coûterait deux fois.
+export const RECENT_DAYS = 30;
+const RECENT_FACTOR = 0.15; // priorité d'un nouvel objet sur cet emplacement
+const HERO_RECENT_DAYS = 7, HERO_RECENT_FACTOR = 0.75; // héros amélioré cette semaine : on laisse passer les autres d'abord
+const daysSince = (ts) => (ts ? (Date.now() - ts) / 86400000 : Infinity);
 const ROLE_W = { tank: { o: 0.25, s: 0.75 }, rogue: { o: 0.55, s: 0.45 }, caster: { o: 0.7, s: 0.3 } };
-const REF_MOB = { hp: 80000, atk: 70, aoe: 40, caps: { c50: 3200, c70: 6400, c75: 19200 } };
 
 /**
  * Valeur de combat d'un ensemble de stats : attaque (avec critiques) × survie (PV, DEF, esquive plafonnée),
@@ -111,8 +115,9 @@ export function heroUpgrades(hero) {
       if (!bestItem || gain > bestItem.gain) bestItem = { ...c, gain };
     }
     if (bestItem && bestItem.gain >= 0.02) {
+      const d = daysSince(g.since);
       add({ kind: 'item', slot: i, item: it ? it.name : '', to: bestItem.item.name, toTier: bestItem.item.tier, bis: bestItem.bis,
-        effort: EFFORT.item + (it && bestItem.item.tier > it.tier + 1 ? 1 : 0), gain: bestItem.gain });
+        effort: EFFORT.item + (it && bestItem.item.tier > it.tier + 1 ? 1 : 0), gain: bestItem.gain, recent: d < RECENT_DAYS ? Math.max(0, Math.floor(d)) : null });
     }
     // 3) Élément : absent ou plus faible que le meilleur enchantement de l'élément du héros.
     const el = mainElement(hero, cls);
@@ -165,31 +170,56 @@ export function heroUpgrades(hero) {
   return out;
 }
 
-/** Importance des héros : présents dans le meilleur groupe général (×1,6) ou d'un élément (×1,3). */
+/**
+ * Importance des héros : présents dans le meilleur groupe général (×1,6) ou d'un élément (×1,3) ;
+ * un héros qui ne joue dans aucun groupe compte moitié (×0,5) : c'est d'abord un candidat au remplacement.
+ */
+export const IDLE_WEIGHT = 0.5;
 export function heroWeights(heroes, size = 4) {
-  const w = new Map(heroes.map((x) => [x.id, 1]));
+  const w = new Map(heroes.map((x) => [x.id, IDLE_WEIGHT]));
   if (!heroes.length) return w;
   const cands = heroes.map(heroCandidate);
-  const fx = combineModifiers([]);
+  const { mob } = teamTarget(heroes, size);
   w.champions = new Set();
   const mark = (res, k) => { if (res) for (const m of res.members) { if (m.hero) w.set(m.hero.id, Math.max(w.get(m.hero.id), k)); else if (m.kind === 'champion') w.champions.add(m.name || m.label); } };
-  mark(recommend(cands.slice(), size, REF_MOB, fx, {}, 1)[0], 1.6);
-  for (const el of ['Fire', 'Water', 'Air', 'Earth', 'Light', 'Dark']) {
-    const champs = championCandidates(listChampions(), heroes, (c) => c.element === el);
-    mark(recommend([...cands, ...champs], size, REF_MOB, fx, { barrier: el, elemFocus: true }, 1)[0], 1.3);
-  }
+  mark(runTeam(cands, heroes, size, '', mob), 1.6);
+  for (const el of ['Fire', 'Water', 'Air', 'Earth', 'Light', 'Dark']) mark(runTeam(cands, heroes, size, el, mob), 1.3);
   return w;
 }
 
-/** Toutes les améliorations, classées par priorité décroissante. */
+// Héros candidat au remplacement (dans aucun groupe et faible, cf. page « Héros à remplacer ») : poids très bas.
+export const REPLACE_WEIGHT = 0.1;
+
+/**
+ * Toutes les améliorations, classées par priorité décroissante. Les héros candidats au remplacement passent
+ * en fin de liste : inutile d'investir dans un héros qu'on va remplacer.
+ */
 export function rankUpgrades(heroes) {
-  const weights = heroWeights(heroes);
+  const weights = planWeights(heroes);
   const all = [];
   for (const hero of heroes) {
-    const wgt = weights.get(hero.id) || 1;
-    for (const u of heroUpgrades(hero)) all.push({ ...u, weight: wgt, priority: (u.gain * 100 * wgt) / u.effort });
+    const wgt = weights.get(hero.id) || IDLE_WEIGHT;
+    const replace = weights.replace.has(hero.id);
+    const fresh = hero.gear.some((g) => daysSince(g.since) < HERO_RECENT_DAYS);
+    for (const u of heroUpgrades(hero)) {
+      let p = (u.gain * 100 * wgt) / u.effort;
+      if (u.recent != null) p *= RECENT_FACTOR; // même emplacement : ne pas payer deux fois
+      else if (fresh) p *= HERO_RECENT_FACTOR;  // même héros : passer d'abord aux autres
+      all.push({ ...u, weight: wgt, replace, priority: p });
+    }
   }
-  return all.sort((a, b) => b.priority - a.priority || b.gain - a.gain);
+  return all.sort((a, b) => (a.replace - b.replace) || b.priority - a.priority || b.gain - a.gain);
+}
+
+/** Importance des héros pour le plan (améliorations, graines) : heroWeights, et poids très bas pour les héros à remplacer (weights.replace). */
+export function planWeights(heroes, size = 4) {
+  const weights = heroWeights(heroes, size);
+  const flags = weakFlags(heroes);
+  weights.replace = new Set();
+  for (const hero of heroes) {
+    if ((weights.get(hero.id) || IDLE_WEIGHT) <= IDLE_WEIGHT && (flags.get(hero.id) || {}).weak) { weights.set(hero.id, REPLACE_WEIGHT); weights.replace.add(hero.id); }
+  }
+  return weights;
 }
 
 // --- Graines : répartir le stock là où il rapporte le plus ---
