@@ -359,3 +359,18 @@ export function decodeShare(code) {
     return team ? { kind: 'team', heroes, team } : null;
   } catch { return null; }
 }
+
+// ---------- Données personnelles tenues par Claude : site/perso/donnees.json ----------
+// Fichier du dépôt mis à jour par Claude ; chaque appareil le fusionne à l'ouverture (une seule fois par révision).
+// Ce que vous modifiez sur un appareil reste prioritaire si c'est plus récent (date de mise à jour de chaque héros).
+const PERSO_PREFS = ['seedStock', 'colOnlyUnlocked', 'colPaid', 'busyHeroes'];
+export function applyPersonal(o) {
+  if (!o || o.app !== 'shop-titans-builder' || !Number.isInteger(o.rev)) return false;
+  if (o.rev <= (getPref('persoRev', 0) || 0)) return false;
+  importObject(o);
+  if (o.prefs && typeof o.prefs === 'object') for (const k of PERSO_PREFS) if (k in o.prefs) load().prefs[k] = o.prefs[k];
+  load().prefs.persoRev = o.rev;
+  load().prefs.persoAt = String(o.exportedAt || '').slice(0, 40);
+  save();
+  return true;
+}

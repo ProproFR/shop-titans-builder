@@ -3,6 +3,7 @@ import { addMessages } from './i18n.js';
 
 addMessages('fr', {
   'nav.collection': 'Collection',
+  'footer.perso': 'Données mises à jour par Claude : version {rev} du {date}.',
   'col.title': 'Collection d\'objets',
   'col.intro': 'Suivez les objets légués dans le livre de collection du jeu. Le site vous dit lesquels compléter d\'abord : les plus rapides à finir.',
   'col.how': 'Pour chaque objet, cochez les qualités déjà léguées (les 5 points de couleur sous l\'objet dans le livre). Cochez « débloqué » pour les objets dont vous avez le plan, même sans rien avoir légué.',
@@ -33,6 +34,7 @@ addMessages('fr', {
 
 addMessages('en', {
   'nav.collection': 'Collection',
+  'footer.perso': 'Data updated by Claude: version {rev} of {date}.',
   'col.title': 'Item collection',
   'col.intro': 'Track the items donated to the game\'s collection book. The site tells you which ones to complete first: the quickest to finish.',
   'col.how': 'For each item, tick the qualities already donated (the 5 coloured dots under the item in the book). Tick "unlocked" for items whose blueprint you own, even if you have donated nothing yet.',

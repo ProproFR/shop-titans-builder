@@ -1,5 +1,6 @@
 // Point d'entrée : routeur par hash (#/vue?param=valeur) + chrome de l'application.
 import { loadData, D, uiIcon } from './data.js';
+import * as store from './store.js';
 import './i18n-extra.js';
 import './i18n-guide.js';
 import './i18n-legal.js';
@@ -92,6 +93,7 @@ function renderFooter() {
   clear(el);
   el.append(
     h('p', {}, t('footer.versions', { game: m.clientVersion, sheet: m.sheetVersion, date: new Date(m.generatedAt).toLocaleDateString(getLang() === 'fr' ? 'fr-FR' : 'en-GB') })),
+    store.getPref('persoRev') ? h('p', { class: 'small' }, t('footer.perso', { rev: store.getPref('persoRev'), date: new Date(store.getPref('persoAt')).toLocaleDateString(getLang() === 'fr' ? 'fr-FR' : 'en-GB') })) : null,
     h('p', { class: 'muted' }, t('footer.disclaimer')),
     h('p', { class: 'muted' }, creditImages()),
     h('p', {}, h('a', { href: '#/about' }, t('nav.about')), ' · ', h('a', { href: '#/legal' }, t('footer.legal'))),
@@ -134,6 +136,11 @@ async function start() {
     root.append(h('p', { class: 'error', role: 'alert' }, `${t('error.data')} (${e.message}). ${t('error.server')}`));
     return;
   }
+  // Données tenues par Claude (si le fichier existe) : fusionnées avant le premier affichage.
+  try {
+    const r = await fetch('perso/donnees.json', { cache: 'no-store' });
+    if (r.ok) store.applyPersonal(await r.json());
+  } catch { /* pas de fichier ou hors ligne : on garde les données de l'appareil */ }
   renderFooter();
   onLangChange(() => { renderFooter(); render(); });
   window.addEventListener('hashchange', render);
