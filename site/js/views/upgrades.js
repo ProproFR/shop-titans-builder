@@ -17,7 +17,7 @@ export function describe(u) {
   const slot = t('sc.slot', { n: u.slot + 1 });
   switch (u.kind) {
     case 'quality': return t('up.d.quality', { slot, item: u.item, from: qualityName(u.from), to: qualityName(u.to) });
-    case 'item': return t(u.item ? 'up.d.item' : 'up.d.itemEmpty', { slot, item: u.item, to: u.to, tier: u.toTier });
+    case 'item': return t(u.item ? 'up.d.item' : 'up.d.itemEmpty', { slot, item: u.item, to: u.to, tier: u.toTier }) + (u.toQuality ? ` ${t('up.d.knownQ', { q: qualityName(u.toQuality) })}` : '');
     case 'skill': return t('up.d.skill', { skill: skillLabel(u.item, u.from), to: `${skillGameName(u.item, u.to)} (${ROMAN[u.to] || u.to})` });
     case 'skillSwap': return t('up.d.skillSwap', { skill: skillLabel(u.item, (u.hero.skills[u.slot] || {}).tier), to: skillLabel(u.to, u.toTier) });
     case 'element': return t(u.from ? 'up.d.elementUp' : 'up.d.element', { slot, item: u.item, from: enchLbl(u.from), to: enchLbl(u.to) });

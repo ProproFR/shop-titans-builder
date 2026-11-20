@@ -14,7 +14,7 @@ let state = null;
 let ok = true;
 let lastError = '';
 
-const empty = () => ({ v: 1, heroes: [], teams: [], champions: [], prefs: {} });
+const empty = () => ({ v: 1, heroes: [], teams: [], champions: [], prefs: {}, collection: {} });
 
 function load() {
   if (state) return state;
@@ -28,6 +28,7 @@ function load() {
         state.teams = (Array.isArray(o.teams) ? o.teams : []).map(sanitizeTeam).filter(Boolean);
         state.champions = (Array.isArray(o.champions) ? o.champions : []).map(sanitizeChampion).filter(Boolean);
         state.prefs = o.prefs && typeof o.prefs === 'object' && !Array.isArray(o.prefs) ? o.prefs : {};
+        state.collection = sanitizeCollection(o.collection);
       }
     }
   } catch (e) { ok = false; lastError = String(e && e.message || e); }
@@ -194,6 +195,32 @@ export function saveTeam(team) {
 }
 export function deleteTeam(id) { const s = load(); s.teams = s.teams.filter((x) => x.id !== id); save(); }
 
+// ---------- Collection d'objets : par objet, qualités léguées (bits 0 à 4 : Normale → Légendaire) + 32 si débloqué ----------
+export const COL_UNLOCKED = 32;
+export function sanitizeCollection(o) {
+  const out = {};
+  if (!o || typeof o !== 'object' || Array.isArray(o)) return out;
+  for (const [k, v] of Object.entries(o).slice(0, 3000)) {
+    const n = Number(v);
+    if (D.itemByName.has(k) && Number.isInteger(n) && n > 0 && n < 64) out[k] = n;
+  }
+  return out;
+}
+export const getCollection = () => load().collection;
+export function setCollectionEntry(name, v) {
+  if (!D.itemByName.has(name)) return;
+  const c = load().collection;
+  if (v > 0 && v < 64) c[name] = v; else delete c[name];
+  save();
+}
+/** Fusion d'une collection importée : on garde tout ce qui est coché d'un côté ou de l'autre (une collection ne fait que grandir). */
+function mergeCollection(o) {
+  const c = load().collection;
+  let n = 0;
+  for (const [k, v] of Object.entries(sanitizeCollection(o))) { const m = (c[k] || 0) | v; if (m !== c[k]) { c[k] = m; n++; } }
+  return n;
+}
+
 export const getPref = (k, d = null) => (k in load().prefs ? load().prefs[k] : d);
 export function setPref(k, v) { load().prefs[k] = v; save(); }
 
@@ -262,7 +289,7 @@ export async function importJSON(file) {
 /** Données exportables (même contenu que le fichier JSON). */
 export function exportObject() {
   const s = load();
-  return { app: 'shop-titans-builder', v: 1, exportedAt: new Date().toISOString(), heroes: s.heroes, teams: s.teams, champions: s.champions };
+  return { app: 'shop-titans-builder', v: 1, exportedAt: new Date().toISOString(), heroes: s.heroes, teams: s.teams, champions: s.champions, collection: s.collection };
 }
 
 // --- Lien de transfert : les données compressées dans la partie « # » de l'adresse.
@@ -303,6 +330,7 @@ export function importObject(o) {
       if (i < 0) cur.push(c); else if (c.updatedAt > cur[i].updatedAt) cur[i] = c;
     }
   }
+  if (o.collection) mergeCollection(o.collection);
   return mergeData(heroes, teams);
 }
 

@@ -8,6 +8,7 @@ import { heroClass, lineageOf, estimateStats, effectiveStats, heroSkillObjects }
 import { skillsToMods } from './calc.js';
 import { heroCandidate } from './tower-calc.js';
 import { teamTarget, runTeam, weakFlags } from './roster-plan.js';
+import { canSuggest, bestQuality } from './collection.js';
 import { topSkills, heroSkillCtx } from './advisor.js';
 import { recommendedEnchants } from './bis-plan.js';
 
@@ -103,20 +104,24 @@ export function heroUpgrades(hero) {
     const types = new Set(cls.slots[i]); // (« Dual Wield » seulement via un build BiS)
     const cands = [];
     const bisSlot = bis && bis.slots[i];
-    if (bisSlot && D.itemByName.has(bisSlot.name)) cands.push({ item: D.itemByName.get(bisSlot.name), bis: true });
+    // (objets débloqués seulement si vous l'avez demandé sur la page Collection)
+    if (bisSlot && D.itemByName.has(bisSlot.name) && canSuggest(bisSlot.name)) cands.push({ item: D.itemByName.get(bisSlot.name), bis: true });
     const mods = skillsToMods(heroSkillObjects(hero).map((x) => x.skill));
-    const pool = D.items.filter((x) => types.has(x.type) && x.tier <= maxTier && (x.origin || 'base') !== 'paid')
+    const pool = D.items.filter((x) => types.has(x.type) && x.tier <= maxTier && (x.origin || 'base') !== 'paid' && canSuggest(x.name))
       .map((x) => ({ x, s: scoreItem(x, prof, g.quality || 'Normal', mods || newMods()) })).sort((a, b) => b.s - a.s).slice(0, 2);
     for (const p of pool) if (!cands.some((c) => c.item.name === p.x.name)) cands.push({ item: p.x, bis: false });
     let bestItem = null;
     for (const c of cands) {
       if (it && c.item.name === it.name) continue;
-      const gain = gainOf(hero, role, (h2) => { h2.gear[i].item = c.item.name; });
-      if (!bestItem || gain > bestItem.gain) bestItem = { ...c, gain };
+      // Qualité visée : la meilleure déjà léguée pour cet objet (vous savez l'obtenir), sinon celle de l'objet actuel.
+      const known = bestQuality(c.item.name);
+      const q = known || g.quality || 'Normal';
+      const gain = gainOf(hero, role, (h2) => { h2.gear[i].item = c.item.name; h2.gear[i].quality = q; });
+      if (!bestItem || gain > bestItem.gain) bestItem = { ...c, gain, toQuality: known };
     }
     if (bestItem && bestItem.gain >= 0.02) {
       const d = daysSince(g.since);
-      add({ kind: 'item', slot: i, item: it ? it.name : '', to: bestItem.item.name, toTier: bestItem.item.tier, bis: bestItem.bis,
+      add({ kind: 'item', slot: i, item: it ? it.name : '', to: bestItem.item.name, toTier: bestItem.item.tier, bis: bestItem.bis, toQuality: bestItem.toQuality,
         effort: EFFORT.item + (it && bestItem.item.tier > it.tier + 1 ? 1 : 0), gain: bestItem.gain, recent: d < RECENT_DAYS ? Math.max(0, Math.floor(d)) : null });
     }
     // 3) Élément : absent ou plus faible que le meilleur enchantement de l'élément du héros.
